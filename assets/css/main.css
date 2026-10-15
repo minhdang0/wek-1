@@ -1,14 +1,36 @@
 ﻿:root {
-  --ivory: #faf6ef;
-  --ink: #1e1b18;
-  --gold: #9a7b4f;
   --font-heading: "Cormorant Garamond", Georgia, serif;
   --font-subtext-pre: "Caramel", cursive;
   --font-ui: "Be Vietnam Pro", Arial, sans-serif;
-  --page-width: 520px;
-  --paper: #fbf6ec;
-  --paper-2: #f4e9d8;
+  --page-width: 430px;
   --text-highlight: #ffe9a8;
+
+  --ivory: #fbf1ee;
+  --paper: #fbf1ee;
+  --paper-2: #f3ddd7;
+  --ink: #3a2626;
+  --ink-soft: #7a5a58;
+  --gold: #b76e79;
+  --gold-light: #e3b7ae;
+  --gold-deep: #8c4a55;
+
+  --grad-gold: linear-gradient(135deg, #e8b9b0 0%, #b76e79 55%, #8c4a55 100%);
+  --grad-paper: linear-gradient(180deg, #fbf1ee 0%, #f3ddd7 100%);
+  --black-900: #111111;
+  --black-800: #1e1b18;
+  --black-700: #2b2b2b;
+  --black-600: #444444;
+  --black-500: #666666;
+  --black-400: #8a8a8a;
+
+  --gold-50: #fbf3dc; /* vàng kem, chữ trên ảnh tối */
+  --gold-100: #f3e2b3; /* champagne sáng */
+  --gold-200: #e6cb86; /* vàng nhạt */
+  --gold-300: #d4af5a; /* vàng chính, sáng và sang */
+  --gold-400: #bf953f; /* vàng cổ điển */
+  --gold-500: #a67c2e; /* vàng đậm, dùng cho chữ trên nền sáng */
+  --gold-600: #8a6420; /* vàng đồng */
+  --gold-700: #5e4314;
 }
 
 * {

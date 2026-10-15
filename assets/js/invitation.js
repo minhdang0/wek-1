@@ -243,44 +243,18 @@ function setupForms() {
   renderWishes();
 }
 
-function setupEnvelopeAndMusic() {
+function setupEnvelope() {
   const screen = document.getElementById("opening-screen");
   const envelope = document.querySelector(".envelope");
   const openButton = document.getElementById("open-invitation");
   const content = document.getElementById("invitation-content");
-  const audio = document.getElementById("bg-music");
-  const musicButton = document.getElementById("music-toggle");
-
-  async function playMusic() {
-    try {
-      await audio.play();
-      musicButton.textContent = "Tắt nhạc";
-      musicButton.setAttribute("aria-pressed", "true");
-      musicButton.removeAttribute("title");
-    } catch (error) {
-      musicButton.textContent = "Không phát được nhạc";
-      musicButton.setAttribute("aria-pressed", "false");
-      musicButton.title = "Tệp nhạc không được trình duyệt này hỗ trợ.";
-    }
-  }
 
   openButton.addEventListener("click", () => {
     envelope.classList.add("is-opening");
     content.inert = false;
     document.body.classList.remove("is-closed");
     screen.classList.add("is-open");
-    playMusic();
     window.setTimeout(() => screen.remove(), 550);
-  });
-
-  musicButton.addEventListener("click", async () => {
-    if (!audio.paused) {
-      audio.pause();
-      musicButton.textContent = "Bật nhạc";
-      musicButton.setAttribute("aria-pressed", "false");
-      return;
-    }
-    await playMusic();
   });
 }
 
@@ -357,10 +331,132 @@ function setupLoveLetterAnimation() {
     });
   });
 }
+
+function setupIconRotation() {
+  if (!window.gsap) return;
+
+  const mm = gsap.matchMedia();
+
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const icon = ".icon-title-main";
+
+    // Xuất hiện: phóng to từ 0
+    gsap.from(icon, {
+      scale: 0,
+      duration: 0.9,
+      ease: "back.out(2)",
+      scrollTrigger: { trigger: icon, start: "top 90%", once: true },
+    });
+
+    // Xoay tròn liên tục, chỉ chạy khi icon đang trong màn hình
+    gsap.to(icon, {
+      rotation: 360,
+      duration: 8,
+      ease: "none",
+      repeat: -1,
+      scrollTrigger: {
+        trigger: icon,
+        toggleActions: "play pause resume pause",
+      },
+    });
+  });
+}
+
+function setupAlbumCarousel() {
+  if (!window.gsap || !window.Draggable) return;
+
+  const gallery = document.querySelector(".gallery");
+  const proxy = document.querySelector(".drag-proxy");
+  const cards = gsap.utils.toArray(".gallery .cards li");
+  if (!gallery || !proxy || !cards.length) return;
+
+  const n = cards.length;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const wrapDistance = gsap.utils.wrap(-n / 2, n / 2);
+  const state = { pos: 0 };
+  let target = 0;
+  let step = 0;
+
+  function measure() {
+    step = cards[0].offsetWidth * 0.6;
+    render();
+  }
+
+  function render() {
+    cards.forEach((card, i) => {
+      const d = wrapDistance(i - state.pos);
+      const a = Math.abs(d);
+      gsap.set(card, {
+        x: d * step,
+        scale: 1 - Math.min(a, 3) * 0.1,
+        rotation: d * 5,
+        opacity: a > 2.5 ? 0 : 1 - a * 0.28,
+        zIndex: Math.round(100 - a * 10),
+        pointerEvents: a > 2.5 ? "none" : "auto", // ảnh nào nhìn thấy đều bấm được
+      });
+    });
+  }
+
+  function goTo(index) {
+    target = index;
+    gsap.to(state, {
+      pos: target,
+      duration: reduce ? 0 : 0.8,
+      ease: "power3.out",
+      overwrite: true,
+      onUpdate: render,
+    });
+  }
+
+  document
+    .querySelector(".nav-prev")
+    .addEventListener("click", () => goTo(Math.round(target) - 1));
+  document
+    .querySelector(".nav-next")
+    .addEventListener("click", () => goTo(Math.round(target) + 1));
+
+  // Bấm vào ảnh: ảnh bên cạnh thì chuyển tới đúng ảnh đó, ảnh giữa thì sang ảnh kế tiếp
+  function handleCardClick(card) {
+    const i = cards.indexOf(card);
+    if (i < 0) return;
+    const d = Math.round(wrapDistance(i - Math.round(state.pos)));
+    goTo(Math.round(state.pos) + (d === 0 ? 1 : d));
+  }
+
+  // Kéo hoặc vuốt ngang
+  let startPos = 0;
+  Draggable.create(proxy, {
+    type: "x",
+    trigger: gallery,
+    dragClickables: false, // bấm nút prev/next không bị tính là kéo
+    onPress() {
+      gsap.killTweensOf(state);
+      startPos = state.pos;
+    },
+    onDrag() {
+      state.pos = startPos - (this.x - this.startX) / step;
+      render();
+    },
+    onRelease() {
+      goTo(Math.round(state.pos));
+    },
+    onClick() {
+      // chạm hoặc bấm mà không kéo
+      const card = this.pointerEvent.target.closest(".cards li");
+      if (card) handleCardClick(card);
+    },
+  });
+
+  window.addEventListener("resize", measure);
+  measure();
+}
+
+setupAlbumCarousel();
+setupIconRotation();
 setupWeddingDetails();
 renderCalendar();
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 setupForms();
 setupLoveLetterAnimation();
-setupEnvelopeAndMusic();
+setupEnvelope();

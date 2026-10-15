@@ -32,19 +32,13 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Physics2DPlugin.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
     <script>
-      gsap.registerPlugin(SplitText, Physics2DPlugin, ScrollTrigger);
+      gsap.registerPlugin(SplitText, Physics2DPlugin, ScrollTrigger, Draggable);
     </script>
   </head>
 
   <body class="is-closed">
-    <audio
-      id="bg-music"
-      src="./assets/music/xungdoi.mp3"
-      loop
-      preload="none"
-    ></audio>
-
     <div
       class="opening-screen"
       id="opening-screen"
@@ -86,7 +80,7 @@
           <div class="title-line-1">We</div>
           <div class="title-line-2">
             <p>Got Married</p>
-            <p>Two hearts, one beautiful beginning</p>
+            <p>The Greatest Happiness</p>
           </div>
         </div>
         <div class="detail-content">
@@ -105,10 +99,9 @@
         </div>
       </section>
       <section class="love-section">
+        <div class="icon-title-main"></div>
         <div class="block-title">
-          <div class="title-first">
-            Our<span class="sub-icon-title" aria-hidden="true"></span>
-          </div>
+          <div class="title-first">Our</div>
           <div class="title-second">Confession</div>
         </div>
 
@@ -149,6 +142,49 @@
               </div>
             </article>
           </div>
+        </div>
+      </section>
+      <section>
+        <div class="icon-title-main"></div>
+        <div class="block-title">
+          <div class="title-first">Our Timeless</div>
+          <div class="title-second">Moments</div>
+        </div>
+        <div class="album-wrap">
+          <div class="component-design"></div>
+          <div class="component-design fix"></div>
+          <div class="gallery">
+            <ul class="cards">
+              <li style="background-image: url(./assets/img/image1.jpg)"></li>
+              <li style="background-image: url(./assets/img/image2.jpg)"></li>
+              <li style="background-image: url(./assets/img/image3.jpg)"></li>
+              <li style="background-image: url(./assets/img/image4.jpg)"></li>
+              <li style="background-image: url(./assets/img/image5.jpg)"></li>
+              <li style="background-image: url(./assets/img/image6.jpg)"></li>
+              <li style="background-image: url(./assets/img/image7.jpg)"></li>
+              <li style="background-image: url(./assets/img/image8.jpg)"></li>
+              <li style="background-image: url(./assets/img/image9.jpg)"></li>
+              <li style="background-image: url(./assets/img/image10.jpg)"></li>
+              <li style="background-image: url(./assets/img/image11.jpg)"></li>
+              <li style="background-image: url(./assets/img/image12.jpg)"></li>
+              <li style="background-image: url(./assets/img/image13.jpg)"></li>
+            </ul>
+            <button
+              class="nav-btn nav-prev prev"
+              type="button"
+              aria-label="Ảnh trước"
+            >
+              <img src="./assets/icon/arrowhead.png" alt="" aria-hidden="true" />
+            </button>
+            <button
+              class="nav-btn nav-next next"
+              type="button"
+              aria-label="Ảnh sau"
+            >
+              <img src="./assets/icon/arrowhead.png" alt="" aria-hidden="true" />
+            </button>
+          </div>
+          <div class="drag-proxy"></div>
         </div>
       </section>
       <section
