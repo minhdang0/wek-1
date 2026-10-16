@@ -1,436 +1,247 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Thiệp mời chung vui ngày cưới của chúng mình."
-    />
-    <meta name="theme-color" content="#FAF6EF" />
-    <title>Thiệp mời ngày vui</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./assets/css/main.css" />
-    <link rel="stylesheet" href="./assets/css/wedding.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Arsenal:ital,wght@0,400;0,700;1,400;1,700&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Commissioner:wght@100..900&family=Corinthia:wght@400;700&family=Edu+QLD+Hand:wght@400..700&family=Encode+Sans+Semi+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Hurricane&family=Pinyon+Script&family=Playwrite+CU+Guides&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Saira+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;700&family=Corinthia:wght@400;700&family=Playfair+Display:ital,wght@1,500&display=swap"
-      rel="stylesheet"
-    />
-    <script src="./assets/js/invitation.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Physics2DPlugin.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
-    <script>
-      gsap.registerPlugin(SplitText, Physics2DPlugin, ScrollTrigger, Draggable);
-    </script>
-  </head>
 
-  <body class="is-closed">
-    <div
-      class="opening-screen"
-      id="opening-screen"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="opening-title"
-    >
-      <div class="envelope" aria-hidden="true">
-        <div class="envelope-letter"></div>
-        <div class="envelope-flap"></div>
-        <span class="wax-seal">囍</span>
-      </div>
-      <p class="opening-kicker">Một lời mời thân thương</p>
-      <h1 id="opening-title" class="opening-title">Ngày vui của chúng mình</h1>
-      <button class="button button-dark" id="open-invitation" type="button">
-        Chạm để mở thiệp
-      </button>
-      <p class="opening-hint">Chạm để mở thiệp</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Thiệp mời chung vui ngày cưới của chúng mình." />
+  <meta name="theme-color" content="#FAF6EF" />
+  <title>Thiệp mời ngày vui</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <link rel="stylesheet" href="./assets/css/wedding.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;700&family=Corinthia:wght@400;700&display=swap"
+    rel="stylesheet" />
+  <script src="./assets/js/invitation.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
+  <script>
+    gsap.registerPlugin(SplitText, ScrollTrigger, Draggable);
+  </script>
+</head>
+
+<body class="is-closed">
+  <div class="opening-screen" id="opening-screen" role="dialog" aria-modal="true" aria-labelledby="opening-title">
+    <div class="envelope" aria-hidden="true">
+      <div class="envelope-letter"></div>
+      <div class="envelope-flap"></div>
+      <span class="wax-seal">囍</span>
     </div>
+    <p class="opening-kicker">Một lời mời thân thương</p>
+    <h1 id="opening-title" class="opening-title">Ngày vui của chúng mình</h1>
+    <button class="button button-dark" id="open-invitation" type="button">
+      Chạm để mở thiệp
+    </button>
+    <p class="opening-hint">Chạm để mở thiệp</p>
+  </div>
 
-    <main id="invitation-content" inert>
-      <section class="hero" id="home" aria-labelledby="hero-names">
-        <figure class="hero-image hero-image--portrait">
-          <img
-            src="./assets/img/hero1.jpg"
-            alt="Cô dâu chú rể trong khoảnh khắc thân mật"
-            fetchpriority="high"
-          />
-        </figure>
-        <figure class="hero-image hero-image--scene">
-          <img
-            src="./assets/img/hero3.jpg"
-            alt="Cô dâu chú rể giữa khung cảnh thiên nhiên"
-          />
-        </figure>
-        <div class="hero-seam" aria-hidden="true"></div>
-        <div class="hero-warmth" aria-hidden="true"></div>
-        <div class="main-title">
-          <div class="title-line-1">We</div>
-          <div class="title-line-2">
-            <p>Got Married</p>
-            <p>The Greatest Happiness</p>
-          </div>
+  <main id="invitation-content" inert>
+    <section class="hero" id="home" aria-labelledby="hero-names">
+      <figure class="hero-image hero-image--portrait">
+        <img src="./assets/img/hero1.jpg" alt="Cô dâu chú rể trong khoảnh khắc thân mật" fetchpriority="high" />
+      </figure>
+      <figure class="hero-image hero-image--scene">
+        <img src="./assets/img/hero3.jpg" alt="Cô dâu chú rể giữa khung cảnh thiên nhiên" />
+      </figure>
+      <div class="hero-seam" aria-hidden="true"></div>
+      <div class="hero-warmth" aria-hidden="true"></div>
+      <div class="main-title">
+        <div class="title-line-1">We</div>
+        <div class="title-line-2">
+          <p>Got Married</p>
+          <p>The Greatest Happiness</p>
         </div>
-        <div class="detail-content">
-          <div class="hn-groom">
-            <span>Groom</span>
-            <span>Hoàng Vinh</span>
-          </div>
-          <div class="hn-main">
-            <span>25</span>
-            <span>10</span>
-          </div>
-          <div class="hn-bride">
-            <span>Bride</span>
-            <span>Nguyễn Nhung</span>
-          </div>
+      </div>
+      <div class="detail-content">
+        <div class="hn-groom">
+          <span>Groom</span>
+          <span>Hoàng Vinh</span>
         </div>
-      </section>
-      <section class="love-section">
-        <div class="icon-title-main"></div>
-        <div class="block-title">
-          <div class="title-first">Our</div>
-          <div class="title-second">Confession</div>
+        <div class="hn-main">
+          <span>25</span>
+          <span>10</span>
         </div>
+        <div class="hn-bride">
+          <span>Bride</span>
+          <span>Nguyễn Nhung</span>
+        </div>
+      </div>
+    </section>
+    <section class="love-section">
+      <div class="icon-title-main"></div>
+      <div class="block-title">
+        <div class="title-first">Our</div>
+        <div class="title-second">Confession</div>
+      </div>
 
-        <div class="love-letter">
-          <div class="confession-wrap">
-            <article class="confession-content">
-              <figure class="image-confession">
-                <img
-                  src="./assets/img/groom.jpg"
-                  alt="Chú rể Hoàng Vinh"
-                  loading="lazy"
-                />
-              </figure>
-              <div class="text-confession">
-                <span class="role">Chú rể</span>
-                <h3 class="who">Hoàng Vinh</h3>
-                <p class="story">
-                  Anh từng nghĩ hạnh phúc còn xa lắm. Cho đến ngày gặp em.
-                </p>
-              </div>
-            </article>
-
-            <article class="confession-content is-reverse">
-              <figure class="image-confession">
-                <img
-                  src="./assets/img/bride.jpg"
-                  alt="Cô dâu Nguyễn Nhung"
-                  loading="lazy"
-                />
-              </figure>
-              <div class="text-confession">
-                <span class="role">Cô dâu</span>
-                <h3 class="who">Nguyễn Nhung</h3>
-                <p class="story">
-                  Chỉ cần một người nắm tay em mỗi sáng thức dậy. Và người ấy,
-                  hóa ra, chính là anh.
-                </p>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-      <section>
-        <div class="icon-title-main"></div>
-        <div class="block-title">
-          <div class="title-first">Our Timeless</div>
-          <div class="title-second">Moments</div>
-        </div>
-        <div class="album-wrap">
-          <div class="component-design"></div>
-          <div class="component-design fix"></div>
-          <div class="gallery">
-            <ul class="cards">
-              <li style="background-image: url(./assets/img/image1.jpg)"></li>
-              <li style="background-image: url(./assets/img/image2.jpg)"></li>
-              <li style="background-image: url(./assets/img/image3.jpg)"></li>
-              <li style="background-image: url(./assets/img/image4.jpg)"></li>
-              <li style="background-image: url(./assets/img/image5.jpg)"></li>
-              <li style="background-image: url(./assets/img/image6.jpg)"></li>
-              <li style="background-image: url(./assets/img/image7.jpg)"></li>
-              <li style="background-image: url(./assets/img/image8.jpg)"></li>
-              <li style="background-image: url(./assets/img/image9.jpg)"></li>
-              <li style="background-image: url(./assets/img/image10.jpg)"></li>
-              <li style="background-image: url(./assets/img/image11.jpg)"></li>
-              <li style="background-image: url(./assets/img/image12.jpg)"></li>
-              <li style="background-image: url(./assets/img/image13.jpg)"></li>
-            </ul>
-            <button
-              class="nav-btn nav-prev prev"
-              type="button"
-              aria-label="Ảnh trước"
-            >
-              <img src="./assets/icon/arrowhead.png" alt="" aria-hidden="true" />
-            </button>
-            <button
-              class="nav-btn nav-next next"
-              type="button"
-              aria-label="Ảnh sau"
-            >
-              <img src="./assets/icon/arrowhead.png" alt="" aria-hidden="true" />
-            </button>
-          </div>
-          <div class="drag-proxy"></div>
-        </div>
-      </section>
-      <section
-        class="invitation-section section-pad"
-        id="loi-moi"
-        aria-labelledby="invitation-title"
-      >
-        <p class="eyebrow">Lời mời</p>
-        <h2 class="section-title" id="invitation-title">
-          Trân trọng kính mời<br />đến chung vui cùng gia đình
-        </h2>
-        <p class="invitation-copy">
-          Trong niềm vui ngày thành hôn, gia đình hai bên hân hoan đón tiếp quý
-          khách đến chung vui và chúc phúc cho chúng mình.
-        </p>
-        <div class="families">
-          <article class="family">
-            <h3>Gia đình nhà gái</h3>
-            <p data-family="bride">Thông tin gia đình nhà gái</p>
+      <div class="love-letter">
+        <div class="confession-wrap">
+          <article class="confession-content">
+            <figure class="image-confession">
+              <img src="./assets/img/groom.jpg" alt="Chú rể Hoàng Vinh" loading="lazy" />
+            </figure>
+            <div class="text-confession">
+              <span class="role">Chú rể</span>
+              <h3 class="who">Hoàng Vinh</h3>
+              <p class="story">
+                Anh từng nghĩ hạnh phúc còn xa lắm. Cho đến ngày gặp em.
+              </p>
+            </div>
           </article>
-          <span class="family-divider" aria-hidden="true">&amp;</span>
-          <article class="family">
-            <h3>Gia đình nhà trai</h3>
-            <p data-family="groom">Thông tin gia đình nhà trai</p>
+
+          <article class="confession-content is-reverse">
+            <figure class="image-confession">
+              <img src="./assets/img/bride.jpg" alt="Cô dâu Nguyễn Nhung" loading="lazy" />
+            </figure>
+            <div class="text-confession">
+              <span class="role">Cô dâu</span>
+              <h3 class="who">Nguyễn Nhung</h3>
+              <p class="story">
+                Chỉ cần một người nắm tay em mỗi sáng thức dậy. Và người ấy,
+                hóa ra, chính là anh.
+              </p>
+            </div>
           </article>
         </div>
-        <p class="invitation-note">
-          Sự hiện diện của bạn là niềm vui và vinh dự của gia đình chúng mình.
-        </p>
-        <a class="button button-outline invitation-rsvp" href="#rsvp-form">
-          Xác nhận tham dự
-        </a>
-      </section>
+      </div>
+    </section>
+    <section class="moments-section" aria-labelledby="moments-title">
+      <div class="icon-title-main"></div>
+      <div class="block-title" id="moments-title">
+        <div class="title-first">Our Timeless</div>
+        <div class="title-second">Moments</div>
+      </div>
+      <div class="album-wrap">
+        <!-- <div class="component-design"></div> -->
+      
+        <div class="gallery">
+          <ul class="cards">
+            <li style="background-image: url(./assets/img/image1.jpg)"></li>
+            <li style="background-image: url(./assets/img/image2.jpg)"></li>
+            <li style="background-image: url(./assets/img/image3.jpg)"></li>
+            <li style="background-image: url(./assets/img/image4.jpg)"></li>
+            <li style="background-image: url(./assets/img/image5.jpg)"></li>
+            <li style="background-image: url(./assets/img/image6.jpg)"></li>
+            <li style="background-image: url(./assets/img/image7.jpg)"></li>
+            <li style="background-image: url(./assets/img/image8.jpg)"></li>
+            <li style="background-image: url(./assets/img/image9.jpg)"></li>
+            <li style="background-image: url(./assets/img/image10.jpg)"></li>
+            <li style="background-image: url(./assets/img/image11.jpg)"></li>
+            <li style="background-image: url(./assets/img/image12.jpg)"></li>
+            <li style="background-image: url(./assets/img/image13.jpg)"></li>
+          </ul>
+        </div>
+        <div class="drag-proxy"></div>
+      </div>
+    </section>
+        <section class="info-section" aria-labelledby="info-title">
+      <div class="icon-title-main"></div>
+      <div class="block-title" id="info-title">
+        <div class="title-first">Wedding</div>
+        <div class="title-second">Ceremony</div>
+      </div>
 
-      <section class="album-section" id="album" aria-labelledby="album-title">
-        <div class="section-heading section-pad">
-          <p class="eyebrow">Những khoảnh khắc</p>
-          <h2 class="section-title" id="album-title">Chuyện chúng mình</h2>
-          <p class="section-lead">Một vài kỷ niệm trên hành trình cùng nhau.</p>
-        </div>
-        <div class="album">
-          <figure class="photo photo--portrait">
-            <img
-              src="./assets/img/image4.jpg"
-              alt="Cô dâu chú rể trong ngày chụp ảnh cưới"
-              loading="lazy"
-            />
-          </figure>
-          <figure class="photo photo--portrait">
-            <img
-              src="./assets/img/image6.jpg"
-              alt="Cô dâu chú rể trao nhẫn"
-              loading="lazy"
-            />
-          </figure>
-          <figure class="photo photo--wide">
-            <img
-              src="./assets/img/image9.jpg"
-              alt="Cô dâu chú rể bên chiếc xe hoa"
-              loading="lazy"
-            />
-          </figure>
-          <figure class="photo photo--portrait album-feature">
-            <img
-              src="./assets/img/image11.jpg"
-              alt="Cô dâu chú rể cùng nhau trong khung cảnh xanh"
-              loading="lazy"
-            />
-          </figure>
-          <div class="album-small">
-            <figure class="photo photo--portrait">
-              <img
-                src="./assets/img/image13.jpg"
-                alt="Khoảnh khắc vui vẻ của cô dâu chú rể"
-                loading="lazy"
-              />
-            </figure>
-            <figure class="photo photo--portrait">
-              <img
-                src="./assets/img/image14.jpg"
-                alt="Cô dâu chú rể trao nhau ánh nhìn"
-                loading="lazy"
-              />
-            </figure>
-          </div>
-        </div>
-        <figure class="photo photo--closing">
-          <img
-            src="./assets/img/image17.jpg"
-            alt="Cô dâu chú rể trong khoảnh khắc hạnh phúc"
-            loading="lazy"
-          />
-        </figure>
-        <p class="closing-copy">
-          Cảm ơn bạn đã cùng chúng mình lưu giữ ngày vui này.
-        </p>
-      </section>
+      <p class="info-invite">
+        Trân trọng kính mời bạn đến chung vui trong lễ thành hôn của chúng mình
+      </p>
 
-      <section
-        class="event-section section-pad"
-        id="thoi-gian-dia-diem"
-        aria-labelledby="event-title"
-      >
-        <p class="eyebrow">Ngày thành hôn</p>
-        <h2 class="section-title" id="event-title">Hẹn gặp bạn nhé</h2>
-        <div class="event-date">
-          <span class="event-weekday" data-wedding-weekday>Thứ Sáu</span>
-          <span class="event-day">20</span>
-          <span class="event-month">Tháng 05 · 2050</span>
+      <div class="info-couple">
+        <div class="info-person">
+          <span class="info-role">Chú rể</span>
+          <span class="info-name" data-name="groom">Hoàng Vinh</span>
         </div>
-        <div class="schedule">
-          <div class="schedule-item">
-            <span>Đón khách</span>
-            <strong data-time="reception">Vui lòng cập nhật</strong>
-          </div>
-          <div class="schedule-item">
-            <span>Cử hành hôn lễ</span>
-            <strong data-time="ceremony">Vui lòng cập nhật</strong>
-          </div>
+        <span class="info-amp" aria-hidden="true">&amp;</span>
+        <div class="info-person">
+          <span class="info-role">Cô dâu</span>
+          <span class="info-name" data-name="bride">Nguyễn Nhung</span>
         </div>
-        <div class="venue">
-          <p class="eyebrow">Địa điểm</p>
-          <h3 data-venue-name>Địa điểm tổ chức sẽ được cập nhật</h3>
-          <p data-venue-address>Vui lòng quay lại xem thông tin địa chỉ.</p>
-          <a
-            class="button button-outline is-disabled"
-            id="directions-link"
-            href="#thoi-gian-dia-diem"
-            aria-disabled="true"
-          >
-            Chỉ đường
+      </div>
+
+      <!-- NGÀY CƯỚI -->
+      <div class="info-date">
+        <span class="info-weekday" data-wd-weekday>Thứ Sáu</span>
+        <div class="info-date-main">
+          <span class="info-month" data-wd-month>Tháng 05</span>
+          <span class="info-day" data-wd-day>20</span>
+          <span class="info-year" data-wd-year>2050</span>
+        </div>
+        <span class="info-lunar">Nhằm ngày 20 tháng 04 năm Canh Dần</span>
+      </div>
+
+      <!-- HAI BÊN GIA ĐÌNH: MỘT KHỐI ĐỐI LẬP -->
+      <div class="info-split">
+        <article class="split-side split-side--groom venue-card">
+          <span class="info-role">Gia đình</span>
+          <h3 class="info-side">Nhà Trai</h3>
+          <p class="info-family">Ông Hoàng Văn A<br />Bà Trần Thị B</p>
+
+          <dl class="split-details">
+            <div><dt>Đón khách</dt><dd>10:30</dd></div>
+            <div><dt>Lễ thành hôn</dt><dd>12:00</dd></div>
+            <div><dt>Khai tiệc</dt><dd>12:45</dd></div>
+          </dl>
+
+          <div class="split-addr">
+            <p class="info-label">Địa chỉ</p>
+            <p class="venue-address">Số 1, Đường ABC, Phường XYZ, Quận Cầu Giấy, Hà Nội</p>
+          </div>
+
+          <a class="venue-pin" data-map aria-label="Xem địa chỉ nhà trai trên Google Maps">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z" />
+              <circle cx="12" cy="9.5" r="2.6" />
+            </svg>
           </a>
-        </div>
-        <div class="calendar-card">
-          <div class="calendar-heading">
-            <h3>Tháng 05 · 2050</h3>
-            <span>Đếm ngược ngày vui</span>
+          <span class="venue-hint">Chạm để chỉ đường</span>
+        </article>
+
+        <span class="split-amp" aria-hidden="true">&amp;</span>
+
+        <article class="split-side split-side--bride venue-card">
+          <span class="info-role">Gia đình</span>
+          <h3 class="info-side">Nhà Gái</h3>
+          <p class="info-family">Ông Nguyễn Văn C<br />Bà Lê Thị D</p>
+
+          <dl class="split-details">
+            <div><dt>Đón khách</dt><dd>08:00</dd></div>
+            <div><dt>Lễ vu quy</dt><dd>09:00</dd></div>
+            <div><dt>Khai tiệc</dt><dd>10:00</dd></div>
+          </dl>
+
+          <div class="split-addr">
+            <p class="info-label">Địa chỉ</p>
+            <p class="venue-address">Số 2, Đường DEF, Phường UVW, Quận Hoàn Kiếm, Hà Nội</p>
           </div>
-          <div
-            class="calendar-grid"
-            id="calendar"
-            aria-label="Lịch tháng 5 năm 2050"
-          ></div>
-          <div class="countdown" aria-label="Thời gian còn lại">
-            <div><strong id="count-days">0</strong><span>ngày</span></div>
-            <div><strong id="count-hours">0</strong><span>giờ</span></div>
-            <div><strong id="count-minutes">0</strong><span>phút</span></div>
-            <div><strong id="count-seconds">0</strong><span>giây</span></div>
-          </div>
-        </div>
-      </section>
 
-      <section
-        class="celebration-section section-pad"
-        id="loi-chuc"
-        aria-labelledby="celebration-title"
-      >
-        <p class="eyebrow">Cùng chung vui</p>
-        <h2 class="section-title" id="celebration-title">
-          Sự hiện diện của bạn<br />là món quà quý giá
-        </h2>
-        <div class="gift-card">
-          <h3>Mừng cưới</h3>
-          <p id="gift-message">
-            Thông tin tài khoản và mã QR sẽ được gia đình bổ sung.
-          </p>
-          <figure class="gift-qr" id="gift-qr-card" hidden>
-            <img id="gift-qr-image" alt="Mã QR mừng cưới" />
-          </figure>
-        </div>
+          <a class="venue-pin" data-map aria-label="Xem địa chỉ nhà gái trên Google Maps">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z" />
+              <circle cx="12" cy="9.5" r="2.6" />
+            </svg>
+          </a>
+          <span class="venue-hint">Chạm để chỉ đường</span>
+        </article>
+      </div>
+    </section>
+    <footer class="site-footer">
+      <span class="footer-mark" aria-hidden="true">囍</span>
+      <p>
+        <span data-name="bride">Tên Cô Dâu</span> &amp;
+        <span data-name="groom">Tên Chú Rể</span>
+      </p>
+      <p class="footer-date" data-wedding-date>Thứ Sáu · 20.05.2050</p>
+      <a href="#home">Về đầu thiệp</a>
+    </footer>
+  </main>
+</body>
 
-        <div class="rsvp-card">
-          <h3>Xác nhận tham dự</h3>
-          <p>Cho chúng mình biết bạn có thể đến chung vui nhé.</p>
-          <form id="rsvp-form">
-            <label for="rsvp-name">Tên của bạn</label>
-            <input
-              id="rsvp-name"
-              name="name"
-              autocomplete="name"
-              maxlength="60"
-              required
-            />
-            <label for="rsvp-attendance">Bạn sẽ tham dự?</label>
-            <select id="rsvp-attendance" name="attendance" required>
-              <option value="">Vui lòng chọn</option>
-              <option value="yes">Có, mình sẽ đến</option>
-              <option value="no">Rất tiếc, mình không thể đến</option>
-            </select>
-            <button class="button button-dark" type="submit">
-              Gửi xác nhận
-            </button>
-            <p
-              class="form-status"
-              id="rsvp-status"
-              role="status"
-              aria-live="polite"
-            ></p>
-          </form>
-        </div>
-
-        <div class="wishes">
-          <h3>Gửi lời chúc</h3>
-          <form id="wish-form">
-            <label for="wish-name">Tên của bạn</label>
-            <input
-              id="wish-name"
-              name="name"
-              autocomplete="name"
-              maxlength="60"
-              required
-            />
-            <label for="wish-message">Lời chúc</label>
-            <textarea
-              id="wish-message"
-              name="message"
-              rows="4"
-              maxlength="500"
-              required
-            ></textarea>
-            <button class="button button-outline" type="submit">
-              Gửi lời chúc
-            </button>
-            <p
-              class="form-status"
-              id="wish-status"
-              role="status"
-              aria-live="polite"
-            ></p>
-          </form>
-          <p class="storage-note">
-            Xác nhận và lời chúc được lưu trên trình duyệt của thiết bị này.
-          </p>
-          <div class="wish-list" id="wish-list" aria-live="polite"></div>
-        </div>
-      </section>
-
-      <footer class="site-footer">
-        <span class="footer-mark" aria-hidden="true">囍</span>
-        <p>
-          <span data-name="bride">Tên Cô Dâu</span> &amp;
-          <span data-name="groom">Tên Chú Rể</span>
-        </p>
-        <p class="footer-date" data-wedding-date>Thứ Sáu · 20.05.2050</p>
-        <a href="#home">Về đầu thiệp</a>
-      </footer>
-    </main>
-  </body>
 </html>
