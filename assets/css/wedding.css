@@ -28,8 +28,7 @@
   letter-spacing: 0.12em;
 }
 
-.opening-title,
-.section-title {
+.opening-title {
   font-family: var(--font-heading);
   font-size: clamp(34px, 9vw, 48px);
   font-weight: 400;
@@ -109,66 +108,10 @@
   font-size: 12px;
 }
 
-.site-header,
 #invitation-content {
   width: 100%;
   max-width: var(--page-width);
   margin-inline: auto;
-}
-
-.site-header {
-  position: absolute;
-  z-index: 5;
-  top: 0;
-  left: 50%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 18px;
-  color: white;
-  transform: translateX(-50%);
-}
-
-.brand-mark {
-  color: inherit;
-  font-family: var(--font-heading);
-  font-size: 30px;
-  line-height: 1;
-  text-decoration: none;
-}
-
-.photo {
-  overflow: hidden;
-  border-radius: 2px;
-  background: rgb(154 123 79 / 10%);
-}
-
-.photo img {
-  animation: none;
-  object-position: center;
-}
-
-.photo--portrait {
-  aspect-ratio: 3 / 4;
-}
-
-.photo--wide {
-  aspect-ratio: 4 / 3;
-}
-
-.photo--full {
-  aspect-ratio: 4 / 5;
-  border-radius: 0;
-}
-
-.hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  height: 100vh;
-  height: 100svh;
-  color: var(--paper);
-  background: var(--ink);
 }
 
 .hero-image {
@@ -380,12 +323,13 @@
   left: 0;
   bottom: 6%;
   width: 100%;
-  padding: 0 18px;
+  padding: 0 14px;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  /* Hai cột bên bằng nhau tuyệt đối, cột giữa luôn nằm đúng tâm. */
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: end;
-  column-gap: 14px;
-  color: var(--black-900);
+  column-gap: 12px;
+  color: var(--gold-700);
   text-shadow: none;
 }
 
@@ -413,6 +357,7 @@
   align-items: center;
   gap: 8px;
   font-family: "Antonio", sans-serif;
+  font-weight: 600;
   font-size: 0.8rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
@@ -433,11 +378,15 @@
   content: none;
 }
 
+.hero .hn-groom span:first-child::after {
+  margin-left: -0.32em;
+}
+
 .hero .hn-groom span:last-child,
 .hero .hn-bride span:last-child {
   font-family: "Corinthia", cursive;
-  font-size: clamp(1.6rem, 7.2vw, 2.1rem);
-  font-weight: 400;
+  font-size: clamp(1.3rem, 5.6vw, 1.9rem);
+  font-weight: 600;
   line-height: 1;
   white-space: nowrap;
 }
@@ -460,7 +409,12 @@
 }
 
 .hero .hn-main span {
-  background-image: linear-gradient(to bottom, #0a0a0a 0%, #2b2b2b 45%, #6b6b6b 100%);
+  background-image: linear-gradient(
+    to bottom,
+    var(--gold-700) 0%,
+    color-mix(in srgb, var(--gold-700) 70%, #0a0a0a) 55%,
+    color-mix(in srgb, var(--gold-700) 40%, #141414) 100%
+  );
   background-size: 100% var(--hn-main-gradient-height);
   background-repeat: no-repeat;
   -webkit-background-clip: text;
@@ -468,7 +422,6 @@
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
-
 .hero .hn-main span:first-child {
   font-size: var(--hn-main-number-size);
   background-position: center top;
@@ -508,179 +461,6 @@
   }
 }
 
-.section-pad {
-  padding: 76px 28px;
-}
-
-.invitation-section,
-.event-section,
-.celebration-section {
-  text-align: center;
-}
-
-.section-title {
-  margin-top: 12px;
-}
-
-.invitation-copy,
-.section-lead {
-  max-width: 370px;
-  margin: 18px auto 0;
-  color: rgb(30 27 24 / 78%);
-  font-size: 15px;
-}
-
-.families {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 14px;
-  margin: 38px 0 30px;
-  padding: 24px 0;
-  border-top: 1px solid rgb(154 123 79 / 32%);
-  border-bottom: 1px solid rgb(154 123 79 / 32%);
-}
-
-.family h3,
-.venue h3,
-.gift-card h3,
-.rsvp-card h3,
-.wishes h3 {
-  font-family: var(--font-heading);
-  font-size: 25px;
-  font-weight: 500;
-}
-
-.family p {
-  margin-top: 5px;
-  color: rgb(30 27 24 / 75%);
-  font-size: 13px;
-}
-
-.family-divider {
-  color: var(--gold);
-  font-family: var(--font-heading);
-  font-size: 26px;
-}
-
-.invitation-note {
-  font-size: 14px;
-}
-
-.invitation-rsvp {
-  margin-top: 22px;
-}
-
-.album-section {
-  padding-bottom: 72px;
-}
-
-.section-heading {
-  padding-top: 20px;
-  padding-bottom: 30px;
-  text-align: center;
-}
-
-.album {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  padding-inline: 8px;
-}
-
-.album .photo--wide {
-  grid-column: 1 / -1;
-}
-
-.album-feature {
-  grid-row: span 2;
-  align-self: center;
-}
-
-.album-small {
-  display: grid;
-  align-content: center;
-  gap: 8px;
-}
-
-.album-small .photo {
-  aspect-ratio: 4 / 5;
-}
-
-.photo--closing {
-  width: calc(100% - 16px);
-  margin: 8px auto 0;
-  aspect-ratio: 4 / 5;
-}
-
-.closing-copy {
-  margin: 18px 24px 0;
-  font-family: var(--font-heading);
-  font-size: 25px;
-  text-align: center;
-}
-
-.event-section {
-  background: transparent;
-}
-
-.event-date {
-  display: grid;
-  justify-items: center;
-  margin: 32px 0 22px;
-}
-
-.event-weekday {
-  color: var(--gold);
-  font-size: 14px;
-}
-
-.event-day {
-  font-family: var(--font-heading);
-  font-size: 88px;
-  line-height: 0.95;
-}
-
-.event-month {
-  font-size: 14px;
-  letter-spacing: 0.08em;
-}
-
-.schedule {
-  max-width: 370px;
-  margin: 0 auto 32px;
-  border-top: 1px solid rgb(154 123 79 / 35%);
-}
-
-.schedule-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 2px;
-  border-bottom: 1px solid rgb(154 123 79 / 35%);
-  text-align: left;
-}
-
-.schedule-item strong {
-  font-weight: 500;
-  text-align: right;
-}
-
-.venue {
-  max-width: 370px;
-  margin: 0 auto;
-}
-
-.venue h3 {
-  margin-top: 8px;
-}
-
-.venue > p:not(.eyebrow) {
-  margin: 8px 0 18px;
-  color: rgb(30 27 24 / 75%);
-  font-size: 14px;
-}
-
 .button {
   display: inline-flex;
   min-height: 46px;
@@ -705,212 +485,6 @@
 .button-dark:hover {
   color: var(--ink);
   background: transparent;
-}
-
-.button-outline {
-  color: var(--ink);
-  background: transparent;
-}
-
-.button-outline:hover {
-  color: var(--ivory);
-  background: var(--ink);
-}
-
-.button.is-disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.calendar-card {
-  max-width: 390px;
-  margin: 42px auto 0;
-  padding: 22px 16px;
-  border: 1px solid rgb(154 123 79 / 30%);
-  background: var(--ivory);
-}
-
-.calendar-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 12px;
-  text-align: left;
-}
-
-.calendar-heading h3 {
-  font-family: var(--font-heading);
-  font-size: 23px;
-  font-weight: 500;
-}
-
-.calendar-heading span {
-  color: rgb(30 27 24 / 70%);
-  font-size: 11px;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 3px;
-}
-
-.calendar-cell {
-  display: grid;
-  min-height: 38px;
-  place-items: center;
-  border-radius: 50%;
-  font-size: 13px;
-}
-
-.calendar-cell.is-weekday {
-  color: var(--gold);
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.calendar-cell.is-wedding-day {
-  color: var(--ivory);
-  background: var(--ink);
-}
-
-.countdown {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-top: 20px;
-}
-
-.countdown div {
-  display: grid;
-  gap: 2px;
-}
-
-.countdown strong {
-  font-family: var(--font-heading);
-  font-size: 27px;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.countdown span {
-  color: rgb(30 27 24 / 70%);
-  font-size: 11px;
-}
-
-.celebration-section {
-  padding-bottom: 54px;
-}
-
-.gift-card,
-.rsvp-card,
-.wishes {
-  max-width: 390px;
-  margin: 28px auto 0;
-  padding: 22px;
-  border: 1px solid rgb(154 123 79 / 30%);
-  text-align: left;
-}
-
-.gift-card {
-  text-align: center;
-  background: rgb(154 123 79 / 7%);
-}
-
-.gift-card p,
-.rsvp-card > p {
-  margin-top: 5px;
-  color: rgb(30 27 24 / 75%);
-  font-size: 14px;
-}
-
-.gift-qr {
-  width: min(100%, 240px);
-  aspect-ratio: 1;
-  margin: 16px auto 0;
-  background: var(--ivory);
-}
-
-.gift-qr img {
-  object-fit: contain;
-}
-
-.gift-qr[hidden] {
-  display: none;
-}
-
-.rsvp-card h3,
-.wishes h3 {
-  margin-bottom: 6px;
-}
-
-.rsvp-card form,
-.wishes form {
-  display: grid;
-  gap: 9px;
-  margin-top: 18px;
-}
-
-.rsvp-card label,
-.wishes label {
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.rsvp-card input,
-.rsvp-card select,
-.wishes input,
-.wishes textarea {
-  width: 100%;
-  min-height: 46px;
-  padding: 11px 12px;
-  border: 1px solid rgb(30 27 24 / 28%);
-  border-radius: 2px;
-  color: var(--ink);
-  background: transparent;
-}
-
-.wishes textarea {
-  min-height: 110px;
-  resize: vertical;
-}
-
-.form-status {
-  min-height: 1.5em;
-  color: var(--gold);
-  font-size: 13px;
-}
-
-.storage-note {
-  margin-top: 14px;
-  color: rgb(30 27 24 / 65%);
-  font-size: 12px;
-}
-
-.wish-list {
-  display: grid;
-  gap: 12px;
-  margin-top: 18px;
-}
-
-.wish-item {
-  padding-top: 12px;
-  border-top: 1px solid rgb(154 123 79 / 25%);
-  overflow-wrap: anywhere;
-}
-
-.wish-item strong {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.wish-item p {
-  margin-top: 3px;
-  color: rgb(30 27 24 / 78%);
-  font-size: 14px;
 }
 
 .site-footer {
@@ -942,44 +516,6 @@
   margin-top: 14px;
   color: var(--ink);
   font-size: 13px;
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (min-width: 700px) {
-  body {
-    padding: 0;
-  }
-  .hero {
-    height: 100svh;
-  }
-  .site-header {
-    top: 0;
-  }
-}
-
-@media (max-width: 360px) {
-  .families {
-    gap: 8px;
-  }
-
-  .family h3 {
-    font-size: 22px;
-  }
-
-  .schedule-item {
-    font-size: 14px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1131,19 +667,18 @@
   mask-size: contain;
 }
 .album-wrap {
-  --card-w: min(72vw, 19rem);
-  --brush: min(92vw, 26rem);
+  --card-w: min(70vw, 19rem);
+  --brush: min(70vw,30rem);
   position: relative;
   width: 100%;
-  height: 80vh;
-  height: max(80svh, calc(var(--card-w) * 1.5 + 5rem));
-  overflow: hidden;
+  height: 60vh;
+  height: max(60svh, calc(var(--card-w) * 1.5 + 5rem));
 }
 
 .component-design {
   position: absolute;
-  left: 50%;
-  top: 28%;
+  left: 0%;
+  top: -20%;
   width: var(--brush);
   height: var(--brush);
   background-color: #9a7b4f;
@@ -1155,12 +690,7 @@
   mask-position: center;
   -webkit-mask-size: contain;
   mask-size: contain;
-  transform: translate(-50%, -50%) rotate(45deg);
   pointer-events: none;
-}
-
-.component-design.fix {
-  top: 72%;
 }
 
 .album-wrap .gallery {
@@ -1198,69 +728,6 @@
   will-change: transform;
 }
 
-.nav-btn {
-  position: absolute;
-  top: 50%;
-  z-index: 200;
-  display: grid;
-  width: 56px;
-  height: 56px;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  background: none; /* bỏ ô nền xám */
-  cursor: pointer;
-  transform: translateY(-50%);
-  transition: transform 200ms ease;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.nav-btn img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgb(255 255 255 / 45%));
-  opacity: 0.55;
-  transition:
-    opacity 200ms ease,
-    filter 200ms ease;
-}
-
-.nav-prev img {
-  transform: scaleX(-1);
-}
-
-.nav-prev {
-  left: 8px;
-}
-.nav-next {
-  right: 8px;
-}
-
-@media (hover: hover) {
-  .nav-btn:hover {
-    transform: translateY(-50%) scale(1.08);
-  }
-
-  .nav-btn:hover img {
-    opacity: 0.9;
-    filter: brightness(0) invert(0.35) drop-shadow(0 3px 8px rgba(255, 255, 254, 0.855));
-  }
-}
-
-.nav-btn:active {
-  transform: translateY(-50%) scale(0.94);
-}
-
-.nav-btn:active img {
-  opacity: 1;
-  filter: brightness(0) invert(0.25) drop-shadow(0 2px 6px rgb(30 27 24 / 60%));
-}
-
-.nav-btn:focus-visible {
-  outline: 2px solid var(--gold-300);
-  outline-offset: 2px;
-}
 
 .album-wrap .cards li {
   cursor: pointer;
@@ -1307,4 +774,439 @@
   .text-confession .story {
     font-size: clamp(16px, 3.7cqw, 20px);
   }
+}
+
+/* ===== Khung viền ảnh chính trong album ===== */
+.album-wrap .cards li {
+  transition: box-shadow 450ms ease;
+}
+
+/* Viền ngoài: kem dày, vàng gold, kem mờ, rồi đổ bóng */
+.album-wrap .cards li.is-active {
+  box-shadow:
+    0 0 0 6px var(--gold-500),
+    0 0 0 7px var(--gold-500, #9a7b4f),
+    0 24px 48px rgb(30 27 24 / 30%);
+}
+
+/* Đường kẻ mảnh nằm trong ảnh */
+.album-wrap .cards li::after,
+.album-wrap .cards li::before {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 450ms ease;
+}
+.album-wrap .cards li::before {
+  position: absolute;
+  inset: -14px;
+  content: "";
+  border: 1px solid var(--gold-500, #9a7b4f);
+  border-radius: calc(0.8rem + 14px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 450ms ease;
+}
+
+.album-wrap .cards li.is-active::after,
+.album-wrap .cards li.is-active::before {
+  opacity: 1;
+}
+
+
+/* ===== Họa tiết cỏ hoa phía sau album ===== */
+.album-botanicals {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.botanical {
+  position: absolute;
+  color: var(--gold-500, #9a7b4f);
+  opacity: 0.7;
+  will-change: transform;
+}
+
+.botanical svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Nét luôn mảnh đều nhau dù họa tiết to hay nhỏ */
+.botanical svg * {
+  vector-effect: non-scaling-stroke;
+}
+
+.botanical svg .tint {
+  fill: currentColor;
+  fill-opacity: 0.12;
+}
+
+.botanical svg .solid {
+  fill: currentColor;
+  stroke: none;
+}
+
+@media (max-width: 420px) {
+  .botanical {
+    scale: 0.8;
+  }
+}
+
+
+.page-leaves {
+  position: fixed;
+  inset: 0;
+  z-index: 30;         
+  width: 100%;
+  height: 100%;
+  pointer-events: none; 
+}
+
+/* ===== Thông tin lễ cưới ===== */
+.info-section {
+  padding: 24px 22px 90px;
+  text-align: center;
+}
+
+.info-invite {
+  max-width: 320px;
+  margin: 18px auto 0;
+  color: rgb(30 27 24 / 78%);
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.info-role {
+  display: block;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+/* --- cặp đôi --- */
+.info-couple {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  max-width: 420px;
+  margin: 32px auto 0;
+}
+
+.info-name {
+  display: block;
+  margin-top: 4px;
+  font-family: "Corinthia", cursive;
+  font-size: clamp(2rem, 9vw, 2.8rem);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.info-amp {
+  color: var(--gold-500);
+  font-family: var(--font-heading);
+  font-size: 30px;
+  font-style: italic;
+}
+
+/* --- ngày cưới --- */
+.info-date {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin: 42px auto 0;
+}
+
+.info-weekday {
+  color: var(--gold-500);
+  font-family: "Antonio", sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.5em;
+  padding-left: 0.5em;
+  text-transform: uppercase;
+}
+
+.info-date-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  width: min(100%, 420px);
+}
+
+.info-month,
+.info-year {
+  position: relative;
+  white-space: nowrap;
+  font-family: "Antonio", sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.info-month {
+  justify-self: end;
+}
+
+.info-year {
+  justify-self: start;
+}
+
+/* đường kẻ vàng hai bên số ngày */
+.info-month::after,
+.info-year::before {
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 1px;
+  background: var(--gold-500);
+  content: "";
+}
+.info-month::after { left: calc(100% + 8px); }
+.info-year::before { right: calc(100% + 8px); }
+
+.info-day {
+  padding: 0 18px;
+  border-right: 1px solid rgb(154 123 79 / 40%);
+  border-left: 1px solid rgb(154 123 79 / 40%);
+  background: linear-gradient(180deg, var(--gold-400) 0%, var(--gold-600) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-family: "Antonio", sans-serif;
+  font-size: clamp(4.6rem, 22vw, 6.2rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.info-lunar {
+  color: rgb(30 27 24 / 60%);
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-style: italic;
+}
+
+.info-side {
+  margin: 2px 0 0;
+  font-family: "Corinthia", cursive;
+  font-size: clamp(2.3rem, 11vw, 3rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.info-family {
+  margin-top: 6px;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.info-label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.venue-address {
+  max-width: none;
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.venue-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+/* ===== Hai bên gia đình: một khối chia đôi ===== */
+.info-split {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 440px;
+  margin: 46px auto 0;
+  border: 1px solid rgb(154 123 79 / 45%);
+  box-shadow: 0 22px 50px rgb(58 38 38 / 22%);
+}
+
+.split-side {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 34px 14px 26px;
+  text-align: center;
+}
+
+.split-side::before {
+  position: absolute;
+  inset: 6px;
+  content: "";
+  pointer-events: none;
+}
+
+.split-side--groom {
+  color: var(--gold-50);
+  background: var(--ink);
+}
+.split-side--groom::before { border: 1px solid rgb(230 203 134 / 32%); }
+.split-side--groom .info-role,
+.split-side--groom .info-label,
+.split-side--groom dt { color: var(--gold-200); }
+.split-side--groom .venue-address { color: rgb(251 243 220 / 82%); }
+.split-side--groom .venue-hint { color: rgb(251 243 220 / 60%); }
+.split-side--groom dd { color: var(--gold-100); }
+.split-side--groom .split-details { border-color: rgb(230 203 134 / 28%); }
+.split-side--groom .split-details > div { border-color: rgb(230 203 134 / 18%); }
+.split-side--groom .venue-pin {
+  border-color: var(--gold-200);
+  color: var(--gold-200);
+  background: transparent;
+}
+
+.split-side--bride {
+  color: var(--ink);
+  background: var(--ivory);
+}
+.split-side--bride::before { border: 1px solid rgb(154 123 79 / 28%); }
+.split-side--bride .info-role,
+.split-side--bride .info-label,
+.split-side--bride dt { color: var(--gold-500); }
+.split-side--bride .info-side { color: var(--gold-600); }
+.split-side--bride .venue-address { color: rgb(30 27 24 / 78%); }
+.split-side--bride .venue-hint { color: rgb(30 27 24 / 60%); }
+.split-side--bride dd { color: var(--gold-600); }
+
+.split-details {
+  width: 100%;
+  margin: 20px 0 0;
+  border-top: 1px solid rgb(154 123 79 / 30%);
+}
+
+.split-details > div {
+  display: grid;
+  gap: 1px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgb(154 123 79 / 20%);
+}
+
+.split-details dt {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.split-details dd {
+  margin: 0;
+  font-family: "Antonio", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+
+.split-addr {
+  margin: 16px 0 20px;
+}
+
+.split-side .venue-pin {
+  margin-top: auto;
+}
+
+.split-side .venue-hint {
+  margin-top: 8px;
+}
+
+.split-amp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 3px solid var(--ivory);
+  border-radius: 50%;
+  color: var(--ivory);
+  background: var(--gold-500);
+  box-shadow: 0 6px 16px rgb(58 38 38 / 28%);
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-style: italic;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+}
+
+.venue-pin {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--gold-500);
+  border-radius: 50%;
+  color: var(--gold-500);
+  background: var(--ivory);
+  cursor: pointer;
+  transition: color 220ms ease, background-color 220ms ease, transform 220ms ease;
+}
+
+.venue-pin::after {
+  position: absolute;
+  inset: -1px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  animation: pin-pulse 2.4s ease-out infinite;
+}
+
+@keyframes pin-pulse {
+  from { opacity: 0.6; transform: scale(1); }
+  to   { opacity: 0;   transform: scale(1.7); }
+}
+
+@media (hover: hover) {
+  .venue-pin:hover {
+    color: var(--ivory);
+    background: var(--gold-500);
+    transform: translateY(-2px);
+  }
+  .split-side--groom .venue-pin:hover {
+    color: var(--ink);
+    background: var(--gold-200);
+  }
+}
+
+.venue-pin:active { transform: scale(0.94); }
+
+@media (max-width: 360px) {
+  .info-date-main { gap: 12px; }
+  .info-month::after, .info-year::before { display: none; }
+}
+
+@media (max-width: 380px) {
+  .info-split { grid-template-columns: 1fr; }
+  .split-side { padding: 30px 20px 24px; }
 }
