@@ -1,18 +1,9 @@
 const WEDDING_CONFIG = {
-  brideName: "Tên Cô Dâu",
-  groomName: "Tên Chú Rể",
-  brideFamily: "Ông/Bà [Tên cha mẹ cô dâu]",
-  groomFamily: "Ông/Bà [Tên cha mẹ chú rể]",
-  receptionTime: "",
-  ceremonyTime: "12:00",
-  venueName: "",
-  venueAddress: "",
-  giftQrImage: "",
+  brideName: "Nguyễn Nhung",
+  groomName: "Hoàng Vinh",
 };
 
 const WEDDING = new Date(2050, 4, 20, 12, 0, 0);
-const WISHES_KEY = "wedding-invitation-wishes";
-const RSVP_KEY = "wedding-invitation-rsvps";
 
 function setText(selector, value) {
   document.querySelectorAll(selector).forEach((element) => {
@@ -28,219 +19,14 @@ function vietnameseWeekday(date) {
 function setupWeddingDetails() {
   setText('[data-name="bride"]', WEDDING_CONFIG.brideName);
   setText('[data-name="groom"]', WEDDING_CONFIG.groomName);
-  setText('[data-family="bride"]', WEDDING_CONFIG.brideFamily);
-  setText('[data-family="groom"]', WEDDING_CONFIG.groomFamily);
-  setText("[data-wedding-weekday]", vietnameseWeekday(WEDDING));
-
-  const dateLabel = `${vietnameseWeekday(WEDDING)} · ${String(
-    WEDDING.getDate(),
-  ).padStart(
-    2,
-    "0",
-  )}.${String(WEDDING.getMonth() + 1).padStart(2, "0")}.${WEDDING.getFullYear()}`;
-  setText("[data-wedding-date]", dateLabel);
-
-  setText(
-    '[data-time="reception"]',
-    WEDDING_CONFIG.receptionTime || "Vui lòng cập nhật",
-  );
-  setText(
-    '[data-time="ceremony"]',
-    WEDDING_CONFIG.ceremonyTime || "Vui lòng cập nhật",
-  );
-  setText(
-    "[data-venue-name]",
-    WEDDING_CONFIG.venueName || "Địa điểm tổ chức sẽ được cập nhật",
-  );
-  setText(
-    "[data-venue-address]",
-    WEDDING_CONFIG.venueAddress || "Vui lòng quay lại xem thông tin địa chỉ.",
-  );
-
-  if (WEDDING_CONFIG.giftQrImage) {
-    document.getElementById("gift-qr-image").src = WEDDING_CONFIG.giftQrImage;
-    document.getElementById("gift-qr-card").hidden = false;
-    setText("#gift-message", "Quét mã QR để gửi lời chúc mừng đến gia đình.");
-  }
-
-  if (WEDDING_CONFIG.venueName && WEDDING_CONFIG.venueAddress) {
-    const directions = document.getElementById("directions-link");
-    const query = encodeURIComponent(
-      `${WEDDING_CONFIG.venueName}, ${WEDDING_CONFIG.venueAddress}`,
-    );
-    directions.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
-    directions.target = "_blank";
-    directions.rel = "noopener noreferrer";
-    directions.removeAttribute("aria-disabled");
-    directions.classList.remove("is-disabled");
-  }
-}
-
-function renderCalendar() {
-  const calendar = document.getElementById("calendar");
-  const weekdays = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
-  const firstDay = new Date(
-    WEDDING.getFullYear(),
-    WEDDING.getMonth(),
-    1,
-  ).getDay();
-  const daysInMonth = new Date(
-    WEDDING.getFullYear(),
+  const dateLabel = `${vietnameseWeekday(WEDDING)} · ${String(WEDDING.getDate()).padStart(2, "0")}.${String(
     WEDDING.getMonth() + 1,
-    0,
-  ).getDate();
-
-  weekdays.forEach((weekday) => {
-    const cell = document.createElement("span");
-    cell.className = "calendar-cell is-weekday";
-    cell.textContent = weekday;
-    calendar.append(cell);
-  });
-
-  for (let index = 0; index < firstDay; index += 1) {
-    const spacer = document.createElement("span");
-    spacer.className = "calendar-cell";
-    spacer.setAttribute("aria-hidden", "true");
-    calendar.append(spacer);
-  }
-
-  for (let day = 1; day <= daysInMonth; day += 1) {
-    const cell = document.createElement("span");
-    cell.className = "calendar-cell";
-    cell.textContent = String(day);
-    if (day === WEDDING.getDate()) {
-      cell.classList.add("is-wedding-day");
-      cell.setAttribute("aria-label", `${day} tháng 5, ngày cưới`);
-    }
-    calendar.append(cell);
-  }
-}
-
-function updateCountdown() {
-  const remaining = WEDDING.getTime() - Date.now();
-  const secondsLeft = Math.max(0, Math.floor(remaining / 1000));
-  const values = [
-    Math.floor(secondsLeft / 86400),
-    Math.floor((secondsLeft % 86400) / 3600),
-    Math.floor((secondsLeft % 3600) / 60),
-    secondsLeft % 60,
-  ];
-  ["days", "hours", "minutes", "seconds"].forEach((unit, index) => {
-    document.getElementById(`count-${unit}`).textContent = String(
-      values[index],
-    );
-  });
-}
-
-function announce(element, message) {
-  element.textContent = message;
-}
-
-function readRecords(key, statusElement) {
-  let stored;
-  try {
-    stored = localStorage.getItem(key);
-  } catch (error) {
-    if (!(error instanceof DOMException)) throw error;
-    announce(statusElement, "Trình duyệt không cho phép đọc dữ liệu đã lưu.");
-    return null;
-  }
-
-  if (!stored) return [];
-
-  let records;
-  try {
-    records = JSON.parse(stored);
-  } catch (error) {
-    if (!(error instanceof SyntaxError)) throw error;
-    announce(statusElement, "Dữ liệu đã lưu bị lỗi và không thể hiển thị.");
-    return null;
-  }
-  if (!Array.isArray(records)) {
-    announce(statusElement, "Dữ liệu đã lưu không đúng định dạng.");
-    return null;
-  }
-  return records;
-}
-
-function saveRecord(key, record, statusElement) {
-  const records = readRecords(key, statusElement);
-  if (!records) return false;
-  records.unshift(record);
-  try {
-    localStorage.setItem(key, JSON.stringify(records));
-    return true;
-  } catch (error) {
-    if (!(error instanceof DOMException)) throw error;
-    announce(
-      statusElement,
-      "Trình duyệt không thể lưu dữ liệu. Hãy bật bộ nhớ trang web rồi thử lại.",
-    );
-    return false;
-  }
-}
-
-function renderWishes() {
-  const status = document.getElementById("wish-status");
-  const list = document.getElementById("wish-list");
-  const wishes = readRecords(WISHES_KEY, status);
-  if (!wishes) return;
-  list.replaceChildren();
-
-  wishes.forEach((wish) => {
-    const item = document.createElement("article");
-    item.className = "wish-item";
-    const name = document.createElement("strong");
-    name.textContent = wish.name;
-    const message = document.createElement("p");
-    message.textContent = wish.message;
-    item.append(name, message);
-    list.append(item);
-  });
-}
-
-function setupForms() {
-  const rsvpForm = document.getElementById("rsvp-form");
-  const rsvpStatus = document.getElementById("rsvp-status");
-  rsvpForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const formData = new FormData(rsvpForm);
-    const attending = formData.get("attendance") === "yes";
-    const saved = saveRecord(
-      RSVP_KEY,
-      {
-        name: String(formData.get("name")).trim(),
-        attendance: attending ? "yes" : "no",
-        createdAt: new Date().toISOString(),
-      },
-      rsvpStatus,
-    );
-    if (!saved) return;
-    rsvpForm.reset();
-    announce(rsvpStatus, "Cảm ơn bạn, xác nhận đã được lưu trên thiết bị này.");
-  });
-
-  const wishForm = document.getElementById("wish-form");
-  const wishStatus = document.getElementById("wish-status");
-  wishForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const formData = new FormData(wishForm);
-    const saved = saveRecord(
-      WISHES_KEY,
-      {
-        name: String(formData.get("name")).trim(),
-        message: String(formData.get("message")).trim(),
-        createdAt: new Date().toISOString(),
-      },
-      wishStatus,
-    );
-    if (!saved) return;
-    wishForm.reset();
-    announce(wishStatus, "Cảm ơn bạn, lời chúc đã được lưu trên thiết bị này.");
-    renderWishes();
-  });
-
-  renderWishes();
+  ).padStart(2, "0")}.${WEDDING.getFullYear()}`;
+  setText("[data-wedding-date]", dateLabel);
+    setText("[data-wd-weekday]", vietnameseWeekday(WEDDING));
+  setText("[data-wd-day]", String(WEDDING.getDate()).padStart(2, "0"));
+  setText("[data-wd-month]", `Tháng ${String(WEDDING.getMonth() + 1).padStart(2, "0")}`);
+  setText("[data-wd-year]", String(WEDDING.getFullYear()));
 }
 
 function setupEnvelope() {
@@ -262,23 +48,6 @@ function setupLoveLetterAnimation() {
   if (!window.gsap || !window.ScrollTrigger || !window.SplitText) return;
 
   document.fonts.ready.then(() => {
-    // Tiêu đề: từng chữ nảy lên
-    const title = SplitText.create(".love-letter .section-title", {
-      type: "chars",
-    });
-    gsap.from(title.chars, {
-      y: 40,
-      rotation: 8,
-      opacity: 0,
-      duration: 0.9,
-      ease: "back.out(2)",
-      stagger: 0.04,
-      scrollTrigger: {
-        trigger: ".love-letter .section-title",
-        start: "top 85%",
-      },
-    });
-
     document.querySelectorAll(".confession-content").forEach((block) => {
       const isReverse = block.classList.contains("is-reverse");
       const img = block.querySelector("img");
@@ -338,25 +107,51 @@ function setupIconRotation() {
   const mm = gsap.matchMedia();
 
   mm.add("(prefers-reduced-motion: no-preference)", () => {
-    const icon = ".icon-title-main";
+    gsap.utils.toArray(".icon-title-main").forEach((icon) => {
+      // Xuất hiện: phóng to từ 0
+      gsap.from(icon, {
+        scale: 0,
+        duration: 0.9,
+        ease: "back.out(2)",
+        scrollTrigger: { trigger: icon, start: "top 90%", once: true },
+      });
 
-    // Xuất hiện: phóng to từ 0
-    gsap.from(icon, {
-      scale: 0,
-      duration: 0.9,
-      ease: "back.out(2)",
-      scrollTrigger: { trigger: icon, start: "top 90%", once: true },
+      // Xoay tròn liên tục, chỉ chạy khi icon đang trong màn hình
+      gsap.to(icon, {
+        rotation: 360,
+        duration: 8,
+        ease: "none",
+        repeat: -1,
+        scrollTrigger: {
+          trigger: icon,
+          toggleActions: "play pause resume pause",
+        },
+      });
     });
+  });
+}
 
-    // Xoay tròn liên tục, chỉ chạy khi icon đang trong màn hình
-    gsap.to(icon, {
-      rotation: 360,
-      duration: 8,
-      ease: "none",
-      repeat: -1,
+function setupMomentsHeadingAnimation() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+
+  const mm = gsap.matchMedia();
+
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const section = document.querySelector(".moments-section");
+    const heading = section?.querySelector(".block-title");
+    if (!heading) return;
+
+    gsap.from(heading.children, {
+      y: 24,
+      opacity: 0,
+      filter: "blur(5px)",
+      duration: 0.8,
+      ease: "power2.out",
+      stagger: 0.18,
       scrollTrigger: {
-        trigger: icon,
-        toggleActions: "play pause resume pause",
+        trigger: heading,
+        start: "top 85%",
+        once: true,
       },
     });
   });
@@ -367,15 +162,20 @@ function setupAlbumCarousel() {
 
   const gallery = document.querySelector(".gallery");
   const proxy = document.querySelector(".drag-proxy");
+  const wrapEl = document.querySelector(".album-wrap");
   const cards = gsap.utils.toArray(".gallery .cards li");
-  if (!gallery || !proxy || !cards.length) return;
+  if (!gallery || !proxy || !wrapEl || !cards.length) return;
 
   const n = cards.length;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const wrapDistance = gsap.utils.wrap(-n / 2, n / 2);
   const state = { pos: 0 };
+  const intro = { v: reduce ? 1 : 0 };
+  if (!reduce) state.pos = .5;
   let target = 0;
   let step = 0;
+  const gust = (power) =>
+    wrapEl.dispatchEvent(new CustomEvent("album:gust", { detail: { power } }));
 
   function measure() {
     step = cards[0].offsetWidth * 0.6;
@@ -383,21 +183,25 @@ function setupAlbumCarousel() {
   }
 
   function render() {
+    const k = intro.v;
     cards.forEach((card, i) => {
       const d = wrapDistance(i - state.pos);
       const a = Math.abs(d);
+      card.classList.toggle("is-active", k > 0.95 && a < 0.5);
       gsap.set(card, {
-        x: d * step,
-        scale: 1 - Math.min(a, 3) * 0.1,
-        rotation: d * 5,
-        opacity: a > 2.5 ? 0 : 1 - a * 0.28,
+        x: d * step * k,
+        scale: (1 - Math.min(a, 3) * 0.1) * (0.85 + 0.15 * k),
+        rotation: d * 5 * k,
+        opacity: (a > 2.5 ? 0 : 1 - a * 0.28) * Math.min(1, k * 1.6),
         zIndex: Math.round(100 - a * 10),
-        pointerEvents: a > 2.5 ? "none" : "auto", // ảnh nào nhìn thấy đều bấm được
+        pointerEvents: a > 2.5 || k < 0.95 ? "none" : "auto",
       });
     });
   }
 
   function goTo(index) {
+    const diff = index - target;
+    if (diff !== 0) gust(-Math.sign(diff) * 1.6);
     target = index;
     gsap.to(state, {
       pos: target,
@@ -408,14 +212,6 @@ function setupAlbumCarousel() {
     });
   }
 
-  document
-    .querySelector(".nav-prev")
-    .addEventListener("click", () => goTo(Math.round(target) - 1));
-  document
-    .querySelector(".nav-next")
-    .addEventListener("click", () => goTo(Math.round(target) + 1));
-
-  // Bấm vào ảnh: ảnh bên cạnh thì chuyển tới đúng ảnh đó, ảnh giữa thì sang ảnh kế tiếp
   function handleCardClick(card) {
     const i = cards.indexOf(card);
     if (i < 0) return;
@@ -423,40 +219,301 @@ function setupAlbumCarousel() {
     goTo(Math.round(state.pos) + (d === 0 ? 1 : d));
   }
 
-  // Kéo hoặc vuốt ngang
   let startPos = 0;
   Draggable.create(proxy, {
     type: "x",
     trigger: gallery,
-    dragClickables: false, // bấm nút prev/next không bị tính là kéo
+    dragClickables: false,
     onPress() {
       gsap.killTweensOf(state);
       startPos = state.pos;
     },
     onDrag() {
       state.pos = startPos - (this.x - this.startX) / step;
+      gust(Math.sign(this.deltaX) * 0.12);
       render();
     },
     onRelease() {
       goTo(Math.round(state.pos));
     },
     onClick() {
-      // chạm hoặc bấm mà không kéo
       const card = this.pointerEvent.target.closest(".cards li");
       if (card) handleCardClick(card);
     },
   });
+  if (!reduce && window.ScrollTrigger) {
+    const navBtns = wrapEl.querySelectorAll(".nav-btn");
+    if (navBtns.length) gsap.set(navBtns, { opacity: 0 });
 
+    const tl = gsap.timeline({
+      paused: true,
+      onComplete: () => {
+        state.pos = Math.round(state.pos);
+        render();
+      },
+    });
+    tl.to(intro, { v: 1, duration: 1.5, ease: "power3.out", onUpdate: render }, 0)
+      .to(state, { pos: 0, duration: 1.9, ease: "power3.out", onUpdate: render }, 0);
+    if (navBtns.length) {
+      tl.to(navBtns, { opacity: 1, duration: 0.8, stagger: 0.12, clearProps: "opacity" }, 1.0);
+    }
+
+    ScrollTrigger.create({
+      trigger: wrapEl,
+      start: "top 75%",
+      once: true,
+      onEnter: () => tl.play(),
+    });
+  }
   window.addEventListener("resize", measure);
   measure();
 }
+function setupFallingLeaves() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+  const canvas = document.createElement("canvas");
+  canvas.className = "page-leaves";
+  canvas.setAttribute("aria-hidden", "true");
+  document.body.append(canvas);
+  const ctx = canvas.getContext("2d");
+
+  const SHAPES = {
+    leaf: new Path2D("M0 -1C0.7 -0.4 0.6 0.5 0 1C-0.6 0.5 -0.7 -0.4 0 -1Z"),
+    petal: new Path2D("M0 -0.8C0.9 -1 1 0.3 0 1C-1 0.3 -0.9 -1 0 -0.8Z"),
+  };
+  const COLORS = ["#BF953F", "#D4AF5A", "#E6CB86", "#B76E79", "#E3B7AE", "#A67C2E"];
+
+  let w = 0, h = 0, dpr = 1;
+  let wind = 0;
+  let raf = 0, last = 0;
+  let scrollDy = 0, lastY = window.scrollY;
+  const rand = gsap.utils.random;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function spawn(p, initial) {
+    const z = rand(0.45, 1.15); // độ sâu: nhỏ = xa
+    p.z = z;
+    p.len = rand(9, 15) * z + 3;
+    p.x = rand(0, w);
+    p.y = initial ? rand(-20, h) : rand(-120, -20);
+    p.vy = rand(20, 36) * z;
+    p.amp = rand(16, 36) * z;
+    p.freq = rand(0.5, 1.1);
+    p.phase = rand(0, Math.PI * 2);
+    p.flipSpeed = rand(1.2, 2.8);
+    p.flipPhase = rand(0, Math.PI * 2);
+    p.rot = rand(0, Math.PI * 2);
+    p.spin = rand(-0.9, 0.9);
+    p.t = 0;
+    p.kind = Math.random() < 0.3 ? "petal" : "leaf";
+    p.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    return p;
+  }
+
+  resize();
+  const count = w < 420 ? 18 : w < 900 ? 24 : 32;
+  const parts = Array.from({ length: count }, () => spawn({}, true));
+  parts.sort((a, b) => a.z - b.z); // lá xa vẽ trước, lá gần vẽ sau
+
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
+    last = now;
+    wind += (0 - wind) * Math.min(1, dt * 1.4);
+
+    const dy = scrollDy; // quãng cuộn kể từ khung hình trước
+    scrollDy = 0;
+
+    ctx.clearRect(0, 0, w, h);
+
+    for (const p of parts) {
+      p.t += dt;
+      const sway = Math.cos(p.t * p.freq + p.phase) * p.amp * p.freq;
+      p.x += (sway + wind * (50 + 90 * p.z)) * dt;
+      p.y += (p.vy - Math.abs(wind) * 28 * p.z) * dt;
+      p.y -= dy * 0.35 * p.z; // thị sai khi cuộn: lá gần trôi nhanh hơn
+      p.rot += (p.spin + wind * 1.6) * dt;
+
+      if (p.y < -80) { // cuộn ngược lên quá xa: cho lá vòng xuống dưới
+        p.y = h + 30;
+        p.x = rand(0, w);
+      }
+      if (p.y > h + 30 || p.x < -60 || p.x > w + 60) {
+        spawn(p, false);
+        if (Math.abs(wind) > 0.5) p.x = wind > 0 ? rand(-40, w * 0.3) : rand(w * 0.7, w + 40);
+        continue;
+      }
+
+      const flip = Math.cos(p.t * p.flipSpeed + p.flipPhase);
+      const face = Math.abs(flip);
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.scale(p.len * 0.5 * (0.25 + 0.75 * face), p.len);
+      ctx.globalAlpha = (0.3 + 0.45 * p.z) * (0.6 + 0.4 * face);
+      if (p.z > 1) {
+        ctx.shadowColor = "rgba(212,175,90,0.7)";
+        ctx.shadowBlur = 8 * face;
+      }
+      ctx.fillStyle = p.color;
+      ctx.fill(SHAPES[p.kind]);
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha *= 0.55 + 0.45 * face;
+      ctx.strokeStyle = "rgba(255,248,225,0.8)";
+      ctx.lineWidth = 0.07;
+      ctx.beginPath();
+      ctx.moveTo(0, -0.85);
+      ctx.lineTo(0, 0.85);
+      ctx.stroke();
+      ctx.restore();
+    }
+    raf = requestAnimationFrame(frame);
+  }
+
+  window.addEventListener("resize", resize);
+  window.addEventListener(
+    "scroll",
+    () => {
+      const y = window.scrollY;
+      scrollDy += y - lastY;
+      lastY = y;
+    },
+    { passive: true },
+  );
+  window.addEventListener("album:gust", (e) => {
+    wind = gsap.utils.clamp(-3, 3, wind + e.detail.power);
+  });
+
+  raf = requestAnimationFrame(frame);
+}
+function setupMapLinks() {
+  document.querySelectorAll("[data-map]").forEach((link) => {
+    const card = link.closest(".venue-card");
+    const address = card?.querySelector(".venue-address")?.textContent.trim();
+    const custom = link.dataset.mapUrl;
+    if (!custom && !address) return;
+
+    link.href =
+      custom ||
+      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+}
+
+function setupInfoAnimation() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const section = document.querySelector(".info-section");
+    if (!section) return;
+
+    const once = (trigger, start = "top 85%") => ({ trigger, start, once: true });
+    const title = section.querySelector(".block-title");
+    if (title) {
+      gsap.from(title.children, {
+        y: 24,
+        opacity: 0,
+        filter: "blur(5px)",
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.18,
+        scrollTrigger: once(title),
+      });
+    }
+
+    const invite = section.querySelector(".info-invite");
+    if (invite) {
+      gsap.from(invite, {
+        y: 18,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: once(invite),
+      });
+    }
+
+    const couple = section.querySelector(".info-couple");
+    const [groom, bride] = section.querySelectorAll(".info-person");
+    const coupleAmp = couple?.querySelector(".info-amp");
+    if (couple && groom && bride && coupleAmp) {
+      gsap.timeline({ scrollTrigger: once(couple) })
+        .from(groom, { x: -36, opacity: 0, duration: 0.9, ease: "power3.out" }, 0)
+        .from(bride, { x: 36, opacity: 0, duration: 0.9, ease: "power3.out" }, 0)
+        .from(coupleAmp, { scale: 0, rotation: -40, opacity: 0, duration: 0.8, ease: "back.out(2.4)" }, 0.35);
+    }
+
+    const date = section.querySelector(".info-date");
+    if (date) {
+      const weekday = date.querySelector(".info-weekday");
+      const day = date.querySelector(".info-day");
+      const month = date.querySelector(".info-month");
+      const year = date.querySelector(".info-year");
+      const lunar = date.querySelector(".info-lunar");
+      const timeline = gsap.timeline({ scrollTrigger: once(date, "top 88%") });
+      if (weekday) timeline.from(weekday, { y: 12, opacity: 0, duration: 0.6, ease: "power2.out" });
+      if (day) timeline.from(day, { scale: 0.4, opacity: 0, duration: 1, ease: "back.out(1.8)" }, "-=0.3");
+      if (month) timeline.from(month, { x: -20, opacity: 0, duration: 0.7, ease: "power2.out" }, "-=0.7");
+      if (year) timeline.from(year, { x: 20, opacity: 0, duration: 0.7, ease: "power2.out" }, "<");
+      if (lunar) timeline.from(lunar, { opacity: 0, duration: 0.6 }, "-=0.2");
+    }
+
+    const split = section.querySelector(".info-split");
+    const sideG = split?.querySelector(".split-side--groom");
+    const sideB = split?.querySelector(".split-side--bride");
+    const splitAmp = split?.querySelector(".split-amp");
+    if (!split || !sideG || !sideB || !splitAmp) return;
+
+    const stacked = window.matchMedia("(max-width: 380px)").matches;
+    const timeline = gsap.timeline({ scrollTrigger: once(split, "top 82%") });
+    timeline
+      .from(split, { opacity: 0, duration: 0.5, ease: "power1.out" })
+      .from(
+        sideG,
+        stacked
+          ? { clipPath: "inset(0 0 100% 0)", duration: 1, ease: "power3.out" }
+          : { clipPath: "inset(0 0 0 100%)", duration: 1, ease: "power3.out" },
+        0,
+      )
+      .from(
+        sideB,
+        stacked
+          ? { clipPath: "inset(100% 0 0 0)", duration: 1, ease: "power3.out" }
+          : { clipPath: "inset(0 100% 0 0)", duration: 1, ease: "power3.out" },
+        0,
+      )
+      .from(splitAmp, { scale: 0, rotation: -90, duration: 0.8, ease: "back.out(2.4)" }, 0.6);
+
+    [sideG, sideB].forEach((side, index) => {
+      timeline
+        .from(
+          side.querySelectorAll(".info-role, .info-side, .info-family, .split-details > div, .split-addr"),
+          { y: 14, opacity: 0, duration: 0.6, ease: "power2.out", stagger: 0.08 },
+          0.7 + index * 0.1,
+        )
+        .from(
+          side.querySelector(".venue-pin"),
+          { scale: 0, opacity: 0, duration: 0.7, ease: "back.out(2.6)" },
+          1.4 + index * 0.1,
+        )
+        .from(side.querySelector(".venue-hint"), { opacity: 0, duration: 0.5 }, 1.6 + index * 0.1);
+    });
+  });
+}
 setupAlbumCarousel();
 setupIconRotation();
+setupMomentsHeadingAnimation();
 setupWeddingDetails();
-renderCalendar();
-updateCountdown();
-window.setInterval(updateCountdown, 1000);
-setupForms();
 setupLoveLetterAnimation();
 setupEnvelope();
+setupFallingLeaves();   
+setupMapLinks();
+setupInfoAnimation();
