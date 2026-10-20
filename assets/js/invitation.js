@@ -1,9 +1,49 @@
+// Chỉnh thông tin của từng cặp đôi tại đây.
 const WEDDING_CONFIG = {
   brideName: "Nguyễn Nhung",
   groomName: "Hoàng Vinh",
+  groomParents: {
+    father: "Ông Hoàng Văn A",
+    mother: "Bà Trần Thị B",
+  },
+  brideParents: {
+    father: "Ông Nguyễn Văn C",
+    mother: "Bà Lê Thị D",
+  },
+  weddingDate: {
+    year: 2026,
+    month: 12, // Tháng theo cách ghi thông thường: từ 1 đến 12.
+    day: 20,
+    hour: 12,
+    minute: 0,
+  },
+  venues: {
+    groomAddress: "Số 1, Đường ABC, Phường XYZ, Quận Cầu Giấy, Hà Nội",
+    brideAddress: "Số 2, Đường DEF, Phường UVW, Quận Hoàn Kiếm, Hà Nội",
+  },
 };
 
-const WEDDING = new Date(2050, 4, 20, 12, 0, 0);
+const WEDDING = new Date(
+  WEDDING_CONFIG.weddingDate.year,
+  WEDDING_CONFIG.weddingDate.month - 1,
+  WEDDING_CONFIG.weddingDate.day,
+  WEDDING_CONFIG.weddingDate.hour,
+  WEDDING_CONFIG.weddingDate.minute,
+);
+
+let invitationOpened = false;
+const openQueue = [];
+
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+window.scrollTo(0, 0);
+
+function whenOpened(fn) {
+  if (invitationOpened) {
+    safeRun(fn);
+  } else {
+    openQueue.push(fn);
+  }
+}
 
 function setText(selector, value) {
   document.querySelectorAll(selector).forEach((element) => {
@@ -19,13 +59,24 @@ function vietnameseWeekday(date) {
 function setupWeddingDetails() {
   setText('[data-name="bride"]', WEDDING_CONFIG.brideName);
   setText('[data-name="groom"]', WEDDING_CONFIG.groomName);
+  setText('[data-family="groom-father"]', WEDDING_CONFIG.groomParents.father);
+  setText('[data-family="groom-mother"]', WEDDING_CONFIG.groomParents.mother);
+  setText('[data-family="bride-father"]', WEDDING_CONFIG.brideParents.father);
+  setText('[data-family="bride-mother"]', WEDDING_CONFIG.brideParents.mother);
+  setText('[data-venue="groom"]', WEDDING_CONFIG.venues.groomAddress);
+  setText('[data-venue="bride"]', WEDDING_CONFIG.venues.brideAddress);
+
   const dateLabel = `${vietnameseWeekday(WEDDING)} · ${String(WEDDING.getDate()).padStart(2, "0")}.${String(
     WEDDING.getMonth() + 1,
   ).padStart(2, "0")}.${WEDDING.getFullYear()}`;
+  const longDateLabel = `Ngày ${WEDDING.getDate()} tháng ${WEDDING.getMonth() + 1} năm ${WEDDING.getFullYear()}`;
+  const weddingTime = `${String(WEDDING.getHours()).padStart(2, "0")}:${String(WEDDING.getMinutes()).padStart(2, "0")}`;
   setText("[data-wedding-date]", dateLabel);
-    setText("[data-wd-weekday]", vietnameseWeekday(WEDDING));
+  setText("[data-wedding-date-long]", longDateLabel);
+  setText('[data-event-time="wedding"]', weddingTime);
+  setText("[data-wd-weekday]", vietnameseWeekday(WEDDING));
   setText("[data-wd-day]", String(WEDDING.getDate()).padStart(2, "0"));
-  setText("[data-wd-month]", `Tháng ${String(WEDDING.getMonth() + 1).padStart(2, "0")}`);
+  setText("[data-wd-month]", `${String(WEDDING.getMonth() + 1).padStart(2, "0")}`);
   setText("[data-wd-year]", String(WEDDING.getFullYear()));
 }
 
@@ -36,11 +87,18 @@ function setupEnvelope() {
   const content = document.getElementById("invitation-content");
 
   openButton.addEventListener("click", () => {
+    if (invitationOpened) return;
+    invitationOpened = true;
+
     envelope.classList.add("is-opening");
     content.inert = false;
     document.body.classList.remove("is-closed");
     screen.classList.add("is-open");
     window.setTimeout(() => screen.remove(), 550);
+    window.setTimeout(() => {
+      openQueue.splice(0).forEach(safeRun);
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
+    }, 550);
   });
 }
 
@@ -96,7 +154,8 @@ function setupLoveLetterAnimation() {
             stagger: 0.06,
           },
           "-=0.5",
-        );
+        )
+        .add(() => startImageWave(block.querySelector(".image-confession")));
     });
   });
 }
@@ -131,31 +190,7 @@ function setupIconRotation() {
   });
 }
 
-function setupMomentsHeadingAnimation() {
-  if (!window.gsap || !window.ScrollTrigger) return;
 
-  const mm = gsap.matchMedia();
-
-  mm.add("(prefers-reduced-motion: no-preference)", () => {
-    const section = document.querySelector(".moments-section");
-    const heading = section?.querySelector(".block-title");
-    if (!heading) return;
-
-    gsap.from(heading.children, {
-      y: 24,
-      opacity: 0,
-      filter: "blur(5px)",
-      duration: 0.8,
-      ease: "power2.out",
-      stagger: 0.18,
-      scrollTrigger: {
-        trigger: heading,
-        start: "top 85%",
-        once: true,
-      },
-    });
-  });
-}
 
 function setupAlbumCarousel() {
   if (!window.gsap || !window.Draggable) return;
@@ -417,18 +452,6 @@ function setupInfoAnimation() {
     if (!section) return;
 
     const once = (trigger, start = "top 85%") => ({ trigger, start, once: true });
-    const title = section.querySelector(".block-title");
-    if (title) {
-      gsap.from(title.children, {
-        y: 24,
-        opacity: 0,
-        filter: "blur(5px)",
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.18,
-        scrollTrigger: once(title),
-      });
-    }
 
     const invite = section.querySelector(".info-invite");
     if (invite) {
@@ -508,12 +531,374 @@ function setupInfoAnimation() {
     });
   });
 }
-setupAlbumCarousel();
-setupIconRotation();
-setupMomentsHeadingAnimation();
-setupWeddingDetails();
-setupLoveLetterAnimation();
-setupEnvelope();
-setupFallingLeaves();   
-setupMapLinks();
-setupInfoAnimation();
+function setupBlockTitleAnimation() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+
+  const mm = gsap.matchMedia();
+
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    gsap.utils.toArray(".block-title").forEach((title) => {
+      gsap.from(title.children, {
+        y: 24,
+        opacity: 0,
+        filter: "blur(5px)",
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.18,
+        scrollTrigger: {
+          trigger: title,
+          start: "top 85%",
+          once: true,
+        },
+      });
+    });
+  });
+}
+
+function setUpCountDown() {
+  if (window.__countdownTimer) clearInterval(window.__countdownTimer);
+
+  const els = {
+    days: document.querySelector('.time-count[data-unit="days"]'),
+    hours: document.querySelector('.time-count[data-unit="hours"]'),
+    minutes: document.querySelector('.time-count[data-unit="minutes"]'),
+    seconds: document.querySelector('.time-count[data-unit="seconds"]'),
+  };
+  if (Object.values(els).some((el) => !el)) return;
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const pad = (n) => String(n).padStart(2, "0");
+
+  const DIR = 1;                 // 1 = số mới rơi từ trên xuống (đếm ngược); -1 = trồi từ dưới lên
+  const DURATION = 520;
+  const EASE = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+
+  function buildSlot(ch) {
+    const slot = document.createElement("span");
+    slot.className = "digit";
+    slot.setAttribute("aria-hidden", "true");
+    const a = document.createElement("span");
+    const b = document.createElement("span");
+    a.className = b.className = "d";
+    a.textContent = ch;
+    b.textContent = "";
+    b.style.opacity = "0";
+    slot.append(a, b);
+    slot.dataset.cur = "0";
+    return slot;
+  }
+
+  function swap(slot, ch) {
+    const cur = slot.children[Number(slot.dataset.cur)];
+    const nxt = slot.children[1 - Number(slot.dataset.cur)];
+    slot.dataset.cur = String(1 - Number(slot.dataset.cur));
+
+    [cur, nxt].forEach((n) => n.getAnimations().forEach((a) => a.cancel()));
+
+    nxt.textContent = ch;
+    nxt.style.opacity = "1";
+    cur.style.opacity = "0";
+    if (reduce) return;
+
+    const off = 70 * DIR; // %
+    const opts = { duration: DURATION, easing: EASE };
+    nxt.animate(
+      [
+        { transform: `translateY(${-off}%) scale(0.92)`, opacity: 0, filter: "blur(4px)" },
+        { transform: "translateY(0) scale(1)", opacity: 1, filter: "blur(0)" },
+      ],
+      opts,
+    );
+    cur.animate(
+      [
+        { transform: "translateY(0) scale(1)", opacity: 1, filter: "blur(0)" },
+        { transform: `translateY(${off}%) scale(0.92)`, opacity: 0, filter: "blur(4px)" },
+      ],
+      opts,
+    );
+  }
+
+  function render(el, value) {
+    const str = pad(value);
+    const prev = el.dataset.value;
+    if (prev === str) return;
+    el.dataset.value = str;
+    el.setAttribute("aria-label", str);
+
+    if (!prev || prev.length !== str.length) {
+      el.replaceChildren(...[...str].map(buildSlot));
+      return;
+    }
+    [...str].forEach((ch, i) => {
+      if (prev[i] !== ch) swap(el.children[i], ch);
+    });
+  }
+
+  function tick() {
+    const diff = WEDDING.getTime() - Date.now();
+    if (diff <= 0) {
+      Object.values(els).forEach((el) => render(el, 0));
+      clearInterval(window.__countdownTimer);
+      return;
+    }
+    const total = Math.floor(diff / 1000);
+    render(els.days, Math.floor(total / 86400));
+    render(els.hours, Math.floor((total % 86400) / 3600));
+    render(els.minutes, Math.floor((total % 3600) / 60));
+    render(els.seconds, total % 60);
+  }
+
+  tick();
+  window.__countdownTimer = setInterval(tick, 1000);
+}
+function setupCountdownAnimation() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const wrap = document.querySelector(".count-wrap");
+    if (!wrap) return;
+
+    const img = wrap.querySelector(".main-image > img");
+    const texts = wrap.querySelectorAll(".sub-text-item");
+    const items = wrap.querySelectorAll(".sub-item");
+    const labels = wrap.querySelectorAll(".title-count");
+    const nums = wrap.querySelectorAll(".time-count");
+
+    gsap
+      .timeline({ scrollTrigger: { trigger: wrap, start: "top 80%", once: true } })
+      // ảnh mở dần từ trên xuống + zoom nhẹ
+      .from(img, { clipPath: "inset(0 0 100% 0)", duration: 1.3, ease: "power3.out" })
+      .from(img, { scale: 1.25, duration: 1.8, ease: "power2.out" }, "<")
+      // 4 từ "Forever Starts Very Soon" hiện lần lượt
+      .from(texts, { y: 26, opacity: 0, duration: 0.9, ease: "power2.out", stagger: 0.18 }, "-=0.9")
+      // 4 ô đếm nổi lên
+      .from(items, { y: 60, opacity: 0, scale: 0.9, duration: 0.9, ease: "back.out(1.6)", stagger: 0.12 }, "-=0.5")
+      .from(labels, { opacity: 0, duration: 0.6, stagger: 0.1 }, "-=0.6")
+      .from(nums, { opacity: 0, scale: 0.8, duration: 0.7, ease: "back.out(2)", stagger: 0.1 }, "<");
+  });
+}
+
+function startImageWave(figure) {
+  if (!figure || figure.querySelector(".wave")) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  // chu kỳ 300 đơn vị, viewBox 1200 => dịch 50% là khớp vòng lặp liền mạch
+  const d = "M0 60 Q75 20 150 60 T300 60 T450 60 T600 60 T750 60 T900 60 T1050 60 T1200 60 V120 H0 Z";
+  const svg = (cls) =>
+    `<svg class="${cls}" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="${d}"/></svg>`;
+
+  const wave = document.createElement("div");
+  wave.className = "wave";
+  wave.setAttribute("aria-hidden", "true");
+  wave.innerHTML = svg("wave-back") + svg("wave-front");
+  figure.append(wave);
+
+  const back = wave.querySelector(".wave-back");
+  const front = wave.querySelector(".wave-front");
+
+  gsap.set(wave, { yPercent: 100 }); // ban đầu sóng nằm dưới đáy, chưa thấy
+
+  const tweens = [
+    gsap.to(back, { xPercent: -50, duration: 7, ease: "none", repeat: -1 }),
+    gsap.fromTo(front, { xPercent: -50 }, { xPercent: 0, duration: 5, ease: "none", repeat: -1 }),
+    // sóng dâng lên rồi rút xuống, nghỉ một nhịp rồi vỗ tiếp
+    gsap.to(wave, {
+      yPercent: 38,
+      duration: 3.2,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      repeatDelay: 0.6,
+    }),
+  ];
+
+  // chỉ chạy khi ảnh đang trong màn hình, đỡ tốn pin
+  if (window.ScrollTrigger) {
+    ScrollTrigger.create({
+      trigger: figure,
+      onToggle: (self) => tweens.forEach((t) => (self.isActive ? t.play() : t.pause())),
+    });
+  }
+}
+function setupRsvp() {
+  const form = document.getElementById("rsvpForm");
+  if (!form) return;
+
+  const status = form.querySelector(".rsvp-status");
+  const submit = form.querySelector(".rsvp-submit");
+  const extra = form.querySelector("[data-when-attend]");
+  const nameInput = document.getElementById("rsvpName");
+  const thanks = document.getElementById("rsvpThanks");
+
+  // chọn "không thể" thì ẩn ô nhà trai/gái và số người
+  form.addEventListener("change", (e) => {
+    if (e.target.name === "attend") extra.hidden = e.target.value === "no";
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (form.elements.website.value) return; // bot
+
+    const data = Object.fromEntries(new FormData(form));
+    const guestName = (data.guestName || "").trim();
+    if (!guestName) {
+      status.textContent = "Bạn vui lòng nhập tên nhé.";
+      nameInput.focus();
+      return;
+    }
+
+    const attending = data.attend === "yes";
+    const payload = {
+      name: guestName,
+      attend: attending ? "Tham dự" : "Không tham dự",
+      side: attending ? data.side : "",
+      guests: attending ? data.guests : "",
+      message: (data.message || "").trim(),
+    };
+
+    submit.disabled = true;
+    status.textContent = "Đang gửi...";
+
+    try {
+      if (WEDDING_CONFIG.rsvpEndpoint) {
+        await fetch(WEDDING_CONFIG.rsvpEndpoint, {
+          method: "POST",
+          mode: "no-cors", // Apps Script không trả CORS, request vẫn được gửi
+          body: new URLSearchParams(payload),
+        });
+      } else {
+        // chưa có endpoint: lưu tạm trong máy để test giao diện
+        const saved = JSON.parse(localStorage.getItem("wedding-rsvp") || "[]");
+        saved.push({ ...payload, at: new Date().toISOString() });
+        localStorage.setItem("wedding-rsvp", JSON.stringify(saved));
+        console.warn("[rsvp] Chưa cấu hình rsvpEndpoint, dữ liệu chỉ lưu trong trình duyệt này.");
+      }
+
+      thanks.querySelector(".rsvp-thanks-text").textContent = attending
+        ? `${guestName} ơi, chúng mình đã nhận được xác nhận và rất mong gặp bạn trong ngày vui.`
+        : `${guestName} ơi, cảm ơn bạn đã gửi lời chúc. Chúng mình rất tiếc không được gặp bạn hôm đó.`;
+
+      showRsvpThanks(form, thanks);
+    } catch (err) {
+      console.error("[rsvp]", err);
+      status.textContent = "Chưa gửi được, bạn thử lại giúp chúng mình nhé.";
+      submit.disabled = false;
+    }
+  });
+}
+
+function showRsvpThanks(form, thanks) {
+  const reveal = () => {
+    form.hidden = true;
+    thanks.hidden = false;
+    if (window.gsap) {
+      gsap.from(thanks.children, {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.15,
+      });
+    }
+  };
+
+  if (window.gsap) {
+    gsap.to(form, { opacity: 0, y: -10, duration: 0.4, ease: "power1.in", onComplete: reveal });
+  } else {
+    reveal();
+  }
+}
+
+function setupRsvpAnimation() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const section = document.querySelector(".rsvp-section");
+    if (!section) return;
+
+    const intro = section.querySelector(".rsvp-intro");
+    const fields = section.querySelectorAll(".rsvp-form > *:not(.rsvp-hp)");
+
+    gsap.from(intro, {
+      y: 18,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power2.out",
+      scrollTrigger: { trigger: intro, start: "top 88%", once: true },
+    });
+
+    gsap.from(fields, {
+      y: 24,
+      opacity: 0,
+      duration: 0.7,
+      ease: "power2.out",
+      stagger: 0.1,
+      scrollTrigger: { trigger: ".rsvp-form", start: "top 85%", once: true },
+    });
+  });
+}
+
+function setupCountdownNote() {
+  if (!window.gsap || !window.ScrollTrigger || !window.SplitText) return;
+
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const note = document.querySelector(".count-note");
+    if (!note) return;
+
+    const line = note.querySelector(".count-note-line");
+    const text = note.querySelector(".count-note-text");
+    const date = note.querySelector(".count-note-date");
+
+    document.fonts.ready.then(() => {
+      const words = SplitText.create(text, { type: "words" });
+
+      gsap
+        .timeline({ scrollTrigger: { trigger: note, start: "top 90%", once: true } })
+        // đường kẻ mở rộng từ giữa ra hai bên
+        .from(line, { scaleX: 0, duration: 0.9, ease: "power2.out" })
+        // từng chữ hiện lên, hơi mờ nhòe như phần Confession
+        .from(
+          words.words,
+          { opacity: 0, y: 14, filter: "blur(4px)", duration: 0.7, ease: "power2.out", stagger: 0.05 },
+          "-=0.4",
+        )
+        // dòng ngày cưới hiện cuối cùng, chữ giãn dần ra
+        .from(
+          date,
+          { opacity: 0, y: 10, letterSpacing: "0.1em", duration: 0.9, ease: "power2.out" },
+          "-=0.3",
+        );
+    });
+  });
+}
+
+function safeRun(fn) {
+  try {
+    fn();
+  } catch (err) {
+    console.error("[" + fn.name + "]", err);
+  }
+}
+
+[
+  setUpCountDown,
+  setupWeddingDetails,
+  setupEnvelope,
+  setupMapLinks,
+  setupRsvp,
+].forEach(safeRun);
+
+[
+  setupAlbumCarousel,
+  setupIconRotation,
+  setupLoveLetterAnimation,
+  setupFallingLeaves,
+  setupInfoAnimation,
+  setupBlockTitleAnimation,
+  setupCountdownAnimation,
+  setupCountdownNote,
+  setupRsvpAnimation,
+].forEach(whenOpened);
