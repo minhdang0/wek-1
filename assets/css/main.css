@@ -1,9 +1,10 @@
-﻿:root {
+:root {
   --font-heading: "Cormorant Garamond", Georgia, serif;
   --font-subtext-pre: "Caramel", cursive;
   --font-ui: "Be Vietnam Pro", Arial, sans-serif;
   --page-width: 430px;
   --text-highlight: #ffe9a8;
+  --font-heading-second: "Corinthia", cursive;
 
   --ivory: #fbf1ee;
   --paper: #fbf1ee;
@@ -90,4 +91,10 @@ select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 3px;
+}
+
+@media (min-width: 700px) {
+  :root {
+    --page-width: 480px;   
+  }
 }
