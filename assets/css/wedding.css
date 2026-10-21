@@ -108,6 +108,87 @@
   font-size: 12px;
 }
 
+.music-toggle {
+  position: fixed;
+  z-index: 40;
+  right: calc(4px + env(safe-area-inset-right));
+  bottom: calc(4px + env(safe-area-inset-bottom));
+  display: grid;
+  width: 32px;
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--gold-200);
+  border-radius: 50%;
+  color: var(--gold-100);
+  background: var(--gold-700);
+  box-shadow: 0 2px 8px rgb(30 27 24 / 35%);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.8);
+  transition:
+    opacity 250ms ease,
+    transform 250ms ease,
+    visibility 250ms;
+}
+
+body:not(.is-closed) .music-toggle {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.music-toggle:hover {
+  transform: scale(1.08);
+}
+
+.music-toggle:active {
+  transform: scale(0.94);
+}
+
+.music-toggle span {
+  position: relative;
+  z-index: 1;
+  font-family: Georgia, serif;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.music-toggle.is-playing span {
+  animation: music-note-spin 4s linear infinite;
+}
+
+/* gạch chéo khi đang tắt nhạc */
+.music-toggle::after {
+  position: absolute;
+  width: 18px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--gold-100);
+  box-shadow: 0 0 0 1px var(--gold-700);
+  content: "";
+  transform: rotate(-45deg);
+  transition: opacity 200ms ease;
+}
+
+.music-toggle.is-playing::after {
+  opacity: 0;
+}
+
+.music-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@keyframes music-note-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 #invitation-content {
   width: 100%;
   max-width: var(--page-width);
@@ -178,18 +259,22 @@
   transform: translateY(-50%);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
-  -webkit-mask-image: linear-gradient(to bottom,
-      transparent 0%,
-      rgb(0 0 0 / 35%) 25%,
-      #000 50%,
-      rgb(0 0 0 / 35%) 75%,
-      transparent 100%);
-  mask-image: linear-gradient(to bottom,
-      transparent 0%,
-      rgb(0 0 0 / 35%) 25%,
-      #000 50%,
-      rgb(0 0 0 / 35%) 75%,
-      transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(0 0 0 / 35%) 25%,
+    #000 50%,
+    rgb(0 0 0 / 35%) 75%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(0 0 0 / 35%) 25%,
+    #000 50%,
+    rgb(0 0 0 / 35%) 75%,
+    transparent 100%
+  );
   pointer-events: none;
 }
 
@@ -197,11 +282,13 @@
   position: absolute;
   z-index: 3;
   inset: 0;
-  background: linear-gradient(to bottom,
-      rgb(30 27 24 / 28%) 0%,
-      transparent 18%,
-      transparent 70%,
-      rgb(30 27 24 / 18%) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgb(30 27 24 / 28%) 0%,
+    transparent 18%,
+    transparent 70%,
+    rgb(30 27 24 / 18%) 100%
+  );
   pointer-events: none;
 }
 
@@ -213,11 +300,13 @@
   right: 0;
   bottom: -1px;
   height: 28%;
-  background: linear-gradient(to bottom,
-      rgb(250 246 239 / 0%) 0%,
-      rgb(250 246 239 / 35%) 35%,
-      rgb(250 246 239 / 80%) 75%,
-      var(--ivory) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgb(250 246 239 / 0%) 0%,
+    rgb(250 246 239 / 35%) 35%,
+    rgb(250 246 239 / 80%) 75%,
+    var(--ivory) 100%
+  );
   pointer-events: none;
 }
 
@@ -295,12 +384,14 @@
 }
 
 .hero-image--portrait::after {
-  background: linear-gradient(to bottom,
-      rgba(77, 74, 71, 0.9) 0%,
-      rgb(77 74 71 / 55%) 12%,
-      rgb(77 74 71 / 25%) 24%,
-      rgb(77 74 71 / 8%) 34%,
-      transparent 90%);
+  background: linear-gradient(
+    to bottom,
+    rgba(77, 74, 71, 0.9) 0%,
+    rgb(77 74 71 / 55%) 12%,
+    rgb(77 74 71 / 25%) 24%,
+    rgb(77 74 71 / 8%) 34%,
+    transparent 90%
+  );
 }
 
 .hero-image--scene::after {
@@ -402,10 +493,12 @@
 }
 
 .hero .hn-main span {
-  background-image: linear-gradient(to bottom,
-      var(--gold-700) 0%,
-      color-mix(in srgb, var(--gold-700) 70%, #0a0a0a) 55%,
-      color-mix(in srgb, var(--gold-700) 40%, #141414) 100%);
+  background-image: linear-gradient(
+    to bottom,
+    var(--gold-700) 0%,
+    color-mix(in srgb, var(--gold-700) 70%, #0a0a0a) 55%,
+    color-mix(in srgb, var(--gold-700) 40%, #141414) 100%
+  );
   background-size: 100% var(--hn-main-gradient-height);
   background-repeat: no-repeat;
   -webkit-background-clip: text;
@@ -492,7 +585,7 @@
   font-size: 30px;
 }
 
-.site-footer>p:not(.footer-date) {
+.site-footer > p:not(.footer-date) {
   margin-top: 4px;
   font-family: var(--font-heading);
   font-size: 24px;
@@ -512,7 +605,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
@@ -723,7 +815,6 @@
   will-change: transform;
 }
 
-
 .album-wrap .cards li {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -810,7 +901,6 @@
   opacity: 1;
 }
 
-
 /* ===== Họa tiết cỏ hoa phía sau album ===== */
 .album-botanicals {
   position: absolute;
@@ -858,7 +948,6 @@
     scale: 0.8;
   }
 }
-
 
 .page-leaves {
   position: fixed;
@@ -1097,7 +1186,7 @@
   border-color: rgb(230 203 134 / 28%);
 }
 
-.split-side--groom .split-details>div {
+.split-side--groom .split-details > div {
   border-color: rgb(230 203 134 / 18%);
 }
 
@@ -1144,7 +1233,7 @@
   border-top: 1px solid rgb(154 123 79 / 30%);
 }
 
-.split-details>div {
+.split-details > div {
   display: grid;
   gap: 1px;
   padding: 9px 0;
@@ -1211,7 +1300,10 @@
   color: var(--gold-500);
   background: var(--ivory);
   cursor: pointer;
-  transition: color 220ms ease, background-color 220ms ease, transform 220ms ease;
+  transition:
+    color 220ms ease,
+    background-color 220ms ease,
+    transform 220ms ease;
 }
 
 .venue-pin::after {
@@ -1274,7 +1366,6 @@
   }
 }
 
-
 /* ===== Save The Date ===== */
 .countdown-section {
   padding: 4px;
@@ -1323,12 +1414,7 @@
   inset: -90% -8%;
   z-index: -1;
   content: "";
-  background: radial-gradient(
-    ellipse at center,
-    rgb(30 27 24 / 55%) 0%,
-    rgb(30 27 24 / 28%) 50%,
-    transparent 75%
-  );
+  background: radial-gradient(ellipse at center, rgb(30 27 24 / 55%) 0%, rgb(30 27 24 / 28%) 50%, transparent 75%);
   pointer-events: none;
 }
 
@@ -1340,12 +1426,7 @@
   white-space: nowrap;
 
   /* vàng champagne ánh kim */
-  background: linear-gradient(
-    180deg,
-    var(--gold-50) 0%,
-    var(--gold-200) 50%,
-    var(--gold-400) 100%
-  );
+  background: linear-gradient(180deg, var(--gold-50) 0%, var(--gold-200) 50%, var(--gold-400) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1396,10 +1477,7 @@
   inset: 0;
   z-index: -1;
   content: "";
-  background: linear-gradient(180deg,
-      transparent 35%,
-      rgb(30 27 24 / 40%) 62%,
-      rgb(30 27 24 / 88%) 100%);
+  background: linear-gradient(180deg, transparent 35%, rgb(30 27 24 / 40%) 62%, rgb(30 27 24 / 88%) 100%);
   pointer-events: none;
 }
 
@@ -1497,8 +1575,8 @@
   justify-items: center;
   gap: 12px;
   max-width: 320px;
-  margin: 28px auto 0;    
-  padding: 0 22px 0;     
+  margin: 28px auto 0;
+  padding: 0 22px 0;
   text-align: center;
 }
 
@@ -1578,7 +1656,9 @@
   font-family: var(--font-heading);
   font-size: 1.1rem;
   line-height: 1.4;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .rsvp-field textarea {
@@ -1626,7 +1706,10 @@
   text-align: center;
   font-size: 13px;
   line-height: 1.3;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .rsvp-choice input:checked + span {
@@ -1647,6 +1730,7 @@
 }
 
 .rsvp-row[hidden],
+.rsvp-form[hidden],
 .rsvp-thanks[hidden] {
   display: none;
 }
@@ -1673,7 +1757,10 @@
   font-size: 0.85rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  transition: background-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    opacity 0.25s ease;
 }
 
 .rsvp-submit:hover,
@@ -1696,32 +1783,281 @@
   font-style: italic;
 }
 
-/* màn cảm ơn */
+/* ===== Màn cảm ơn ===== */
 .rsvp-thanks {
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  max-width: 340px;
+  width: min(100%, 380px);
   margin: 34px auto 0;
 }
 
-.rsvp-thanks-mark {
-  color: var(--gold);
-  font-family: var(--font-heading);
-  font-size: 34px;
+.rsvp-thanks [hidden] {
+  display: none !important;
 }
 
+.rsvp-thanks-card {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 62px 26px 28px;
+  border: 1px solid var(--gold-300);
+  color: var(--gold-50);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(212 175 90 / 26%) 0%, transparent 58%),
+    radial-gradient(ellipse at 50% 100%, rgb(183 110 121 / 16%) 0%, transparent 60%), var(--ink);
+  box-shadow: 0 28px 60px rgb(58 38 38 / 34%);
+}
+
+.rsvp-thanks-card::before {
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgb(230 203 134 / 35%);
+  content: "";
+  pointer-events: none;
+}
+
+/* bốn góc trang trí */
+.thanks-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--gold-300);
+  pointer-events: none;
+}
+.thanks-corner--tl {
+  top: 13px;
+  left: 13px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.thanks-corner--tr {
+  top: 13px;
+  right: 13px;
+  border-left: 0;
+  border-bottom: 0;
+}
+.thanks-corner--bl {
+  bottom: 13px;
+  left: 13px;
+  border-right: 0;
+  border-top: 0;
+}
+.thanks-corner--br {
+  bottom: 13px;
+  right: 13px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* con dấu */
+.rsvp-thanks-seal {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 3px solid var(--ivory);
+  border-radius: 50%;
+  color: var(--ivory);
+  background: radial-gradient(circle at 35% 28%, var(--gold-300) 0%, var(--gold-600) 80%);
+  box-shadow: 0 8px 22px rgb(30 27 24 / 45%);
+  font-family: var(--font-heading);
+  font-size: 30px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+}
+
+/* vòng nét đứt xoay quanh con dấu */
+.rsvp-thanks-seal::before {
+  position: absolute;
+  inset: -11px;
+  border: 1px dashed var(--gold-200);
+  border-radius: 50%;
+  content: "";
+  animation: thanks-spin 14s linear infinite;
+}
+
+.rsvp-thanks-seal::after {
+  position: absolute;
+  inset: -3px;
+  border: 1px solid var(--gold-200);
+  border-radius: 50%;
+  content: "";
+  animation: pin-pulse 2.4s ease-out infinite;
+}
+
+@keyframes thanks-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rsvp-thanks-kicker {
+  color: var(--gold-200);
+  font-family: "Antonio", sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;
+  text-transform: uppercase;
+}
+
+/* tiêu đề vàng ánh kim, có vệt sáng chạy qua */
 .rsvp-thanks-title {
   font-family: "Corinthia", cursive;
-  font-size: 3rem;
+  font-size: 3.8rem;
   font-weight: 400;
   line-height: 1;
+  background: linear-gradient(
+    100deg,
+    var(--gold-400) 0%,
+    var(--gold-200) 35%,
+    #fff8e1 50%,
+    var(--gold-200) 65%,
+    var(--gold-400) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: thanks-shimmer 4s linear infinite;
+}
+
+@keyframes thanks-shimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+/* tên khách */
+.rsvp-thanks-guest {
+  max-width: 100%;
+  color: var(--gold-100);
+  font-family: "Corinthia", cursive;
+  font-size: 2.3rem;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+  text-shadow: 0 2px 14px rgb(212 175 90 / 35%);
+}
+
+.rsvp-thanks-line {
+  display: block;
+  width: 110px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-300), transparent);
 }
 
 .rsvp-thanks-text {
-  color: rgb(30 27 24 / 78%);
+  max-width: 280px;
+  color: rgb(251 243 220 / 88%);
   font-family: var(--font-heading);
-  font-size: 1.1rem;
+  font-size: 1.12rem;
   font-style: italic;
   line-height: 1.55;
+  text-wrap: balance;
+}
+
+/* ngày / giờ / khách */
+.rsvp-thanks-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  margin: 10px 0 0;
+  border-block: 1px solid rgb(230 203 134 / 28%);
+}
+
+.rsvp-thanks-meta > div {
+  display: grid;
+  gap: 2px;
+  padding: 12px 4px;
+  text-align: center;
+}
+
+.rsvp-thanks-meta > div + div {
+  border-left: 1px solid rgb(230 203 134 / 22%);
+}
+
+.rsvp-thanks-meta dt {
+  color: var(--gold-200);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.rsvp-thanks-meta dd {
+  margin: 0;
+  color: var(--gold-100);
+  font-family: "Antonio", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+
+.rsvp-thanks-venue {
+  max-width: 270px;
+  color: rgb(251 243 220 / 70%);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* nút */
+.rsvp-thanks-actions {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.rsvp-thanks-cal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 190px;
+  padding: 12px 22px;
+  border: 1px solid var(--gold-200);
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--gold-200) 0%, var(--gold-300) 55%, var(--gold-400) 100%);
+  cursor: pointer;
+  font-family: "Antonio", sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.24em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.rsvp-thanks-cal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgb(0 0 0 / 35%);
+}
+
+.rsvp-thanks-again {
+  padding: 4px 8px;
+  border: 0;
+  color: var(--gold-200);
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-style: italic;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.rsvp-petal {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 8px;
+  height: 12px;
+  border-radius: 80% 0 80% 0;
+  pointer-events: none;
 }

@@ -85,11 +85,40 @@ function setupEnvelope() {
   const envelope = document.querySelector(".envelope");
   const openButton = document.getElementById("open-invitation");
   const content = document.getElementById("invitation-content");
+  const music = document.getElementById("wedding-music");
+  const musicToggle = document.getElementById("music-toggle");
+
+  function updateMusicButton() {
+    const isPlaying = !music.paused;
+    musicToggle.classList.toggle("is-playing", isPlaying);
+    musicToggle.setAttribute("aria-pressed", String(isPlaying));
+    musicToggle.setAttribute("aria-label", isPlaying ? "Tắt nhạc" : "Bật nhạc");
+    musicToggle.title = isPlaying ? "Tắt nhạc" : "Bật nhạc";
+  }
+
+  function playMusic() {
+    music.play().catch((error) => {
+      console.error("Không thể phát nhạc thiệp cưới:", error);
+      updateMusicButton();
+    });
+  }
+
+  music.addEventListener("play", updateMusicButton);
+  music.addEventListener("pause", updateMusicButton);
+  music.addEventListener("error", () => {
+    console.error("Không thể tải tệp nhạc thiệp cưới:", music.error);
+    updateMusicButton();
+  });
+  musicToggle.addEventListener("click", () => {
+    if (music.paused) playMusic();
+    else music.pause();
+  });
 
   openButton.addEventListener("click", () => {
     if (invitationOpened) return;
     invitationOpened = true;
 
+    playMusic();
     envelope.classList.add("is-opening");
     content.inert = false;
     document.body.classList.remove("is-closed");
@@ -792,14 +821,48 @@ function showRsvpThanks(form, thanks) {
   const reveal = () => {
     form.hidden = true;
     thanks.hidden = false;
-    if (window.gsap) {
-      gsap.from(thanks.children, {
-        y: 20,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.15,
-      });
+    thanks.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (!window.gsap) return;
+
+    const card = thanks.querySelector(".rsvp-thanks-card");
+    const q = (selector) => thanks.querySelector(selector);
+
+    gsap
+      .timeline()
+      .from(card, { opacity: 0, y: 30, scale: 0.92, duration: 0.8, ease: "power3.out" })
+      .from(q(".rsvp-thanks-seal"), { scale: 0, rotation: -180, duration: 0.9, ease: "back.out(2)" }, "-=0.3")
+      .from(
+        [q(".rsvp-thanks-kicker"), q(".rsvp-thanks-title")],
+        { y: 16, opacity: 0, filter: "blur(4px)", duration: 0.7, stagger: 0.15 },
+        "-=0.4",
+      )
+      .from(q(".rsvp-thanks-line"), { scaleX: 0, duration: 0.7, ease: "power2.out" }, "-=0.3")
+      .from(
+        [q(".rsvp-thanks-text"), q(".rsvp-thanks-date")],
+        { y: 12, opacity: 0, duration: 0.7, stagger: 0.15 },
+        "-=0.3",
+      );
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      for (let i = 0; i < 16; i++) {
+        const petal = document.createElement("span");
+        petal.className = "rsvp-petal";
+        card.append(petal);
+        gsap.fromTo(
+          petal,
+          { x: 0, y: 0, scale: gsap.utils.random(0.6, 1.2), rotation: gsap.utils.random(0, 360), opacity: 1 },
+          {
+            x: gsap.utils.random(-150, 150),
+            y: gsap.utils.random(-30, 200),
+            rotation: "+=" + gsap.utils.random(120, 360),
+            opacity: 0,
+            duration: gsap.utils.random(1.4, 2.4),
+            delay: 0.5,
+            ease: "power2.out",
+            onComplete: () => petal.remove(),
+          },
+        );
+      }
     }
   };
 
