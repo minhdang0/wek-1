@@ -1,527 +1,402 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Thiệp mời chung vui ngày cưới của chúng mình."
-    />
-    <meta name="theme-color" content="#FAF6EF" />
-    <title>Thiệp mời ngày vui</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./assets/css/main.css" />
-    <link rel="stylesheet" href="./assets/css/wedding.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;700&family=Corinthia:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Italiana&display=swap"
-      rel="stylesheet"
-    />
-    <script src="./assets/js/invitation.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
-    <script>
-      gsap.registerPlugin(SplitText, ScrollTrigger, Draggable);
-    </script>
-  </head>
 
-  <body class="is-closed">
-    <div
-      class="opening-screen"
-      id="opening-screen"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="opening-title"
-    >
-      <div class="envelope" aria-hidden="true">
-        <div class="envelope-letter"></div>
-        <div class="envelope-flap"></div>
-        <span class="wax-seal">囍</span>
-      </div>
-      <p class="opening-kicker">Một lời mời thân thương</p>
-      <h1 id="opening-title" class="opening-title">Ngày vui của chúng mình</h1>
-      <button class="button button-dark" id="open-invitation" type="button">
-        Chạm để mở thiệp
-      </button>
-      <p class="opening-hint">Chạm để mở thiệp</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Thiệp mời chung vui ngày cưới của chúng mình." />
+  <meta name="theme-color" content="#FAF6EF" />
+  <title>Thiệp mời ngày vui</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;700&family=Be+Vietnam+Pro:wght@300;400;500&family=Corinthia:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Hurricane&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <link rel="stylesheet" href="./assets/css/wedding.css" />
+  <script src="./assets/js/invitation.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
+  <script>
+    gsap.registerPlugin(SplitText, ScrollTrigger, Draggable);
+  </script>
+</head>
+
+<body class="is-closed">
+  <div class="opening-screen" id="opening-screen" role="dialog" aria-modal="true" aria-labelledby="opening-title">
+    <div class="envelope" id="open-invitation" role="button" tabindex="0" aria-label="Chạm để mở thiệp">
+      <div class="envelope-letter"></div>
+      <div class="envelope-flap"></div>
+      <div class="wax-seal"></div>
     </div>
-
-    <main id="invitation-content" inert>
-      <section class="hero" id="home" aria-labelledby="hero-names">
-        <figure class="hero-image hero-image--portrait">
-          <img
-            src="./assets/img/hero1.jpg"
-            alt="Cô dâu chú rể trong khoảnh khắc thân mật"
-            fetchpriority="high"
-          />
-        </figure>
-        <figure class="hero-image hero-image--scene">
-          <img
-            src="./assets/img/hero3.jpg"
-            alt="Cô dâu chú rể giữa khung cảnh thiên nhiên"
-          />
-        </figure>
-        <div class="hero-seam" aria-hidden="true"></div>
-        <div class="hero-warmth" aria-hidden="true"></div>
-        <div class="main-title">
-          <div class="title-line-1">We</div>
-          <div class="title-line-2">
-            <p>Got Married</p>
-            <p>The Greatest Happiness</p>
-          </div>
+    <p class="opening-kicker">Một lời mời thân thương</p>
+    <h1 id="opening-title" class="opening-title">Ngày vui của chúng mình</h1>
+    <p class="opening-hint">Chạm vào thiệp để mở</p>
+  </div>
+  <main id="invitation-content" inert>
+    <section class="hero" id="home" aria-labelledby="hero-names">
+      <figure class="hero-image hero-image--portrait">
+        <img data-image="heroPortrait" alt="" fetchpriority="high" />
+      </figure>
+      <figure class="hero-image hero-image--scene">
+        <img data-image="heroScene" alt="" />
+      </figure>
+      <div class="hero-seam" aria-hidden="true"></div>
+      <div class="hero-warmth" aria-hidden="true"></div>
+      <div class="main-title">
+        <div class="title-line-1">We</div>
+        <div class="title-line-2">
+          <p>Got Married</p>
+          <p>The Greatest Happiness</p>
         </div>
-        <div class="detail-content">
-          <div class="hn-groom">
-            <span>Groom</span>
-            <span>Hoàng Vinh</span>
-          </div>
-          <div class="hn-main">
-            <span>25</span>
-            <span>10</span>
-          </div>
-          <div class="hn-bride">
-            <span>Bride</span>
-            <span>Nguyễn Nhung</span>
-          </div>
+      </div>
+      <div class="detail-content">
+        <div class="hn-groom">
+          <span>Groom</span>
+          <span data-name="groom"></span>
         </div>
-      </section>
-      <section class="love-section">
-        <div class="icon-title-main"></div>
-        <div class="block-title">
-          <div class="title-first">Our</div>
-          <div class="title-second">Confession</div>
+        <div class="hn-main">
+          <span data-hero-date="day"></span>
+          <span data-hero-date="month"></span>
         </div>
-
-        <div class="love-letter">
-          <div class="confession-wrap">
-            <article class="confession-content">
-              <figure class="image-confession">
-                <img
-                  src="./assets/img/groom.jpg"
-                  alt="Chú rể Hoàng Vinh"
-                  loading="lazy"
-                />
-              </figure>
-              <div class="text-confession">
-                <span class="role">Chú rể</span>
-                <h3 class="who">Hoàng Vinh</h3>
-                <p class="story">
-                  Anh từng nghĩ hạnh phúc còn xa lắm. Cho đến ngày gặp em.
-                </p>
-              </div>
-            </article>
-
-            <article class="confession-content is-reverse">
-              <figure class="image-confession">
-                <img
-                  src="./assets/img/bride.jpg"
-                  alt="Cô dâu Nguyễn Nhung"
-                  loading="lazy"
-                />
-              </figure>
-              <div class="text-confession">
-                <span class="role">Cô dâu</span>
-                <h3 class="who">Nguyễn Nhung</h3>
-                <p class="story">
-                  Chỉ cần một người nắm tay em mỗi sáng thức dậy. Và người ấy,
-                  hóa ra, chính là anh.
-                </p>
-              </div>
-            </article>
-          </div>
+        <div class="hn-bride">
+          <span>Bride</span>
+          <span data-name="bride"></span>
         </div>
-      </section>
-      <section class="moments-section" aria-labelledby="moments-title">
-        <div class="icon-title-main"></div>
-        <div class="block-title" id="moments-title">
-          <div class="title-first">Our Timeless</div>
-          <div class="title-second">Moments</div>
-        </div>
-        <div class="album-wrap">
-          <!-- <div class="component-design"></div> -->
+      </div>
+    </section>
+    <section class="love-section">
+      <div class="icon-title-main"></div>
+      <div class="block-title">
+        <div class="title-first">Our</div>
+        <div class="title-second">Confession</div>
+      </div>
 
-          <div class="gallery">
-            <ul class="cards">
-              <li style="background-image: url(./assets/img/image1.jpg)"></li>
-              <li style="background-image: url(./assets/img/image2.jpg)"></li>
-              <li style="background-image: url(./assets/img/image3.jpg)"></li>
-              <li style="background-image: url(./assets/img/image4.jpg)"></li>
-              <li style="background-image: url(./assets/img/image5.jpg)"></li>
-              <li style="background-image: url(./assets/img/image6.jpg)"></li>
-              <li style="background-image: url(./assets/img/image7.jpg)"></li>
-              <li style="background-image: url(./assets/img/image8.jpg)"></li>
-              <li style="background-image: url(./assets/img/image9.jpg)"></li>
-              <li style="background-image: url(./assets/img/image10.jpg)"></li>
-              <li style="background-image: url(./assets/img/image11.jpg)"></li>
-              <li style="background-image: url(./assets/img/image12.jpg)"></li>
-              <li style="background-image: url(./assets/img/image13.jpg)"></li>
-            </ul>
-          </div>
-          <div class="drag-proxy"></div>
-        </div>
-      </section>
-      <section class="info-section" aria-labelledby="info-title">
-        <div class="icon-title-main"></div>
-        <div class="block-title" id="info-title">
-          <div class="title-first">Wedding</div>
-          <div class="title-second">Ceremony</div>
-        </div>
-
-        <p class="info-invite">
-          Trân trọng kính mời bạn đến chung vui trong lễ thành hôn của chúng
-          mình
-        </p>
-
-        <div class="info-couple">
-          <div class="info-person">
-            <span class="info-role">Chú rể</span>
-            <span class="info-name" data-name="groom">Hoàng Vinh</span>
-          </div>
-          <span class="info-amp" aria-hidden="true">&amp;</span>
-          <div class="info-person">
-            <span class="info-role">Cô dâu</span>
-            <span class="info-name" data-name="bride">Nguyễn Nhung</span>
-          </div>
-        </div>
-
-        <div class="info-date">
-          <span class="info-weekday" data-wd-weekday>Chủ Nhật</span>
-          <div class="info-date-main">
-            <span class="info-month" data-wd-month>12</span>
-            <span class="info-day" data-wd-day>20</span>
-            <span class="info-year" data-wd-year>2026</span>
-          </div>
-          <span class="info-lunar" data-wedding-date-long
-            >Ngày 20 tháng 12 năm 2026</span
-          >
-        </div>
-
-        <div class="info-split">
-          <article class="split-side split-side--groom venue-card">
-            <span class="info-role">Gia đình</span>
-            <h3 class="info-side">Nhà Trai</h3>
-            <p class="info-family">
-              <span data-family="groom-father">Ông Hoàng Văn A</span><br />
-              <span data-family="groom-mother">Bà Trần Thị B</span>
-            </p>
-
-            <dl class="split-details">
-              <div>
-                <dt>Đón khách</dt>
-                <dd>10:30</dd>
-              </div>
-              <div>
-                <dt>Lễ thành hôn</dt>
-                <dd data-event-time="wedding">12:00</dd>
-              </div>
-              <div>
-                <dt>Khai tiệc</dt>
-                <dd>12:45</dd>
-              </div>
-            </dl>
-
-            <div class="split-addr">
-              <p class="info-label">Địa chỉ</p>
-              <p class="venue-address" data-venue="groom">
-                Số 1, Đường ABC, Phường XYZ, Quận Cầu Giấy, Hà Nội
-              </p>
+      <div class="love-letter">
+        <div class="confession-wrap">
+          <article class="confession-content">
+            <figure class="image-confession" data-story-card="groom">
+              <img data-story-image="groom" alt="" loading="lazy" />
+            </figure>
+            <div class="text-confession">
+              <span class="role" data-story-role="groom"></span>
+              <h3 class="who" data-story-name="groom"></h3>
+              <p class="story" data-story-text="groom"></p>
             </div>
-
-            <a
-              class="venue-pin"
-              data-map
-              aria-label="Xem địa chỉ nhà trai trên Google Maps"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path
-                  d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"
-                />
-                <circle cx="12" cy="9.5" r="2.6" />
-              </svg>
-            </a>
-            <span class="venue-hint">Chạm để chỉ đường</span>
           </article>
 
-          <span class="split-amp" aria-hidden="true">&amp;</span>
-
-          <article class="split-side split-side--bride venue-card">
-            <span class="info-role">Gia đình</span>
-            <h3 class="info-side">Nhà Gái</h3>
-            <p class="info-family">
-              <span data-family="bride-father">Ông Nguyễn Văn C</span><br />
-              <span data-family="bride-mother">Bà Lê Thị D</span>
-            </p>
-
-            <dl class="split-details">
-              <div>
-                <dt>Đón khách</dt>
-                <dd>08:00</dd>
-              </div>
-              <div>
-                <dt>Lễ vu quy</dt>
-                <dd>09:00</dd>
-              </div>
-              <div>
-                <dt>Khai tiệc</dt>
-                <dd>10:00</dd>
-              </div>
-            </dl>
-
-            <div class="split-addr">
-              <p class="info-label">Địa chỉ</p>
-              <p class="venue-address" data-venue="bride">
-                Số 2, Đường DEF, Phường UVW, Quận Hoàn Kiếm, Hà Nội
-              </p>
+          <article class="confession-content is-reverse">
+            <figure class="image-confession" data-story-card="bride">
+              <img data-story-image="bride" alt="" loading="lazy" />
+            </figure>
+            <div class="text-confession">
+              <span class="role" data-story-role="bride"></span>
+              <h3 class="who" data-story-name="bride"></h3>
+              <p class="story" data-story-text="bride"></p>
             </div>
-
-            <a
-              class="venue-pin"
-              data-map
-              aria-label="Xem địa chỉ nhà gái trên Google Maps"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path
-                  d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"
-                />
-                <circle cx="12" cy="9.5" r="2.6" />
-              </svg>
-            </a>
-            <span class="venue-hint">Chạm để chỉ đường</span>
           </article>
         </div>
-      </section>
-      <section class="countdown-section" aria-labelledby="count-title">
-        <div class="icon-title-main"></div>
-        <div class="block-title" id="count-title">
-          <div class="title-first">Save</div>
-          <div class="title-second">The Date</div>
+      </div>
+    </section>
+    <section class="moments-section" aria-labelledby="moments-title">
+      <div class="icon-title-main"></div>
+      <div class="block-title" id="moments-title">
+        <div class="title-first">Our Timeless</div>
+        <div class="title-second">Moments</div>
+      </div>
+      <div class="album-wrap">
+        <!-- <div class="component-design"></div> -->
+
+        <div class="gallery">
+          <ul class="cards">
+          </ul>
         </div>
-        <div class="count-wrap">
-          <div class="main-image">
-            <img src="./assets/img/image14.jpg" alt="Ảnh cưới" loading="lazy" />
-            <div class="sub-text">
-              <div class="sub-text-item">Forever</div>
-              <div class="sub-text-item">Starts</div>
-              <div class="sub-text-item">Very</div>
-              <div class="sub-text-item">Soon</div>
-            </div>
-            <div class="sub-image">
-              <div class="sub-item">
-                <img src="./assets/img/hero1.jpg" alt="" loading="lazy" />
-                <span class="title-count">Day</span>
-                <span class="time-count" data-unit="days">00</span>
-              </div>
-              <div class="sub-item">
-                <img src="./assets/img/hero2.jpg" alt="" loading="lazy" />
-                <span class="title-count">Hour</span>
-                <span class="time-count" data-unit="hours">00</span>
-              </div>
-              <div class="sub-item">
-                <img src="./assets/img/hero3.jpg" alt="" loading="lazy" />
-                <span class="title-count">Min</span>
-                <span class="time-count" data-unit="minutes">00</span>
-              </div>
-              <div class="sub-item">
-                <img src="./assets/img/hero4.jpg" alt="" loading="lazy" />
-                <span class="title-count">Sec</span>
-                <span class="time-count" data-unit="seconds">00</span>
-              </div>
-            </div>
-          </div>
+        <div class="drag-proxy"></div>
+      </div>
+    </section>
+    <section class="info-section" aria-labelledby="info-title">
+      <div class="icon-title-main"></div>
+      <div class="block-title" id="info-title">
+        <div class="title-first">Wedding</div>
+        <div class="title-second">Ceremony</div>
+      </div>
+
+      <p class="info-invite">
+        Trân trọng kính mời bạn đến chung vui trong lễ thành hôn của chúng
+        mình
+      </p>
+
+      <div class="info-couple">
+        <div class="info-person">
+          <span class="info-role">Chú rể</span>
+          <span class="info-name" data-name="groom"></span>
         </div>
-        <div class="count-note">
-          <span class="count-note-line" aria-hidden="true"></span>
-          <p class="count-note-text">
-            Mỗi giây trôi qua là một bước chân gần hơn đến ngày chúng mình về
-            chung một nhà.
+        <span class="info-amp" aria-hidden="true">&amp;</span>
+        <div class="info-person">
+          <span class="info-role">Cô dâu</span>
+          <span class="info-name" data-name="bride"></span>
+        </div>
+      </div>
+
+      <div class="info-date">
+        <span class="info-weekday" data-wd-weekday></span>
+        <div class="info-date-main">
+          <span class="info-month" data-wd-month></span>
+          <span class="info-day" data-wd-day></span>
+          <span class="info-year" data-wd-year></span>
+        </div>
+        <span class="info-lunar" data-wedding-date-long></span>
+      </div>
+
+      <div class="info-split">
+        <article class="split-side split-side--groom venue-card">
+          <span class="info-role">Gia đình</span>
+          <h3 class="info-side">Nhà Trai</h3>
+          <p class="info-family">
+            <span data-family="groom-father"></span><br />
+            <span data-family="groom-mother"></span>
           </p>
-          <p class="count-note-date" data-wedding-date>Chủ Nhật · 20.12.2026</p>
-        </div>
-      </section>
 
-      <section class="rsvp-section" aria-labelledby="rsvp-title">
-        <div class="icon-title-main"></div>
-        <div class="block-title" id="rsvp-title">
-          <div class="title-first">Send</div>
-          <div class="title-second">Your Wishes</div>
-        </div>
+          <dl class="split-details">
+            <div>
+              <dt>Đón khách</dt>
+              <dd data-event-time="groom-arrival"></dd>
+            </div>
+            <div>
+              <dt>Lễ thành hôn</dt>
+              <dd data-event-time="wedding"></dd>
+            </div>
+            <div>
+              <dt>Khai tiệc</dt>
+              <dd data-event-time="groom-banquet"></dd>
+            </div>
+          </dl>
 
-        <p class="rsvp-intro">
-          Sự hiện diện và lời chúc của bạn là món quà trọn vẹn nhất với chúng
-          mình.
-        </p>
-
-        <form class="rsvp-form" id="rsvpForm" novalidate>
-          <label class="rsvp-field">
-            <span>Tên của bạn</span>
-            <input
-              id="rsvpName"
-              name="guestName"
-              type="text"
-              maxlength="80"
-              autocomplete="name"
-              required
-            />
-          </label>
-
-          <fieldset class="rsvp-choice">
-            <legend>Bạn sẽ tham dự chứ?</legend>
-            <label>
-              <input type="radio" name="attend" value="yes" checked />
-              <span>Sẽ tham dự</span>
-            </label>
-            <label>
-              <input type="radio" name="attend" value="no" />
-              <span>Rất tiếc, không thể</span>
-            </label>
-          </fieldset>
-
-          <div class="rsvp-row" data-when-attend>
-            <label class="rsvp-field">
-              <span>Bạn là khách của</span>
-              <select name="side">
-                <option value="Nhà trai">Nhà trai</option>
-                <option value="Nhà gái">Nhà gái</option>
-              </select>
-            </label>
-            <label class="rsvp-field">
-              <span>Số người</span>
-              <select name="guests">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </label>
+          <div class="split-addr">
+            <p class="info-label">Địa chỉ</p>
+            <p class="venue-address" data-venue="groom"></p>
           </div>
 
-          <label class="rsvp-field">
-            <span>Lời chúc</span>
-            <textarea name="message" rows="4" maxlength="1000"></textarea>
-          </label>
+          <a class="venue-pin" data-map aria-label="Xem địa chỉ nhà trai trên Google Maps">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z" />
+              <circle cx="12" cy="9.5" r="2.6" />
+            </svg>
+          </a>
+          <span class="venue-hint">Chạm để chỉ đường</span>
+        </article>
 
-          <!-- bẫy bot: người thật không thấy -->
-          <input
-            class="rsvp-hp"
-            name="website"
-            type="text"
-            tabindex="-1"
-            autocomplete="off"
-            aria-hidden="true"
-          />
+        <span class="split-amp" aria-hidden="true">&amp;</span>
 
-          <button class="rsvp-submit" type="submit">Gửi lời chúc</button>
-          <p class="rsvp-status" aria-live="polite"></p>
-        </form>
+        <article class="split-side split-side--bride venue-card">
+          <span class="info-role">Gia đình</span>
+          <h3 class="info-side">Nhà Gái</h3>
+          <p class="info-family">
+            <span data-family="bride-father"></span><br />
+            <span data-family="bride-mother"></span>
+          </p>
 
-        <div class="rsvp-thanks" id="rsvpThanks" hidden>
-          <div class="rsvp-thanks-card">
-            <span
-              class="thanks-corner thanks-corner--tl"
-              aria-hidden="true"
-            ></span>
-            <span
-              class="thanks-corner thanks-corner--tr"
-              aria-hidden="true"
-            ></span>
-            <span
-              class="thanks-corner thanks-corner--bl"
-              aria-hidden="true"
-            ></span>
-            <span
-              class="thanks-corner thanks-corner--br"
-              aria-hidden="true"
-            ></span>
+          <dl class="split-details">
+            <div>
+              <dt>Đón khách</dt>
+              <dd data-event-time="bride-arrival"></dd>
+            </div>
+            <div>
+              <dt>Lễ vu quy</dt>
+              <dd data-event-time="bride-ceremony"></dd>
+            </div>
+            <div>
+              <dt>Khai tiệc</dt>
+              <dd data-event-time="bride-banquet"></dd>
+            </div>
+          </dl>
 
-            <span class="rsvp-thanks-seal" aria-hidden="true">囍</span>
-            <p class="rsvp-thanks-kicker">Thank you</p>
-            <h3 class="rsvp-thanks-title">Cảm ơn bạn</h3>
-            <p class="rsvp-thanks-guest"></p>
-            <span class="rsvp-thanks-line" aria-hidden="true"></span>
-            <p class="rsvp-thanks-text"></p>
+          <div class="split-addr">
+            <p class="info-label">Địa chỉ</p>
+            <p class="venue-address" data-venue="bride"></p>
+          </div>
 
-            <dl class="rsvp-thanks-meta" hidden>
-              <div>
-                <dt>Ngày</dt>
-                <dd data-thanks="date"></dd>
-              </div>
-              <div>
-                <dt>Giờ</dt>
-                <dd data-thanks="time"></dd>
-              </div>
-              <div>
-                <dt>Khách</dt>
-                <dd data-thanks="guests"></dd>
-              </div>
-            </dl>
-            <p class="rsvp-thanks-venue" data-thanks="venue" hidden></p>
-
-            <div class="rsvp-thanks-actions">
-              <a class="rsvp-thanks-cal" data-thanks="calendar" hidden
-                >Thêm vào lịch</a
-              >
-              <button class="rsvp-thanks-again" type="button" data-rsvp-again>
-                Gửi thêm lời chúc
-              </button>
+          <a class="venue-pin" data-map aria-label="Xem địa chỉ nhà gái trên Google Maps">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z" />
+              <circle cx="12" cy="9.5" r="2.6" />
+            </svg>
+          </a>
+          <span class="venue-hint">Chạm để chỉ đường</span>
+        </article>
+      </div>
+    </section>
+    <section class="countdown-section" aria-labelledby="count-title">
+      <div class="icon-title-main"></div>
+      <div class="block-title" id="count-title">
+        <div class="title-first">Save</div>
+        <div class="title-second">The Date</div>
+      </div>
+      <div class="count-wrap">
+        <div class="main-image">
+          <img data-image="countdownMain" alt="" loading="lazy" />
+          <div class="sub-text">
+            <div class="sub-text-item">Forever</div>
+            <div class="sub-text-item">Starts</div>
+            <div class="sub-text-item">Very</div>
+            <div class="sub-text-item">Soon</div>
+          </div>
+          <div class="sub-image">
+            <div class="sub-item">
+              <img data-countdown-image="0" alt="" loading="lazy" />
+              <span class="title-count">Day</span>
+              <span class="time-count" data-unit="days">00</span>
+            </div>
+            <div class="sub-item">
+              <img data-countdown-image="1" alt="" loading="lazy" />
+              <span class="title-count">Hour</span>
+              <span class="time-count" data-unit="hours">00</span>
+            </div>
+            <div class="sub-item">
+              <img data-countdown-image="2" alt="" loading="lazy" />
+              <span class="title-count">Min</span>
+              <span class="time-count" data-unit="minutes">00</span>
+            </div>
+            <div class="sub-item">
+              <img data-countdown-image="3" alt="" loading="lazy" />
+              <span class="title-count">Sec</span>
+              <span class="time-count" data-unit="seconds">00</span>
             </div>
           </div>
         </div>
-      </section>
-      <footer class="site-footer">
-        <span class="footer-mark" aria-hidden="true">囍</span>
-        <p>
-          <span data-name="bride">Tên Cô Dâu</span> &amp;
-          <span data-name="groom">Tên Chú Rể</span>
+      </div>
+      <div class="count-note">
+        <span class="count-note-line" aria-hidden="true"></span>
+        <p class="count-note-text">
+          Mỗi giây trôi qua là một bước chân gần hơn đến ngày chúng mình về
+          chung một nhà.
         </p>
-        <p class="footer-date" data-wedding-date>Chủ Nhật · 20.12.2026</p>
-      </footer>
-    </main>
-    <audio
-      id="wedding-music"
-      src="./assets/sound/music.mp3"
-      loop
-      preload="none"
-    ></audio>
-    <button
-      class="music-toggle"
-      id="music-toggle"
-      type="button"
-      aria-label="Bật nhạc"
-      aria-pressed="false"
-      title="Bật nhạc"
-    >
-      <span aria-hidden="true">♪</span>
-    </button>
-  </body>
+        <p class="count-note-date" data-wedding-date></p>
+      </div>
+    </section>
+
+    <section class="rsvp-section" aria-labelledby="rsvp-title">
+      <div class="icon-title-main"></div>
+      <div class="block-title" id="rsvp-title">
+        <div class="title-first">Send</div>
+        <div class="title-second">Your Wishes</div>
+      </div>
+
+      <p class="rsvp-intro">
+        Sự hiện diện và lời chúc của bạn là món quà trọn vẹn nhất với chúng
+        mình.
+      </p>
+
+      <form class="rsvp-form" id="rsvpForm" novalidate>
+        <label class="rsvp-field">
+          <span>Tên của bạn</span>
+          <input id="rsvpName" name="guestName" type="text" maxlength="80" autocomplete="name" required />
+        </label>
+
+        <fieldset class="rsvp-choice">
+          <legend>Bạn sẽ tham dự chứ?</legend>
+          <label>
+            <input type="radio" name="attend" value="yes" checked />
+            <span>Sẽ tham dự</span>
+          </label>
+          <label>
+            <input type="radio" name="attend" value="no" />
+            <span>Rất tiếc, không thể</span>
+          </label>
+        </fieldset>
+
+        <div class="rsvp-row" data-when-attend>
+          <label class="rsvp-field">
+            <span>Bạn là khách của</span>
+            <select name="side">
+              <option value="Nhà trai">Nhà trai</option>
+              <option value="Nhà gái">Nhà gái</option>
+            </select>
+          </label>
+          <label class="rsvp-field">
+            <span>Số người</span>
+            <select name="guests">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="rsvp-field">
+          <span>Lời chúc</span>
+          <textarea name="message" rows="4" maxlength="1000"></textarea>
+        </label>
+
+        <!-- bẫy bot: người thật không thấy -->
+        <input class="rsvp-hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <button class="rsvp-submit" type="submit">Gửi lời chúc</button>
+        <p class="rsvp-status" aria-live="polite"></p>
+      </form>
+
+      <div class="rsvp-thanks" id="rsvpThanks" role="dialog" aria-modal="true"
+        aria-labelledby="rsvpThanksTitle" hidden>
+        <div class="rsvp-thanks-card">
+          <span class="thanks-corner thanks-corner--tl" aria-hidden="true"></span>
+          <span class="thanks-corner thanks-corner--tr" aria-hidden="true"></span>
+          <span class="thanks-corner thanks-corner--bl" aria-hidden="true"></span>
+          <span class="thanks-corner thanks-corner--br" aria-hidden="true"></span>
+
+          <span class="rsvp-thanks-seal" aria-hidden="true">囍</span>
+          <p class="rsvp-thanks-kicker">Thank you</p>
+          <h3 class="rsvp-thanks-title" id="rsvpThanksTitle">Cảm ơn bạn</h3>
+          <p class="rsvp-thanks-guest"></p>
+          <span class="rsvp-thanks-line" aria-hidden="true"></span>
+          <p class="rsvp-thanks-text"></p>
+
+          <dl class="rsvp-thanks-meta" hidden>
+            <div>
+              <dt>Ngày</dt>
+              <dd data-thanks="date"></dd>
+            </div>
+            <div>
+              <dt>Giờ</dt>
+              <dd data-thanks="time"></dd>
+            </div>
+            <div>
+              <dt>Khách</dt>
+              <dd data-thanks="guests"></dd>
+            </div>
+          </dl>
+          <p class="rsvp-thanks-venue" data-thanks="venue" hidden></p>
+
+          <div class="rsvp-thanks-actions">
+            <a class="rsvp-thanks-cal" data-thanks="calendar" hidden>Thêm vào lịch</a>
+            <button class="rsvp-thanks-again" type="button" data-rsvp-again>
+              Gửi thêm lời chúc
+            </button>
+            <button class="rsvp-thanks-again" type="button" data-rsvp-close>Đóng</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="site-footer">
+      <span class="footer-seal" aria-hidden="true"></span>
+      <p class="footer-names">
+        <span data-name="groom"></span>
+        <span class="footer-amp" aria-hidden="true">&amp;</span>
+        <span data-name="bride"></span>
+      </p>
+      <p class="footer-thanks">Cảm ơn bạn đã chung vui cùng chúng mình</p>
+    </footer>
+  </main>
+  <audio id="wedding-music" src="./assets/sound/music.mp3" loop preload="none"></audio>
+  <button class="music-toggle" id="music-toggle" type="button" aria-label="Bật nhạc" aria-pressed="false"
+    title="Bật nhạc">
+    <span aria-hidden="true">♪</span>
+  </button>
+</body>
+
 </html>
