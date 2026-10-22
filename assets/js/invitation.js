@@ -17,10 +17,67 @@ const WEDDING_CONFIG = {
     hour: 12,
     minute: 0,
   },
+  eventTimes: {
+    groomArrival: "10:30",
+    groomBanquet: "12:45",
+    brideArrival: "08:00",
+    brideCeremony: "09:00",
+    brideBanquet: "10:00",
+  },
   venues: {
     groomAddress: "Số 1, Đường ABC, Phường XYZ, Quận Cầu Giấy, Hà Nội",
     brideAddress: "Số 2, Đường DEF, Phường UVW, Quận Hoàn Kiếm, Hà Nội",
   },
+  stories: {
+    groom: {
+      role: "Chú rể",
+      text: "Anh từng nghĩ hạnh phúc còn xa lắm. Cho đến ngày gặp em.",
+      image: "./assets/img/groom.jpg",
+      imageAlt: "Chú rể Hoàng Vinh",
+    },
+    bride: {
+      role: "Cô dâu",
+      text: "Chỉ cần một người nắm tay em mỗi sáng thức dậy. Và người ấy, hóa ra, chính là anh.",
+      image: "./assets/img/bride.jpg",
+      imageAlt: "Cô dâu Nguyễn Nhung",
+    },
+  },
+  images: {
+    heroPortrait: {
+      src: "./assets/img/hero1.jpg",
+      alt: "Cô dâu chú rể trong khoảnh khắc thân mật",
+    },
+    heroScene: {
+      src: "./assets/img/hero3.jpg",
+      alt: "Cô dâu chú rể giữa khung cảnh thiên nhiên",
+    },
+    countdownMain: {
+      src: "./assets/img/image14.jpg",
+      alt: "Ảnh cưới",
+    },
+    countdown: [
+      "./assets/img/hero1.jpg",
+      "./assets/img/hero2.jpg",
+      "./assets/img/hero3.jpg",
+      "./assets/img/hero4.jpg",
+    ],
+    gallery: [
+      "./assets/img/image1.jpg",
+      "./assets/img/image2.jpg",
+      "./assets/img/image3.jpg",
+      "./assets/img/image4.jpg",
+      "./assets/img/image5.jpg",
+      "./assets/img/image6.jpg",
+      "./assets/img/image7.jpg",
+      "./assets/img/image8.jpg",
+      "./assets/img/image9.jpg",
+      "./assets/img/image10.jpg",
+      "./assets/img/image11.jpg",
+      "./assets/img/image12.jpg",
+      "./assets/img/image13.jpg",
+    ],
+  },
+  rsvpEndpoint: "",
 };
 
 const WEDDING = new Date(
@@ -65,6 +122,8 @@ function setupWeddingDetails() {
   setText('[data-family="bride-mother"]', WEDDING_CONFIG.brideParents.mother);
   setText('[data-venue="groom"]', WEDDING_CONFIG.venues.groomAddress);
   setText('[data-venue="bride"]', WEDDING_CONFIG.venues.brideAddress);
+  setText('[data-hero-date="day"]', String(WEDDING.getDate()).padStart(2, "0"));
+  setText('[data-hero-date="month"]', String(WEDDING.getMonth() + 1).padStart(2, "0"));
 
   const dateLabel = `${vietnameseWeekday(WEDDING)} · ${String(WEDDING.getDate()).padStart(2, "0")}.${String(
     WEDDING.getMonth() + 1,
@@ -78,15 +137,62 @@ function setupWeddingDetails() {
   setText("[data-wd-day]", String(WEDDING.getDate()).padStart(2, "0"));
   setText("[data-wd-month]", `${String(WEDDING.getMonth() + 1).padStart(2, "0")}`);
   setText("[data-wd-year]", String(WEDDING.getFullYear()));
+
+  Object.entries(WEDDING_CONFIG.eventTimes).forEach(([event, time]) => {
+    setText(`[data-event-time="${event.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}"]`, time);
+  });
+
+  document.querySelectorAll("[data-image]").forEach((image) => {
+    const imageConfig = WEDDING_CONFIG.images[image.dataset.image];
+    if (!imageConfig) return;
+    image.src = imageConfig.src;
+    image.alt = imageConfig.alt;
+  });
+
+  document.querySelectorAll("[data-story-image]").forEach((image) => {
+    const story = WEDDING_CONFIG.stories[image.dataset.storyImage];
+    if (!story) return;
+    image.src = story.image;
+    image.alt = story.imageAlt;
+  });
+
+  document.querySelectorAll("[data-story-card]").forEach((card) => {
+    const story = WEDDING_CONFIG.stories[card.dataset.storyCard];
+    if (!story) return;
+    setText(`[data-story-role="${card.dataset.storyCard}"]`, story.role);
+    const name = card.dataset.storyCard === "bride" ? WEDDING_CONFIG.brideName : WEDDING_CONFIG.groomName;
+    setText(`[data-story-name="${card.dataset.storyCard}"]`, name);
+    setText(`[data-story-text="${card.dataset.storyCard}"]`, story.text);
+  });
+
+  document.querySelectorAll("[data-countdown-image]").forEach((image) => {
+    const index = Number(image.dataset.countdownImage);
+    const src = WEDDING_CONFIG.images.countdown[index];
+    if (src) image.src = src;
+  });
+
+  const galleryCards = document.querySelector(".gallery .cards");
+  if (galleryCards) {
+    galleryCards.replaceChildren(
+      ...WEDDING_CONFIG.images.gallery.map((src) => {
+        const card = document.createElement("li");
+        card.style.backgroundImage = `url("${src}")`;
+        return card;
+      }),
+    );
+  }
 }
 
 function setupEnvelope() {
   const screen = document.getElementById("opening-screen");
-  const envelope = document.querySelector(".envelope");
-  const openButton = document.getElementById("open-invitation");
+  const envelope = document.getElementById("open-invitation");
   const content = document.getElementById("invitation-content");
   const music = document.getElementById("wedding-music");
   const musicToggle = document.getElementById("music-toggle");
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const OPEN_MS = reduce ? 0 : 1000;
+  const FADE_MS = 550;
 
   function updateMusicButton() {
     const isPlaying = !music.paused;
@@ -114,23 +220,35 @@ function setupEnvelope() {
     else music.pause();
   });
 
-  openButton.addEventListener("click", () => {
+  function openInvitation() {
     if (invitationOpened) return;
     invitationOpened = true;
 
-    playMusic();
+    playMusic(); // phải gọi ngay trong lần chạm thì trình duyệt mới cho phát nhạc
     envelope.classList.add("is-opening");
-    content.inert = false;
-    document.body.classList.remove("is-closed");
-    screen.classList.add("is-open");
-    window.setTimeout(() => screen.remove(), 550);
+
+    // phong bì mở xong -> cả màn mờ dần để lộ thiệp
     window.setTimeout(() => {
+      content.inert = false;
+      document.body.classList.remove("is-closed");
+      screen.classList.add("is-open");
+    }, OPEN_MS);
+
+    window.setTimeout(() => {
+      screen.remove();
       openQueue.splice(0).forEach(safeRun);
       if (window.ScrollTrigger) ScrollTrigger.refresh();
-    }, 550);
+    }, OPEN_MS + FADE_MS);
+  }
+
+  envelope.addEventListener("click", openInvitation);
+  envelope.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openInvitation();
+    }
   });
 }
-
 function setupLoveLetterAnimation() {
   if (!window.gsap || !window.ScrollTrigger || !window.SplitText) return;
 
@@ -545,18 +663,37 @@ function setupInfoAnimation() {
       .from(splitAmp, { scale: 0, rotation: -90, duration: 0.8, ease: "back.out(2.4)" }, 0.6);
 
     [sideG, sideB].forEach((side, index) => {
+      const pin = side.querySelector(".venue-pin");
+      const hint = side.querySelector(".venue-hint");
+
       timeline
         .from(
           side.querySelectorAll(".info-role, .info-side, .info-family, .split-details > div, .split-addr"),
           { y: 14, opacity: 0, duration: 0.6, ease: "power2.out", stagger: 0.08 },
           0.7 + index * 0.1,
         )
-        .from(
-          side.querySelector(".venue-pin"),
-          { scale: 0, opacity: 0, duration: 0.7, ease: "back.out(2.6)" },
+        .fromTo(
+          pin,
+          { scale: 0, opacity: 0 },
+          {
+            scale: 1,
+            opacity: 1,
+            duration: 0.7,
+            ease: "back.out(2.6)",
+            clearProps: "transform,opacity", // trả nút về CSS thuần sau khi xong
+          },
           1.4 + index * 0.1,
         )
-        .from(side.querySelector(".venue-hint"), { opacity: 0, duration: 0.5 }, 1.6 + index * 0.1);
+        .fromTo(
+          hint,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.5, clearProps: "opacity" },
+          1.6 + index * 0.1,
+        );
+    });
+
+    timeline.eventCallback("onComplete", () => {
+      gsap.set(split.querySelectorAll(".venue-pin, .venue-hint"), { clearProps: "transform,opacity" });
     });
   });
 }
@@ -699,6 +836,12 @@ function setupCountdownAnimation() {
       // ảnh mở dần từ trên xuống + zoom nhẹ
       .from(img, { clipPath: "inset(0 0 100% 0)", duration: 1.3, ease: "power3.out" })
       .from(img, { scale: 1.25, duration: 1.8, ease: "power2.out" }, "<")
+      .fromTo(
+        ".count-wrap .sub-text",
+        { "--shade": 0 },
+        { "--shade": 1, duration: 0.8, ease: "power1.out" },
+        "-=0.9",
+      )
       // 4 từ "Forever Starts Very Soon" hiện lần lượt
       .from(texts, { y: 26, opacity: 0, duration: 0.9, ease: "power2.out", stagger: 0.18 }, "-=0.9")
       // 4 ô đếm nổi lên
@@ -712,7 +855,6 @@ function startImageWave(figure) {
   if (!figure || figure.querySelector(".wave")) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  // chu kỳ 300 đơn vị, viewBox 1200 => dịch 50% là khớp vòng lặp liền mạch
   const d = "M0 60 Q75 20 150 60 T300 60 T450 60 T600 60 T750 60 T900 60 T1050 60 T1200 60 V120 H0 Z";
   const svg = (cls) =>
     `<svg class="${cls}" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="${d}"/></svg>`;
@@ -726,7 +868,7 @@ function startImageWave(figure) {
   const back = wave.querySelector(".wave-back");
   const front = wave.querySelector(".wave-front");
 
-  gsap.set(wave, { yPercent: 100 }); // ban đầu sóng nằm dưới đáy, chưa thấy
+  gsap.set(wave, { yPercent: 100 });
 
   const tweens = [
     gsap.to(back, { xPercent: -50, duration: 7, ease: "none", repeat: -1 }),
@@ -742,7 +884,6 @@ function startImageWave(figure) {
     }),
   ];
 
-  // chỉ chạy khi ảnh đang trong màn hình, đỡ tốn pin
   if (window.ScrollTrigger) {
     ScrollTrigger.create({
       trigger: figure,
@@ -759,10 +900,35 @@ function setupRsvp() {
   const extra = form.querySelector("[data-when-attend]");
   const nameInput = document.getElementById("rsvpName");
   const thanks = document.getElementById("rsvpThanks");
+  let previousBodyOverflow = "";
+  let previousFocus = null;
 
   // chọn "không thể" thì ẩn ô nhà trai/gái và số người
   form.addEventListener("change", (e) => {
     if (e.target.name === "attend") extra.hidden = e.target.value === "no";
+  });
+
+  function closeThanks({ focusMessage = false } = {}) {
+    thanks.hidden = true;
+    document.body.style.overflow = previousBodyOverflow;
+    form.elements.message.value = "";
+    submit.disabled = false;
+    status.textContent = "";
+
+    if (focusMessage) form.elements.message.focus();
+    else previousFocus?.focus();
+  }
+
+  thanks.addEventListener("click", (e) => {
+    if (e.target === thanks || e.target.closest("[data-rsvp-close]")) closeThanks();
+  });
+
+  thanks.querySelector("[data-rsvp-again]")?.addEventListener("click", () => {
+    closeThanks({ focusMessage: true });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !thanks.hidden) closeThanks();
   });
 
   form.addEventListener("submit", async (e) => {
@@ -786,29 +952,31 @@ function setupRsvp() {
       message: (data.message || "").trim(),
     };
 
+    if (!WEDDING_CONFIG.rsvpEndpoint) {
+      status.textContent = "Chưa kết nối RSVP. Vui lòng cấu hình URL Google Apps Script trong WEDDING_CONFIG.";
+      console.error("[rsvp] Chưa cấu hình WEDDING_CONFIG.rsvpEndpoint.");
+      return;
+    }
+
     submit.disabled = true;
     status.textContent = "Đang gửi...";
 
     try {
-      if (WEDDING_CONFIG.rsvpEndpoint) {
-        await fetch(WEDDING_CONFIG.rsvpEndpoint, {
-          method: "POST",
-          mode: "no-cors", // Apps Script không trả CORS, request vẫn được gửi
-          body: new URLSearchParams(payload),
-        });
-      } else {
-        // chưa có endpoint: lưu tạm trong máy để test giao diện
-        const saved = JSON.parse(localStorage.getItem("wedding-rsvp") || "[]");
-        saved.push({ ...payload, at: new Date().toISOString() });
-        localStorage.setItem("wedding-rsvp", JSON.stringify(saved));
-        console.warn("[rsvp] Chưa cấu hình rsvpEndpoint, dữ liệu chỉ lưu trong trình duyệt này.");
-      }
+      await fetch(WEDDING_CONFIG.rsvpEndpoint, {
+        method: "POST",
+        mode: "no-cors",
+        body: new URLSearchParams(payload),
+      });
 
       thanks.querySelector(".rsvp-thanks-text").textContent = attending
-        ? `${guestName} ơi, chúng mình đã nhận được xác nhận và rất mong gặp bạn trong ngày vui.`
+        ? `${guestName} ơi, cảm ơn bạn đã phản hồi và chúng mình rất mong gặp bạn trong ngày vui.`
         : `${guestName} ơi, cảm ơn bạn đã gửi lời chúc. Chúng mình rất tiếc không được gặp bạn hôm đó.`;
 
-      showRsvpThanks(form, thanks);
+      previousBodyOverflow = document.body.style.overflow;
+      previousFocus = document.activeElement;
+      document.body.style.overflow = "hidden";
+      showRsvpThanks(thanks);
+      thanks.querySelector("[data-rsvp-close]").focus();
     } catch (err) {
       console.error("[rsvp]", err);
       status.textContent = "Chưa gửi được, bạn thử lại giúp chúng mình nhé.";
@@ -817,59 +985,46 @@ function setupRsvp() {
   });
 }
 
-function showRsvpThanks(form, thanks) {
-  const reveal = () => {
-    form.hidden = true;
-    thanks.hidden = false;
-    thanks.scrollIntoView({ behavior: "smooth", block: "center" });
-    if (!window.gsap) return;
+function showRsvpThanks(thanks) {
+  thanks.hidden = false;
+  if (!window.gsap) return;
 
-    const card = thanks.querySelector(".rsvp-thanks-card");
-    const q = (selector) => thanks.querySelector(selector);
+  const card = thanks.querySelector(".rsvp-thanks-card");
+  const q = (selector) => thanks.querySelector(selector);
 
-    gsap
-      .timeline()
-      .from(card, { opacity: 0, y: 30, scale: 0.92, duration: 0.8, ease: "power3.out" })
-      .from(q(".rsvp-thanks-seal"), { scale: 0, rotation: -180, duration: 0.9, ease: "back.out(2)" }, "-=0.3")
-      .from(
-        [q(".rsvp-thanks-kicker"), q(".rsvp-thanks-title")],
-        { y: 16, opacity: 0, filter: "blur(4px)", duration: 0.7, stagger: 0.15 },
-        "-=0.4",
-      )
-      .from(q(".rsvp-thanks-line"), { scaleX: 0, duration: 0.7, ease: "power2.out" }, "-=0.3")
-      .from(
-        [q(".rsvp-thanks-text"), q(".rsvp-thanks-date")],
-        { y: 12, opacity: 0, duration: 0.7, stagger: 0.15 },
-        "-=0.3",
+  gsap.fromTo(thanks, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power1.out" });
+  gsap
+    .timeline()
+    .from(card, { opacity: 0, y: 30, scale: 0.92, duration: 0.8, ease: "power3.out" })
+    .from(q(".rsvp-thanks-seal"), { scale: 0, rotation: -180, duration: 0.9, ease: "back.out(2)" }, "-=0.3")
+    .from(
+      [q(".rsvp-thanks-kicker"), q(".rsvp-thanks-title")],
+      { y: 16, opacity: 0, filter: "blur(4px)", duration: 0.7, stagger: 0.15 },
+      "-=0.4",
+    )
+    .from(q(".rsvp-thanks-line"), { scaleX: 0, duration: 0.7, ease: "power2.out" }, "-=0.3")
+    .from(q(".rsvp-thanks-text"), { y: 12, opacity: 0, duration: 0.7 }, "-=0.3");
+
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (let i = 0; i < 16; i++) {
+      const petal = document.createElement("span");
+      petal.className = "rsvp-petal";
+      card.append(petal);
+      gsap.fromTo(
+        petal,
+        { x: 0, y: 0, scale: gsap.utils.random(0.6, 1.2), rotation: gsap.utils.random(0, 360), opacity: 1 },
+        {
+          x: gsap.utils.random(-150, 150),
+          y: gsap.utils.random(-30, 200),
+          rotation: "+=" + gsap.utils.random(120, 360),
+          opacity: 0,
+          duration: gsap.utils.random(1.4, 2.4),
+          delay: 0.5,
+          ease: "power2.out",
+          onComplete: () => petal.remove(),
+        },
       );
-
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      for (let i = 0; i < 16; i++) {
-        const petal = document.createElement("span");
-        petal.className = "rsvp-petal";
-        card.append(petal);
-        gsap.fromTo(
-          petal,
-          { x: 0, y: 0, scale: gsap.utils.random(0.6, 1.2), rotation: gsap.utils.random(0, 360), opacity: 1 },
-          {
-            x: gsap.utils.random(-150, 150),
-            y: gsap.utils.random(-30, 200),
-            rotation: "+=" + gsap.utils.random(120, 360),
-            opacity: 0,
-            duration: gsap.utils.random(1.4, 2.4),
-            delay: 0.5,
-            ease: "power2.out",
-            onComplete: () => petal.remove(),
-          },
-        );
-      }
     }
-  };
-
-  if (window.gsap) {
-    gsap.to(form, { opacity: 0, y: -10, duration: 0.4, ease: "power1.in", onComplete: reveal });
-  } else {
-    reveal();
   }
 }
 
@@ -882,7 +1037,9 @@ function setupRsvpAnimation() {
     if (!section) return;
 
     const intro = section.querySelector(".rsvp-intro");
-    const fields = section.querySelectorAll(".rsvp-form > *:not(.rsvp-hp)");
+    const fields = section.querySelectorAll(
+      ".rsvp-form > *:not(.rsvp-hp):not(.rsvp-submit):not(.rsvp-status)",
+    );
 
     gsap.from(intro, {
       y: 18,
@@ -920,15 +1077,12 @@ function setupCountdownNote() {
 
       gsap
         .timeline({ scrollTrigger: { trigger: note, start: "top 90%", once: true } })
-        // đường kẻ mở rộng từ giữa ra hai bên
         .from(line, { scaleX: 0, duration: 0.9, ease: "power2.out" })
-        // từng chữ hiện lên, hơi mờ nhòe như phần Confession
         .from(
           words.words,
           { opacity: 0, y: 14, filter: "blur(4px)", duration: 0.7, ease: "power2.out", stagger: 0.05 },
           "-=0.4",
         )
-        // dòng ngày cưới hiện cuối cùng, chữ giãn dần ra
         .from(
           date,
           { opacity: 0, y: 10, letterSpacing: "0.1em", duration: 0.9, ease: "power2.out" },
