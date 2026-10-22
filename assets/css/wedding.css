@@ -77,8 +77,13 @@
 }
 
 @keyframes envelope-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 .envelope::before,
@@ -142,7 +147,7 @@
   mask-position: center;
   -webkit-mask-size: contain;
   mask-size: contain;
-  background-color: var(--red-hi);
+  background-color: var(--gold-deep);
   transition:
     opacity 280ms ease,
     transform 280ms ease;
@@ -171,8 +176,13 @@
 }
 
 @keyframes hint-blink {
-  0%, 100% { opacity: 0.45; }
-  50%      { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 .music-toggle {
   position: fixed;
@@ -1461,7 +1471,7 @@ body:not(.is-closed) .music-toggle {
   width: 90%;
   transform: translateX(-50%);
   text-align: center;
-   --shade: 1;
+  --shade: 1;
 }
 
 /* lớp tối mờ phía sau chữ để chữ nổi lên khỏi ảnh */

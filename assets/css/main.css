@@ -1,10 +1,9 @@
 :root {
   --font-heading: "Cormorant Garamond", Georgia, serif;
-  --font-subtext-pre: "Caramel", cursive;
   --font-ui: "Be Vietnam Pro", Arial, sans-serif;
   --page-width: 430px;
   --text-highlight: #ffe9a8;
-  --font-heading-second: "Corinthia", cursive;
+  --font-des: "Caramel", cursive;
 
   --ivory: #fbf1ee;
   --paper: #fbf1ee;
@@ -32,6 +31,8 @@
   --gold-500: #a67c2e; /* vàng đậm, dùng cho chữ trên nền sáng */
   --gold-600: #8a6420; /* vàng đồng */
   --gold-700: #5e4314;
+
+  --red-hi: #8b1508;
 }
 
 * {
@@ -95,6 +96,6 @@ textarea:focus-visible {
 
 @media (min-width: 700px) {
   :root {
-    --page-width: 480px;   
+    --page-width: 480px;
   }
 }
