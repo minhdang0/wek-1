@@ -43,14 +43,12 @@ const WEDDING_CONFIG = {
     },
   },
   images: {
-    heroPortrait: {
-      src: "./assets/img/hero1.jpg",
-      alt: "Cô dâu chú rể trong khoảnh khắc thân mật",
-    },
-    heroScene: {
-      src: "./assets/img/hero3.jpg",
-      alt: "Cô dâu chú rể giữa khung cảnh thiên nhiên",
-    },
+    heroSlides: [
+      { src: "./assets/img/hero-optimized/hero1.jpg", alt: "Ảnh cưới 1" },
+      { src: "./assets/img/hero-optimized/hero2.jpg", alt: "Ảnh cưới 2" },
+      { src: "./assets/img/hero-optimized/hero3.jpg", alt: "Ảnh cưới 3" },
+      { src: "./assets/img/hero-optimized/hero4.jpg", alt: "Ảnh cưới 4" },
+    ],
     countdownMain: {
       src: "./assets/img/image14.jpg",
       alt: "Ảnh cưới",
@@ -62,19 +60,19 @@ const WEDDING_CONFIG = {
       "./assets/img/hero4.jpg",
     ],
     gallery: [
-      "./assets/img/image1.jpg",
-      "./assets/img/image2.jpg",
-      "./assets/img/image3.jpg",
-      "./assets/img/image4.jpg",
-      "./assets/img/image5.jpg",
-      "./assets/img/image6.jpg",
-      "./assets/img/image7.jpg",
-      "./assets/img/image8.jpg",
-      "./assets/img/image9.jpg",
-      "./assets/img/image10.jpg",
-      "./assets/img/image11.jpg",
-      "./assets/img/image12.jpg",
-      "./assets/img/image13.jpg",
+      "./assets/img/gallery-optimized/image1.jpg",
+      "./assets/img/gallery-optimized/image2.jpg",
+      "./assets/img/gallery-optimized/image3.jpg",
+      "./assets/img/gallery-optimized/image4.jpg",
+      "./assets/img/gallery-optimized/image5.jpg",
+      "./assets/img/gallery-optimized/image6.jpg",
+      "./assets/img/gallery-optimized/image7.jpg",
+      "./assets/img/gallery-optimized/image8.jpg",
+      "./assets/img/gallery-optimized/image9.jpg",
+      "./assets/img/gallery-optimized/image10.jpg",
+      "./assets/img/gallery-optimized/image11.jpg",
+      "./assets/img/gallery-optimized/image12.jpg",
+      "./assets/img/gallery-optimized/image13.jpg",
     ],
   },
   rsvpEndpoint: "",
@@ -123,7 +121,10 @@ function setupWeddingDetails() {
   setText('[data-venue="groom"]', WEDDING_CONFIG.venues.groomAddress);
   setText('[data-venue="bride"]', WEDDING_CONFIG.venues.brideAddress);
   setText('[data-hero-date="day"]', String(WEDDING.getDate()).padStart(2, "0"));
-  setText('[data-hero-date="month"]', String(WEDDING.getMonth() + 1).padStart(2, "0"));
+  setText(
+    '[data-hero-date="month"]',
+    String(WEDDING.getMonth() + 1).padStart(2, "0"),
+  );
 
   const dateLabel = `${vietnameseWeekday(WEDDING)} · ${String(WEDDING.getDate()).padStart(2, "0")}.${String(
     WEDDING.getMonth() + 1,
@@ -135,11 +136,17 @@ function setupWeddingDetails() {
   setText('[data-event-time="wedding"]', weddingTime);
   setText("[data-wd-weekday]", vietnameseWeekday(WEDDING));
   setText("[data-wd-day]", String(WEDDING.getDate()).padStart(2, "0"));
-  setText("[data-wd-month]", `${String(WEDDING.getMonth() + 1).padStart(2, "0")}`);
+  setText(
+    "[data-wd-month]",
+    `${String(WEDDING.getMonth() + 1).padStart(2, "0")}`,
+  );
   setText("[data-wd-year]", String(WEDDING.getFullYear()));
 
   Object.entries(WEDDING_CONFIG.eventTimes).forEach(([event, time]) => {
-    setText(`[data-event-time="${event.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}"]`, time);
+    setText(
+      `[data-event-time="${event.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}"]`,
+      time,
+    );
   });
 
   document.querySelectorAll("[data-image]").forEach((image) => {
@@ -147,6 +154,14 @@ function setupWeddingDetails() {
     if (!imageConfig) return;
     image.src = imageConfig.src;
     image.alt = imageConfig.alt;
+  });
+
+  document.querySelectorAll("[data-hero-slide]").forEach((image) => {
+    const slide =
+      WEDDING_CONFIG.images.heroSlides[Number(image.dataset.heroSlide)];
+    if (!slide) return;
+    image.src = slide.src;
+    image.alt = slide.alt;
   });
 
   document.querySelectorAll("[data-story-image]").forEach((image) => {
@@ -160,7 +175,10 @@ function setupWeddingDetails() {
     const story = WEDDING_CONFIG.stories[card.dataset.storyCard];
     if (!story) return;
     setText(`[data-story-role="${card.dataset.storyCard}"]`, story.role);
-    const name = card.dataset.storyCard === "bride" ? WEDDING_CONFIG.brideName : WEDDING_CONFIG.groomName;
+    const name =
+      card.dataset.storyCard === "bride"
+        ? WEDDING_CONFIG.brideName
+        : WEDDING_CONFIG.groomName;
     setText(`[data-story-name="${card.dataset.storyCard}"]`, name);
     setText(`[data-story-text="${card.dataset.storyCard}"]`, story.text);
   });
@@ -183,6 +201,134 @@ function setupWeddingDetails() {
   }
 }
 
+let heroIntro = null;
+
+function prepareHeroIntro() {
+  if (
+    !window.gsap ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    return;
+  }
+
+  const hero = document.querySelector(".hero");
+  if (!hero) return;
+  const q = (selector) => hero.querySelector(selector);
+
+  const wipeFrom = "inset(-25% 100% -25% -10%)";
+  const wipeTo = "inset(-25% -10% -25% -10%)";
+  const wipe = (element, at, duration) =>
+    heroIntro.fromTo(
+      element,
+      { clipPath: wipeFrom, opacity: 0 },
+      {
+        clipPath: wipeTo,
+        opacity: 1,
+        duration,
+        ease: "power2.inOut",
+        clearProps: "clipPath",
+      },
+      at,
+    );
+
+  heroIntro = gsap.timeline({
+    paused: true,
+    defaults: { ease: "power3.out" },
+  });
+
+  heroIntro.fromTo(
+    q(".hero-slides"),
+    { clipPath: "inset(0 0 100% 0)" },
+    {
+      clipPath: "inset(0 0 0% 0)",
+      duration: 1.5,
+      ease: "power3.inOut",
+      clearProps: "clipPath",
+    },
+    0,
+  );
+
+  wipe(q(".title-line-1"), 0.9, 0.9);
+  wipe(q(".title-line-2 p:first-child"), 1.3, 1.2);
+
+  heroIntro
+    .from(q(".title-line-2 p:last-child"), { opacity: 0, duration: 1 }, 2.1)
+    .from(
+      q(".hn-main"),
+      { opacity: 0, scale: 0.85, duration: 0.9, ease: "back.out(1.8)" },
+      1.8,
+    )
+    .from(q(".hn-groom"), { opacity: 0, x: -30, duration: 0.9 }, 2.0)
+    .from(q(".hn-bride"), { opacity: 0, x: 30, duration: 0.9 }, 2.0);
+}
+
+function playHeroIntro() {
+  if (heroIntro) heroIntro.play();
+}
+
+(function () {
+  let lastW = 0;
+  function setAppHeight() {
+    if (innerWidth === lastW) return; // bỏ qua resize chỉ đổi chiều cao
+    lastW = innerWidth;
+    document.documentElement.style.setProperty("--app-h", innerHeight + "px");
+  }
+  setAppHeight();
+  addEventListener("resize", setAppHeight);
+})();
+
+function setupHeroSlideshow() {
+  const hero = document.querySelector(".hero");
+  const slides = [...document.querySelectorAll(".hero-slide")];
+  if (!hero || slides.length < 2) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const INTERVAL = 5000;
+  let index = 0;
+  let timer = null;
+  let visible = true;
+
+  slides.forEach((slide) => {
+    const image = slide.querySelector("img");
+    if (image?.decode) image.decode().catch(() => {});
+  });
+
+  function next() {
+    const prev = slides[index];
+    index = (index + 1) % slides.length;
+    const current = slides[index];
+    slides.forEach((slide) => slide.classList.remove("is-leaving"));
+    prev.classList.remove("is-active");
+    prev.classList.add("is-leaving");
+    current.classList.add("is-active");
+  }
+
+  function start() {
+    if (timer || !visible || document.hidden) return;
+    timer = setInterval(next, INTERVAL);
+  }
+
+  function stop() {
+    clearInterval(timer);
+    timer = null;
+  }
+
+  new IntersectionObserver(
+    (entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible) start();
+      else stop();
+    },
+    { threshold: 0.2 },
+  ).observe(hero);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop();
+    else start();
+  });
+  start();
+}
+
 function setupEnvelope() {
   const screen = document.getElementById("opening-screen");
   const envelope = document.getElementById("open-invitation");
@@ -192,7 +338,7 @@ function setupEnvelope() {
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const OPEN_MS = reduce ? 0 : 1000;
-  const FADE_MS = 550;
+  const FADE_MS = 900;
 
   function updateMusicButton() {
     const isPlaying = !music.paused;
@@ -232,6 +378,7 @@ function setupEnvelope() {
       content.inert = false;
       document.body.classList.remove("is-closed");
       screen.classList.add("is-open");
+      playHeroIntro();
     }, OPEN_MS);
 
     window.setTimeout(() => {
@@ -295,7 +442,6 @@ function setupLoveLetterAnimation() {
           {
             opacity: 0,
             y: 18,
-            filter: "blur(4px)",
             duration: 0.7,
             ease: "power2.out",
             stagger: 0.06,
@@ -337,8 +483,6 @@ function setupIconRotation() {
   });
 }
 
-
-
 function setupAlbumCarousel() {
   if (!window.gsap || !window.Draggable) return;
 
@@ -353,7 +497,7 @@ function setupAlbumCarousel() {
   const wrapDistance = gsap.utils.wrap(-n / 2, n / 2);
   const state = { pos: 0 };
   const intro = { v: reduce ? 1 : 0 };
-  if (!reduce) state.pos = .5;
+  if (!reduce) state.pos = 0.5;
   let target = 0;
   let step = 0;
   const gust = (power) =>
@@ -377,6 +521,7 @@ function setupAlbumCarousel() {
         opacity: (a > 2.5 ? 0 : 1 - a * 0.28) * Math.min(1, k * 1.6),
         zIndex: Math.round(100 - a * 10),
         pointerEvents: a > 2.5 || k < 0.95 ? "none" : "auto",
+        visibility: a > 2.5 ? "hidden" : "visible",
       });
     });
   }
@@ -434,10 +579,21 @@ function setupAlbumCarousel() {
         render();
       },
     });
-    tl.to(intro, { v: 1, duration: 1.5, ease: "power3.out", onUpdate: render }, 0)
-      .to(state, { pos: 0, duration: 1.9, ease: "power3.out", onUpdate: render }, 0);
+    tl.to(
+      intro,
+      { v: 1, duration: 1.5, ease: "power3.out", onUpdate: render },
+      0,
+    ).to(
+      state,
+      { pos: 0, duration: 1.9, ease: "power3.out", onUpdate: render },
+      0,
+    );
     if (navBtns.length) {
-      tl.to(navBtns, { opacity: 1, duration: 0.8, stagger: 0.12, clearProps: "opacity" }, 1.0);
+      tl.to(
+        navBtns,
+        { opacity: 1, duration: 0.8, stagger: 0.12, clearProps: "opacity" },
+        1.0,
+      );
     }
 
     ScrollTrigger.create({
@@ -457,31 +613,40 @@ function setupFallingLeaves() {
   canvas.className = "page-leaves";
   canvas.setAttribute("aria-hidden", "true");
   document.body.append(canvas);
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { alpha: true, desynchronized: true });
 
   const SHAPES = {
     leaf: new Path2D("M0 -1C0.7 -0.4 0.6 0.5 0 1C-0.6 0.5 -0.7 -0.4 0 -1Z"),
     petal: new Path2D("M0 -0.8C0.9 -1 1 0.3 0 1C-1 0.3 -0.9 -1 0 -0.8Z"),
   };
-  const COLORS = ["#BF953F", "#D4AF5A", "#E6CB86", "#B76E79", "#E3B7AE", "#A67C2E"];
+  const COLORS = [
+    "#BF953F",
+    "#D4AF5A",
+    "#E6CB86",
+    "#B76E79",
+    "#E3B7AE",
+    "#A67C2E",
+  ];
 
-  let w = 0, h = 0, dpr = 1;
+  let w = 0,
+    h = 0,
+    dpr = 1;
   let wind = 0;
-  let raf = 0, last = 0;
-  let scrollDy = 0, lastY = window.scrollY;
+  let last = 0;
+  let lastY = window.scrollY;
+  let pendingScroll = 0; // quãng cuộn chưa áp dụng cho lá (được làm mượt dần)
   const rand = gsap.utils.random;
 
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5); // giảm từ 2 -> 1.5 cho nhẹ
     w = window.innerWidth;
     h = window.innerHeight;
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   function spawn(p, initial) {
-    const z = rand(0.45, 1.15); // độ sâu: nhỏ = xa
+    const z = rand(0.45, 1.15);
     p.z = z;
     p.len = rand(9, 15) * z + 3;
     p.x = rand(0, w);
@@ -501,18 +666,31 @@ function setupFallingLeaves() {
   }
 
   resize();
-  const count = w < 420 ? 18 : w < 900 ? 24 : 32;
+  const count = w < 420 ? 16 : w < 900 ? 22 : 30;
   const parts = Array.from({ length: count }, () => spawn({}, true));
-  parts.sort((a, b) => a.z - b.z); // lá xa vẽ trước, lá gần vẽ sau
+  parts.sort((a, b) => a.z - b.z);
 
   function frame(now) {
-    const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
+    requestAnimationFrame(frame);
+    if (document.hidden) {
+      last = now;
+      return;
+    }
+
+    // chạy mọi khung hình, không bỏ khung nào
+    const dt = Math.min(0.05, (now - (last || now)) / 1000) || 0.016;
     last = now;
     wind += (0 - wind) * Math.min(1, dt * 1.4);
 
-    const dy = scrollDy; // quãng cuộn kể từ khung hình trước
-    scrollDy = 0;
+    // thị sai khi cuộn: đọc scrollY ngay trong khung, áp dụng dần (mượt, không nhảy)
+    const y = window.scrollY;
+    pendingScroll += y - lastY;
+    lastY = y;
+    const applied = pendingScroll * (1 - Math.exp(-dt * 8));
+    pendingScroll -= applied;
+    const dy = Math.max(-80, Math.min(80, applied)); // chặn cuộn quá nhanh
 
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
 
     for (const p of parts) {
@@ -520,60 +698,51 @@ function setupFallingLeaves() {
       const sway = Math.cos(p.t * p.freq + p.phase) * p.amp * p.freq;
       p.x += (sway + wind * (50 + 90 * p.z)) * dt;
       p.y += (p.vy - Math.abs(wind) * 28 * p.z) * dt;
-      p.y -= dy * 0.35 * p.z; // thị sai khi cuộn: lá gần trôi nhanh hơn
+      p.y -= dy * 0.25 * p.z;
       p.rot += (p.spin + wind * 1.6) * dt;
 
-      if (p.y < -80) { // cuộn ngược lên quá xa: cho lá vòng xuống dưới
+      if (p.y < -80) {
         p.y = h + 30;
         p.x = rand(0, w);
       }
       if (p.y > h + 30 || p.x < -60 || p.x > w + 60) {
         spawn(p, false);
-        if (Math.abs(wind) > 0.5) p.x = wind > 0 ? rand(-40, w * 0.3) : rand(w * 0.7, w + 40);
+        if (Math.abs(wind) > 0.5)
+          p.x = wind > 0 ? rand(-40, w * 0.3) : rand(w * 0.7, w + 40);
         continue;
       }
 
-      const flip = Math.cos(p.t * p.flipSpeed + p.flipPhase);
-      const face = Math.abs(flip);
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.scale(p.len * 0.5 * (0.25 + 0.75 * face), p.len);
+      const face = Math.abs(Math.cos(p.t * p.flipSpeed + p.flipPhase));
+      const sx = p.len * 0.5 * (0.25 + 0.75 * face);
+      const cos = Math.cos(p.rot),
+        sin = Math.sin(p.rot);
+
+      // không dùng save/restore: đặt thẳng ma trận (rẻ hơn nhiều)
+      ctx.setTransform(
+        cos * sx * dpr,
+        sin * sx * dpr,
+        -sin * p.len * dpr,
+        cos * p.len * dpr,
+        p.x * dpr,
+        p.y * dpr,
+      );
       ctx.globalAlpha = (0.3 + 0.45 * p.z) * (0.6 + 0.4 * face);
-      if (p.z > 1) {
-        ctx.shadowColor = "rgba(212,175,90,0.7)";
-        ctx.shadowBlur = 8 * face;
-      }
       ctx.fillStyle = p.color;
-      ctx.fill(SHAPES[p.kind]);
-      ctx.shadowBlur = 0;
-      ctx.globalAlpha *= 0.55 + 0.45 * face;
-      ctx.strokeStyle = "rgba(255,248,225,0.8)";
-      ctx.lineWidth = 0.07;
-      ctx.beginPath();
-      ctx.moveTo(0, -0.85);
-      ctx.lineTo(0, 0.85);
-      ctx.stroke();
-      ctx.restore();
+      ctx.fill(SHAPES[p.kind]); // bỏ nét gân lá (stroke) để nhẹ hơn
     }
-    raf = requestAnimationFrame(frame);
   }
 
-  window.addEventListener("resize", resize);
-  window.addEventListener(
-    "scroll",
-    () => {
-      const y = window.scrollY;
-      scrollDy += y - lastY;
-      lastY = y;
-    },
-    { passive: true },
-  );
+  let leavesW = innerWidth;
+  window.addEventListener("resize", () => {
+    if (innerWidth === leavesW) return;
+    leavesW = innerWidth;
+    resize();
+  });
   window.addEventListener("album:gust", (e) => {
     wind = gsap.utils.clamp(-3, 3, wind + e.detail.power);
   });
 
-  raf = requestAnimationFrame(frame);
+  requestAnimationFrame(frame);
 }
 function setupMapLinks() {
   document.querySelectorAll("[data-map]").forEach((link) => {
@@ -598,7 +767,11 @@ function setupInfoAnimation() {
     const section = document.querySelector(".info-section");
     if (!section) return;
 
-    const once = (trigger, start = "top 85%") => ({ trigger, start, once: true });
+    const once = (trigger, start = "top 85%") => ({
+      trigger,
+      start,
+      once: true,
+    });
 
     const invite = section.querySelector(".info-invite");
     if (invite) {
@@ -615,10 +788,29 @@ function setupInfoAnimation() {
     const [groom, bride] = section.querySelectorAll(".info-person");
     const coupleAmp = couple?.querySelector(".info-amp");
     if (couple && groom && bride && coupleAmp) {
-      gsap.timeline({ scrollTrigger: once(couple) })
-        .from(groom, { x: -36, opacity: 0, duration: 0.9, ease: "power3.out" }, 0)
-        .from(bride, { x: 36, opacity: 0, duration: 0.9, ease: "power3.out" }, 0)
-        .from(coupleAmp, { scale: 0, rotation: -40, opacity: 0, duration: 0.8, ease: "back.out(2.4)" }, 0.35);
+      gsap
+        .timeline({ scrollTrigger: once(couple) })
+        .from(
+          groom,
+          { x: -36, opacity: 0, duration: 0.9, ease: "power3.out" },
+          0,
+        )
+        .from(
+          bride,
+          { x: 36, opacity: 0, duration: 0.9, ease: "power3.out" },
+          0,
+        )
+        .from(
+          coupleAmp,
+          {
+            scale: 0,
+            rotation: -40,
+            opacity: 0,
+            duration: 0.8,
+            ease: "back.out(2.4)",
+          },
+          0.35,
+        );
     }
 
     const date = section.querySelector(".info-date");
@@ -629,10 +821,31 @@ function setupInfoAnimation() {
       const year = date.querySelector(".info-year");
       const lunar = date.querySelector(".info-lunar");
       const timeline = gsap.timeline({ scrollTrigger: once(date, "top 88%") });
-      if (weekday) timeline.from(weekday, { y: 12, opacity: 0, duration: 0.6, ease: "power2.out" });
-      if (day) timeline.from(day, { scale: 0.4, opacity: 0, duration: 1, ease: "back.out(1.8)" }, "-=0.3");
-      if (month) timeline.from(month, { x: -20, opacity: 0, duration: 0.7, ease: "power2.out" }, "-=0.7");
-      if (year) timeline.from(year, { x: 20, opacity: 0, duration: 0.7, ease: "power2.out" }, "<");
+      if (weekday)
+        timeline.from(weekday, {
+          y: 12,
+          opacity: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        });
+      if (day)
+        timeline.from(
+          day,
+          { scale: 0.4, opacity: 0, duration: 1, ease: "back.out(1.8)" },
+          "-=0.3",
+        );
+      if (month)
+        timeline.from(
+          month,
+          { x: -20, opacity: 0, duration: 0.7, ease: "power2.out" },
+          "-=0.7",
+        );
+      if (year)
+        timeline.from(
+          year,
+          { x: 20, opacity: 0, duration: 0.7, ease: "power2.out" },
+          "<",
+        );
       if (lunar) timeline.from(lunar, { opacity: 0, duration: 0.6 }, "-=0.2");
     }
 
@@ -660,7 +873,11 @@ function setupInfoAnimation() {
           : { clipPath: "inset(0 100% 0 0)", duration: 1, ease: "power3.out" },
         0,
       )
-      .from(splitAmp, { scale: 0, rotation: -90, duration: 0.8, ease: "back.out(2.4)" }, 0.6);
+      .from(
+        splitAmp,
+        { scale: 0, rotation: -90, duration: 0.8, ease: "back.out(2.4)" },
+        0.6,
+      );
 
     [sideG, sideB].forEach((side, index) => {
       const pin = side.querySelector(".venue-pin");
@@ -668,8 +885,16 @@ function setupInfoAnimation() {
 
       timeline
         .from(
-          side.querySelectorAll(".info-role, .info-side, .info-family, .split-details > div, .split-addr"),
-          { y: 14, opacity: 0, duration: 0.6, ease: "power2.out", stagger: 0.08 },
+          side.querySelectorAll(
+            ".info-role, .info-side, .info-family, .split-details > div, .split-addr",
+          ),
+          {
+            y: 14,
+            opacity: 0,
+            duration: 0.6,
+            ease: "power2.out",
+            stagger: 0.08,
+          },
           0.7 + index * 0.1,
         )
         .fromTo(
@@ -693,7 +918,9 @@ function setupInfoAnimation() {
     });
 
     timeline.eventCallback("onComplete", () => {
-      gsap.set(split.querySelectorAll(".venue-pin, .venue-hint"), { clearProps: "transform,opacity" });
+      gsap.set(split.querySelectorAll(".venue-pin, .venue-hint"), {
+        clearProps: "transform,opacity",
+      });
     });
   });
 }
@@ -707,7 +934,6 @@ function setupBlockTitleAnimation() {
       gsap.from(title.children, {
         y: 24,
         opacity: 0,
-        filter: "blur(5px)",
         duration: 0.8,
         ease: "power2.out",
         stagger: 0.18,
@@ -735,7 +961,7 @@ function setUpCountDown() {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const pad = (n) => String(n).padStart(2, "0");
 
-  const DIR = 1;                 // 1 = số mới rơi từ trên xuống (đếm ngược); -1 = trồi từ dưới lên
+  const DIR = 1; // 1 = số mới rơi từ trên xuống (đếm ngược); -1 = trồi từ dưới lên
   const DURATION = 520;
   const EASE = "cubic-bezier(0.2, 0.8, 0.2, 1)";
 
@@ -770,15 +996,15 @@ function setUpCountDown() {
     const opts = { duration: DURATION, easing: EASE };
     nxt.animate(
       [
-        { transform: `translateY(${-off}%) scale(0.92)`, opacity: 0, filter: "blur(4px)" },
-        { transform: "translateY(0) scale(1)", opacity: 1, filter: "blur(0)" },
+        { transform: `translateY(${-off}%) scale(0.92)`, opacity: 0 },
+        { transform: "translateY(0) scale(1)", opacity: 1 },
       ],
       opts,
     );
     cur.animate(
       [
-        { transform: "translateY(0) scale(1)", opacity: 1, filter: "blur(0)" },
-        { transform: `translateY(${off}%) scale(0.92)`, opacity: 0, filter: "blur(4px)" },
+        { transform: "translateY(0) scale(1)", opacity: 1 },
+        { transform: `translateY(${off}%) scale(0.92)`, opacity: 0 },
       ],
       opts,
     );
@@ -832,9 +1058,15 @@ function setupCountdownAnimation() {
     const nums = wrap.querySelectorAll(".time-count");
 
     gsap
-      .timeline({ scrollTrigger: { trigger: wrap, start: "top 80%", once: true } })
+      .timeline({
+        scrollTrigger: { trigger: wrap, start: "top 80%", once: true },
+      })
       // ảnh mở dần từ trên xuống + zoom nhẹ
-      .from(img, { clipPath: "inset(0 0 100% 0)", duration: 1.3, ease: "power3.out" })
+      .from(img, {
+        clipPath: "inset(0 0 100% 0)",
+        duration: 1.3,
+        ease: "power3.out",
+      })
       .from(img, { scale: 1.25, duration: 1.8, ease: "power2.out" }, "<")
       .fromTo(
         ".count-wrap .sub-text",
@@ -843,11 +1075,36 @@ function setupCountdownAnimation() {
         "-=0.9",
       )
       // 4 từ "Forever Starts Very Soon" hiện lần lượt
-      .from(texts, { y: 26, opacity: 0, duration: 0.9, ease: "power2.out", stagger: 0.18 }, "-=0.9")
+      .from(
+        texts,
+        { y: 26, opacity: 0, duration: 0.9, ease: "power2.out", stagger: 0.18 },
+        "-=0.9",
+      )
       // 4 ô đếm nổi lên
-      .from(items, { y: 60, opacity: 0, scale: 0.9, duration: 0.9, ease: "back.out(1.6)", stagger: 0.12 }, "-=0.5")
+      .from(
+        items,
+        {
+          y: 60,
+          opacity: 0,
+          scale: 0.9,
+          duration: 0.9,
+          ease: "back.out(1.6)",
+          stagger: 0.12,
+        },
+        "-=0.5",
+      )
       .from(labels, { opacity: 0, duration: 0.6, stagger: 0.1 }, "-=0.6")
-      .from(nums, { opacity: 0, scale: 0.8, duration: 0.7, ease: "back.out(2)", stagger: 0.1 }, "<");
+      .from(
+        nums,
+        {
+          opacity: 0,
+          scale: 0.8,
+          duration: 0.7,
+          ease: "back.out(2)",
+          stagger: 0.1,
+        },
+        "<",
+      );
   });
 }
 
@@ -855,7 +1112,8 @@ function startImageWave(figure) {
   if (!figure || figure.querySelector(".wave")) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  const d = "M0 60 Q75 20 150 60 T300 60 T450 60 T600 60 T750 60 T900 60 T1050 60 T1200 60 V120 H0 Z";
+  const d =
+    "M0 60 Q75 20 150 60 T300 60 T450 60 T600 60 T750 60 T900 60 T1050 60 T1200 60 V120 H0 Z";
   const svg = (cls) =>
     `<svg class="${cls}" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="${d}"/></svg>`;
 
@@ -872,7 +1130,11 @@ function startImageWave(figure) {
 
   const tweens = [
     gsap.to(back, { xPercent: -50, duration: 7, ease: "none", repeat: -1 }),
-    gsap.fromTo(front, { xPercent: -50 }, { xPercent: 0, duration: 5, ease: "none", repeat: -1 }),
+    gsap.fromTo(
+      front,
+      { xPercent: -50 },
+      { xPercent: 0, duration: 5, ease: "none", repeat: -1 },
+    ),
     // sóng dâng lên rồi rút xuống, nghỉ một nhịp rồi vỗ tiếp
     gsap.to(wave, {
       yPercent: 38,
@@ -887,7 +1149,8 @@ function startImageWave(figure) {
   if (window.ScrollTrigger) {
     ScrollTrigger.create({
       trigger: figure,
-      onToggle: (self) => tweens.forEach((t) => (self.isActive ? t.play() : t.pause())),
+      onToggle: (self) =>
+        tweens.forEach((t) => (self.isActive ? t.play() : t.pause())),
     });
   }
 }
@@ -920,7 +1183,8 @@ function setupRsvp() {
   }
 
   thanks.addEventListener("click", (e) => {
-    if (e.target === thanks || e.target.closest("[data-rsvp-close]")) closeThanks();
+    if (e.target === thanks || e.target.closest("[data-rsvp-close]"))
+      closeThanks();
   });
 
   thanks.querySelector("[data-rsvp-again]")?.addEventListener("click", () => {
@@ -953,7 +1217,8 @@ function setupRsvp() {
     };
 
     if (!WEDDING_CONFIG.rsvpEndpoint) {
-      status.textContent = "Chưa kết nối RSVP. Vui lòng cấu hình URL Google Apps Script trong WEDDING_CONFIG.";
+      status.textContent =
+        "Chưa kết nối RSVP. Vui lòng cấu hình URL Google Apps Script trong WEDDING_CONFIG.";
       console.error("[rsvp] Chưa cấu hình WEDDING_CONFIG.rsvpEndpoint.");
       return;
     }
@@ -992,18 +1257,40 @@ function showRsvpThanks(thanks) {
   const card = thanks.querySelector(".rsvp-thanks-card");
   const q = (selector) => thanks.querySelector(selector);
 
-  gsap.fromTo(thanks, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power1.out" });
+  gsap.fromTo(
+    thanks,
+    { opacity: 0 },
+    { opacity: 1, duration: 0.35, ease: "power1.out" },
+  );
   gsap
     .timeline()
-    .from(card, { opacity: 0, y: 30, scale: 0.92, duration: 0.8, ease: "power3.out" })
-    .from(q(".rsvp-thanks-seal"), { scale: 0, rotation: -180, duration: 0.9, ease: "back.out(2)" }, "-=0.3")
+    .from(card, {
+      opacity: 0,
+      y: 30,
+      scale: 0.92,
+      duration: 0.8,
+      ease: "power3.out",
+    })
+    .from(
+      q(".rsvp-thanks-seal"),
+      { scale: 0, rotation: -180, duration: 0.9, ease: "back.out(2)" },
+      "-=0.3",
+    )
     .from(
       [q(".rsvp-thanks-kicker"), q(".rsvp-thanks-title")],
-      { y: 16, opacity: 0, filter: "blur(4px)", duration: 0.7, stagger: 0.15 },
+      { y: 16, opacity: 0, duration: 0.7, stagger: 0.15 },
       "-=0.4",
     )
-    .from(q(".rsvp-thanks-line"), { scaleX: 0, duration: 0.7, ease: "power2.out" }, "-=0.3")
-    .from(q(".rsvp-thanks-text"), { y: 12, opacity: 0, duration: 0.7 }, "-=0.3");
+    .from(
+      q(".rsvp-thanks-line"),
+      { scaleX: 0, duration: 0.7, ease: "power2.out" },
+      "-=0.3",
+    )
+    .from(
+      q(".rsvp-thanks-text"),
+      { y: 12, opacity: 0, duration: 0.7 },
+      "-=0.3",
+    );
 
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     for (let i = 0; i < 16; i++) {
@@ -1012,7 +1299,13 @@ function showRsvpThanks(thanks) {
       card.append(petal);
       gsap.fromTo(
         petal,
-        { x: 0, y: 0, scale: gsap.utils.random(0.6, 1.2), rotation: gsap.utils.random(0, 360), opacity: 1 },
+        {
+          x: 0,
+          y: 0,
+          scale: gsap.utils.random(0.6, 1.2),
+          rotation: gsap.utils.random(0, 360),
+          opacity: 1,
+        },
         {
           x: gsap.utils.random(-150, 150),
           y: gsap.utils.random(-30, 200),
@@ -1076,16 +1369,30 @@ function setupCountdownNote() {
       const words = SplitText.create(text, { type: "words" });
 
       gsap
-        .timeline({ scrollTrigger: { trigger: note, start: "top 90%", once: true } })
+        .timeline({
+          scrollTrigger: { trigger: note, start: "top 90%", once: true },
+        })
         .from(line, { scaleX: 0, duration: 0.9, ease: "power2.out" })
         .from(
           words.words,
-          { opacity: 0, y: 14, filter: "blur(4px)", duration: 0.7, ease: "power2.out", stagger: 0.05 },
+          {
+            opacity: 0,
+            y: 14,
+            duration: 0.7,
+            ease: "power2.out",
+            stagger: 0.05,
+          },
           "-=0.4",
         )
         .from(
           date,
-          { opacity: 0, y: 10, letterSpacing: "0.1em", duration: 0.9, ease: "power2.out" },
+          {
+            opacity: 0,
+            y: 10,
+            letterSpacing: "0.1em",
+            duration: 0.9,
+            ease: "power2.out",
+          },
           "-=0.3",
         );
     });
@@ -1106,9 +1413,11 @@ function safeRun(fn) {
   setupEnvelope,
   setupMapLinks,
   setupRsvp,
+  prepareHeroIntro,
 ].forEach(safeRun);
 
 [
+  setupHeroSlideshow,
   setupAlbumCarousel,
   setupIconRotation,
   setupLoveLetterAnimation,

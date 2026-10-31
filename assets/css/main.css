@@ -51,6 +51,13 @@ body {
   font-family: var(--font-ui);
   font-size: 16px;
   line-height: 1.7;
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  body {
+    overflow-x: clip;
+  }
 }
 
 body.is-closed {

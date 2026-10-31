@@ -10,8 +10,8 @@
   text-align: center;
   background: var(--ivory);
   transition:
-    opacity 500ms ease,
-    visibility 500ms ease;
+    opacity 900ms ease,
+    visibility 900ms ease;
 }
 /* lớp phủ họa tiết lá phía sau nội dung màn mở thiệp */
 .opening-screen::before {
@@ -74,6 +74,8 @@
 .envelope.is-opening {
   animation-play-state: paused;
   pointer-events: none;
+  filter: drop-shadow(0 0 22px rgb(212 175 90 / 45%));
+  transition: filter 600ms ease;
 }
 
 @keyframes envelope-float {
@@ -166,7 +168,7 @@
 }
 
 .envelope.is-opening .envelope-letter {
-  transform: translateY(-48%);
+  transform: translateY(-62%);
 }
 
 .opening-hint {
@@ -269,89 +271,83 @@ body:not(.is-closed) .music-toggle {
   width: 100%;
   max-width: var(--page-width);
   margin-inline: auto;
-}
-
-.hero-image {
-  position: absolute;
-  overflow: hidden;
-  margin: 0;
-}
-
-.hero-image img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  animation: zoom-breathe 7s ease-in-out infinite alternate;
-  will-change: transform;
+  overflow-x: clip;
 }
 
 .hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  height: 100vh;
-  height: 100svh;
-  height: 100dvh;
+  height: var(--app-h, 100svh);
   min-height: 560px;
   color: white;
   background: var(--ink);
 }
 
-/* ẢNH TRÊN: đúng nửa trên, 0% → 50% */
-.hero-image--portrait {
-  z-index: 1;
-  inset: 0 0 50% 0;
-}
-
-.hero-image--portrait img {
-  object-position: center top;
-  filter: brightness(0.8);
-}
-
-/* ẢNH DƯỚI: đúng nửa dưới, 50% → 100%, KHÔNG mask, KHÔNG chồng */
-.hero-image--scene {
-  z-index: 1;
-  inset: 50% 0 0 0;
-  -webkit-mask-image: none;
-  mask-image: none;
-}
-
-.hero-image--scene img {
-  object-position: center top;
-  filter: brightness(0.8);
-  /* lấy phần trên cùng của ảnh */
-}
-
-/* DẢI MỜ Ở CẠNH TIẾP XÚC: làm nhòe hai mép ảnh, rõ nhất đúng đường 50% */
-.hero-seam {
+.hero-slides {
   position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.hero-slide.is-active {
+  opacity: 1;
   z-index: 2;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 22%;
-  transform: translateY(-50%);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  -webkit-mask-image: linear-gradient(
+}
+
+.hero-slide.is-leaving {
+  opacity: 0;
+  z-index: 1;
+}
+
+.hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.hero-slides::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(
     to bottom,
-    transparent 0%,
-    rgb(0 0 0 / 35%) 25%,
-    #000 50%,
-    rgb(0 0 0 / 35%) 75%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgb(0 0 0 / 35%) 25%,
-    #000 50%,
-    rgb(0 0 0 / 35%) 75%,
-    transparent 100%
+    rgb(77 74 71 / 70%) 0%,
+    rgb(77 74 71 / 25%) 25%,
+    rgb(0 0 0 / 15%) 60%,
+    rgb(0 0 0 / 20%) 100%
   );
   pointer-events: none;
+}
+
+@media (hover: hover) and (min-width: 721px) {
+  .hero-slide.is-active img {
+    animation: hero-zoom 6.5s ease-out forwards;
+  }
+
+  .hero-slide.is-leaving img {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes hero-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
 }
 
 .hero-warmth {
@@ -392,6 +388,7 @@ body:not(.is-closed) .music-toggle {
   top: 50%;
   left: 50%;
   width: 100%;
+  max-width: 100%;
   padding: 0 16px;
   transform: translate(-50%, -50%);
   display: flex;
@@ -401,7 +398,7 @@ body:not(.is-closed) .music-toggle {
   white-space: nowrap;
   color: #fff;
   font-family: "Corinthia", cursive;
-  font-size: clamp(3.2rem, 15vw, 5.2rem);
+  font-size: clamp(2.6rem, 13vw, 5.2rem);
   font-weight: 400;
   font-style: normal;
   line-height: 1;
@@ -449,29 +446,6 @@ body:not(.is-closed) .music-toggle {
   letter-spacing: 0.04em;
   white-space: normal;
   text-shadow: 0 1px 10px rgb(30 27 24 / 70%);
-}
-
-.hero-image::after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  pointer-events: none;
-}
-
-.hero-image--portrait::after {
-  background: linear-gradient(
-    to bottom,
-    rgba(77, 74, 71, 0.9) 0%,
-    rgb(77 74 71 / 55%) 12%,
-    rgb(77 74 71 / 25%) 24%,
-    rgb(77 74 71 / 8%) 34%,
-    transparent 90%
-  );
-}
-
-.hero-image--scene::after {
-  background: linear-gradient(to top, rgb(77 74 71 / 35%) 0%, rgb(77 74 71 / 20%) 20%, transparent 55%);
 }
 
 .hero .detail-content {
@@ -614,12 +588,6 @@ body:not(.is-closed) .music-toggle {
 
   to {
     transform: scale(1.12);
-  }
-}
-
-@media (min-width: 700px) {
-  .hero {
-    height: 100svh;
   }
 }
 
@@ -1614,7 +1582,7 @@ body:not(.is-closed) .music-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 
 /* ===== Sóng vỗ trên ảnh confession ===== */
@@ -1704,6 +1672,7 @@ body:not(.is-closed) .music-toggle {
 .rsvp-field {
   display: grid;
   gap: 6px;
+  min-width: 0;
 }
 
 .rsvp-field > span,
@@ -1797,7 +1766,7 @@ body:not(.is-closed) .music-toggle {
 
 .rsvp-row {
   display: grid;
-  grid-template-columns: 1fr 96px;
+  grid-template-columns: minmax(0, 1fr) 96px;
   gap: 10px;
 }
 
@@ -2202,4 +2171,35 @@ body:not(.is-closed) .music-toggle {
   font-size: 0.95rem;
   font-style: italic;
   line-height: 1.5;
+}
+
+@media (max-width: 720px), (hover: none) {
+  .image-confession {
+    -webkit-mask-image: none;
+    mask-image: none;
+    border-radius: 6px;
+  }
+  .count-wrap .time-count .digit {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .count-wrap .sub-text-item {
+    filter: none;
+    text-shadow: 0 1px 6px rgb(20 10 5 / 80%);
+  }
+  .album-wrap .cards li {
+    box-shadow: 0 6px 14px rgb(30 27 24 / 22%);
+  }
+}
+
+.page-leaves {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  contain: strict;
+  will-change: transform;
+  transform: translateZ(0);
 }

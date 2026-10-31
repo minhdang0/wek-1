@@ -24,6 +24,18 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
     <script>
       gsap.registerPlugin(SplitText, ScrollTrigger, Draggable);
+      ScrollTrigger.config({
+        ignoreMobileResize: true,
+        autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
+      });
+      let w0 = innerWidth,
+        t0;
+      addEventListener("resize", () => {
+        if (innerWidth === w0) return;
+        w0 = innerWidth;
+        clearTimeout(t0);
+        t0 = setTimeout(() => ScrollTrigger.refresh(), 250);
+      });
     </script>
   </head>
 
@@ -52,13 +64,16 @@
     </div>
     <main id="invitation-content" inert>
       <section class="hero" id="home" aria-labelledby="hero-names">
-        <figure class="hero-image hero-image--portrait">
-          <img data-image="heroPortrait" alt="" fetchpriority="high" />
-        </figure>
-        <figure class="hero-image hero-image--scene">
-          <img data-image="heroScene" alt="" />
-        </figure>
-        <div class="hero-seam" aria-hidden="true"></div>
+        <div class="hero-slides" aria-hidden="true">
+          <figure class="hero-slide is-active">
+            <img data-hero-slide="0" alt="" fetchpriority="high" />
+          </figure>
+          <figure class="hero-slide">
+            <img data-hero-slide="1" alt="" />
+          </figure>
+          <figure class="hero-slide"><img data-hero-slide="2" alt="" /></figure>
+          <figure class="hero-slide"><img data-hero-slide="3" alt="" /></figure>
+        </div>
         <div class="hero-warmth" aria-hidden="true"></div>
         <div class="main-title">
           <div class="title-line-1">We</div>
@@ -489,4 +504,5 @@
       <span aria-hidden="true">♪</span>
     </button>
   </body>
+  <script src="assets/js/guard.js"></script>
 </html>
