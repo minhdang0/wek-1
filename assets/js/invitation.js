@@ -1,44 +1,51 @@
 // Chỉnh thông tin của từng cặp đôi tại đây.
 const WEDDING_CONFIG = {
-  brideName: "Nguyễn Nhung",
-  groomName: "Hoàng Vinh",
+  brideName: "Phương Nhung",
+  groomName: "Phùng Vinh",
   groomParents: {
-    father: "Ông Hoàng Văn A",
-    mother: "Bà Trần Thị B",
+    father: "Ông Phùng Văn Thiết",
+    mother: "Bà Hoàng Thị Thuý",
   },
   brideParents: {
-    father: "Ông Nguyễn Văn C",
-    mother: "Bà Lê Thị D",
+    father: "Ông Nguyễn Đức Châu",
+    mother: "Bà Nguyễn Thị Lan",
   },
-  weddingDate: {
-    year: 2026,
-    month: 12, // Tháng theo cách ghi thông thường: từ 1 đến 12.
-    day: 20,
-    hour: 12,
-    minute: 0,
+  weddingDates: {
+    bride: { year: 2026, month: 11, day: 24, hour: 9, minute: 30 },
+    groom: { year: 2026, month: 11, day: 25, hour: 16, minute: 30 },
   },
   eventTimes: {
-    groomArrival: "10:30",
-    groomBanquet: "12:45",
-    brideArrival: "08:00",
-    brideCeremony: "09:00",
-    brideBanquet: "10:00",
+    brideArrival: "09:00",
+    brideCeremony: "09:30",
+    brideBanquet: "12:00",
+    groomArrival: "16:00",
+    groomCeremony: "16:30",
+    groomBanquet: "16:30",
   },
   venues: {
-    groomAddress: "Số 1, Đường ABC, Phường XYZ, Quận Cầu Giấy, Hà Nội",
-    brideAddress: "Số 2, Đường DEF, Phường UVW, Quận Hoàn Kiếm, Hà Nội",
+    groom: {
+      address: "Tại Nhà riêng - Xóm Cổ Phương, xã Trùng Khánh, Tỉnh Cao Bằng",
+      mapUrl:
+        "https://www.google.com/maps/place/22%C2%B047'06.9%22N+106%C2%B030'33.3%22E/@22.7857062,106.508718,17.75z/data=!4m4!3m3!8m2!3d22.785245!4d106.509246?entry=ttu&g_ep=EgoyMDI2MTAyOC4wIKXMDSoASAFQAw%3D%3D",
+    },
+    bride: {
+      address:
+        "Đình Quan Nha Tổ dân phố Quan Nha- phường Duy Tiên- tỉnh Ninh Bình",
+      mapUrl:
+        "https://www.google.com/maps/search/?api=1&query=20.63713836669922,105.98127746582031",
+    },
   },
   stories: {
     groom: {
       role: "Chú rể",
       text: "Anh từng nghĩ hạnh phúc còn xa lắm. Cho đến ngày gặp em.",
-      image: "./assets/img/groom.jpg",
+      image: "./assets/img/story-optimized/groom.jpg",
       imageAlt: "Chú rể Hoàng Vinh",
     },
     bride: {
       role: "Cô dâu",
       text: "Chỉ cần một người nắm tay em mỗi sáng thức dậy. Và người ấy, hóa ra, chính là anh.",
-      image: "./assets/img/bride.jpg",
+      image: "./assets/img/story-optimized/bride.jpg",
       imageAlt: "Cô dâu Nguyễn Nhung",
     },
   },
@@ -47,17 +54,16 @@ const WEDDING_CONFIG = {
       { src: "./assets/img/hero-optimized/hero1.jpg", alt: "Ảnh cưới 1" },
       { src: "./assets/img/hero-optimized/hero2.jpg", alt: "Ảnh cưới 2" },
       { src: "./assets/img/hero-optimized/hero3.jpg", alt: "Ảnh cưới 3" },
-      { src: "./assets/img/hero-optimized/hero4.jpg", alt: "Ảnh cưới 4" },
     ],
     countdownMain: {
-      src: "./assets/img/image14.jpg",
+      src: "./assets/img/image18.jpg",
       alt: "Ảnh cưới",
     },
     countdown: [
-      "./assets/img/hero1.jpg",
-      "./assets/img/hero2.jpg",
-      "./assets/img/hero3.jpg",
-      "./assets/img/hero4.jpg",
+      "./assets/img/hero-optimized/hero1.jpg",
+      "./assets/img/hero-optimized/hero2.jpg",
+      "./assets/img/hero-optimized/hero3.jpg",
+      "./assets/img/hero-optimized/hero4.jpg",
     ],
     gallery: [
       "./assets/img/gallery-optimized/image1.jpg",
@@ -73,19 +79,42 @@ const WEDDING_CONFIG = {
       "./assets/img/gallery-optimized/image11.jpg",
       "./assets/img/gallery-optimized/image12.jpg",
       "./assets/img/gallery-optimized/image13.jpg",
+      "./assets/img/gallery-optimized/image14.jpg",
+      "./assets/img/gallery-optimized/image15.jpg",
+      "./assets/img/gallery-optimized/image16.jpg",
     ],
   },
-  rsvpEndpoint: "",
+  rsvpEndpoint:
+    "https://script.google.com/macros/s/AKfycbxojB-5_Pcyp8hBP5q0hm64PLmEYidO4nokolSOIzcuagisBGbb2Dv4qsi7zhujJOo/exec",
+  gift: {
+    groom: {
+      holder: "PHUNG VAN VINH",
+      bank: "Vietcombank",
+      accountNumber: "0123456789",
+      qr: "./assets/img/qr/groom.jpg",
+    },
+    bride: {
+      holder: "NGUYEN PHUONG NHUNG",
+      bank: "Techcombank",
+      accountNumber: "9876543210",
+      qr: "./assets/img/qr/bride.jpg",
+    },
+  },
 };
 
-const WEDDING = new Date(
-  WEDDING_CONFIG.weddingDate.year,
-  WEDDING_CONFIG.weddingDate.month - 1,
-  WEDDING_CONFIG.weddingDate.day,
-  WEDDING_CONFIG.weddingDate.hour,
-  WEDDING_CONFIG.weddingDate.minute,
-);
-
+const toDate = (d) => new Date(d.year, d.month - 1, d.day, d.hour, d.minute);
+const WEDDING_DATES = {
+  bride: toDate(WEDDING_CONFIG.weddingDates.bride),
+  groom: toDate(WEDDING_CONFIG.weddingDates.groom),
+};
+const WEDDING =
+  WEDDING_DATES.bride < WEDDING_DATES.groom
+    ? WEDDING_DATES.bride
+    : WEDDING_DATES.groom;
+const WEDDING_LAST =
+  WEDDING_DATES.bride > WEDDING_DATES.groom
+    ? WEDDING_DATES.bride
+    : WEDDING_DATES.groom;
 let invitationOpened = false;
 const openQueue = [];
 
@@ -118,29 +147,39 @@ function setupWeddingDetails() {
   setText('[data-family="groom-mother"]', WEDDING_CONFIG.groomParents.mother);
   setText('[data-family="bride-father"]', WEDDING_CONFIG.brideParents.father);
   setText('[data-family="bride-mother"]', WEDDING_CONFIG.brideParents.mother);
-  setText('[data-venue="groom"]', WEDDING_CONFIG.venues.groomAddress);
-  setText('[data-venue="bride"]', WEDDING_CONFIG.venues.brideAddress);
-  setText('[data-hero-date="day"]', String(WEDDING.getDate()).padStart(2, "0"));
-  setText(
-    '[data-hero-date="month"]',
-    String(WEDDING.getMonth() + 1).padStart(2, "0"),
-  );
+  setText('[data-venue="groom"]', WEDDING_CONFIG.venues.groom.address);
+  setText('[data-venue="bride"]', WEDDING_CONFIG.venues.bride.address);
 
-  const dateLabel = `${vietnameseWeekday(WEDDING)} · ${String(WEDDING.getDate()).padStart(2, "0")}.${String(
-    WEDDING.getMonth() + 1,
-  ).padStart(2, "0")}.${WEDDING.getFullYear()}`;
-  const longDateLabel = `Ngày ${WEDDING.getDate()} tháng ${WEDDING.getMonth() + 1} năm ${WEDDING.getFullYear()}`;
-  const weddingTime = `${String(WEDDING.getHours()).padStart(2, "0")}:${String(WEDDING.getMinutes()).padStart(2, "0")}`;
-  setText("[data-wedding-date]", dateLabel);
-  setText("[data-wedding-date-long]", longDateLabel);
-  setText('[data-event-time="wedding"]', weddingTime);
-  setText("[data-wd-weekday]", vietnameseWeekday(WEDDING));
-  setText("[data-wd-day]", String(WEDDING.getDate()).padStart(2, "0"));
-  setText(
-    "[data-wd-month]",
-    `${String(WEDDING.getMonth() + 1).padStart(2, "0")}`,
+  const pad = (n) => String(n).padStart(2, "0");
+  setText('[data-hero-date="day"]', pad(WEDDING_LAST.getDate()));
+  setText('[data-hero-date="month"]', pad(WEDDING_LAST.getMonth() + 1));
+
+  Object.entries(WEDDING_DATES).forEach(([side, date]) => {
+    setText(`[data-wd-weekday="${side}"]`, vietnameseWeekday(date));
+    setText(`[data-wd-day="${side}"]`, pad(date.getDate()));
+    setText(
+      `[data-wd-monthyear="${side}"]`,
+      `Tháng ${pad(date.getMonth() + 1)} · ${date.getFullYear()}`,
+    );
+    setText(
+      `[data-wd-time="${side}"]`,
+      `Lúc ${pad(date.getHours())}:${pad(date.getMinutes())}`,
+    );
+  });
+
+  const [d1, d2] = [WEDDING_DATES.bride, WEDDING_DATES.groom].sort(
+    (a, b) => a - b,
   );
-  setText("[data-wd-year]", String(WEDDING.getFullYear()));
+  const fmt = (d) =>
+    `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+  const sameMonth =
+    d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+  setText(
+    "[data-wedding-date]",
+    sameMonth
+      ? `${pad(d1.getDate())} - ${pad(d2.getDate())}.${pad(d1.getMonth() + 1)}.${d1.getFullYear()}`
+      : `${fmt(d1)} - ${fmt(d2)}`,
+  );
 
   Object.entries(WEDDING_CONFIG.eventTimes).forEach(([event, time]) => {
     setText(
@@ -290,7 +329,7 @@ function setupHeroSlideshow() {
 
   slides.forEach((slide) => {
     const image = slide.querySelector("img");
-    if (image?.decode) image.decode().catch(() => {});
+    if (image?.decode) image.decode().catch(() => { });
   });
 
   function next() {
@@ -364,6 +403,37 @@ function setupEnvelope() {
   musicToggle.addEventListener("click", () => {
     if (music.paused) playMusic();
     else music.pause();
+  });
+
+  let wasPlaying = false;
+
+  let resumeOnTouch = false;
+
+  function resumeMusic() {
+    if (!resumeOnTouch) return;
+    music.play().then(() => {
+      resumeOnTouch = false;
+      document.removeEventListener("touchstart", resumeMusic);
+      document.removeEventListener("click", resumeMusic);
+    }).catch(() => { });
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      wasPlaying = !music.paused;
+      music.pause();
+    } else if (wasPlaying && invitationOpened) {
+      music.play().catch(() => {
+        // bị chặn: chờ lần chạm/cuộn tiếp theo rồi bật lại
+        resumeOnTouch = true;
+        document.addEventListener("touchstart", resumeMusic, { passive: true });
+        document.addEventListener("click", resumeMusic);
+      });
+    }
+  });
+
+  window.addEventListener("pagehide", () => {
+    music.pause();
   });
 
   function openInvitation() {
@@ -746,14 +816,11 @@ function setupFallingLeaves() {
 }
 function setupMapLinks() {
   document.querySelectorAll("[data-map]").forEach((link) => {
-    const card = link.closest(".venue-card");
-    const address = card?.querySelector(".venue-address")?.textContent.trim();
-    const custom = link.dataset.mapUrl;
-    if (!custom && !address) return;
-
+    const venue = WEDDING_CONFIG.venues[link.dataset.map];
+    if (!venue) return;
     link.href =
-      custom ||
-      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+      venue.mapUrl ||
+      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.address)}`;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
   });
@@ -813,41 +880,31 @@ function setupInfoAnimation() {
         );
     }
 
-    const date = section.querySelector(".info-date");
-    if (date) {
-      const weekday = date.querySelector(".info-weekday");
-      const day = date.querySelector(".info-day");
-      const month = date.querySelector(".info-month");
-      const year = date.querySelector(".info-year");
-      const lunar = date.querySelector(".info-lunar");
-      const timeline = gsap.timeline({ scrollTrigger: once(date, "top 88%") });
-      if (weekday)
-        timeline.from(weekday, {
-          y: 12,
-          opacity: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        });
-      if (day)
-        timeline.from(
-          day,
+    section.querySelectorAll(".info-date").forEach((date) => {
+      const q = (s) => date.querySelector(s);
+      const tl = gsap.timeline({ scrollTrigger: once(date, "top 88%") });
+      tl.from(q(".info-date-label"), {
+        y: 10,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      })
+        .from(
+          q(".info-weekday"),
+          { y: 12, opacity: 0, duration: 0.6, ease: "power2.out" },
+          "-=0.3",
+        )
+        .from(
+          q(".info-day"),
           { scale: 0.4, opacity: 0, duration: 1, ease: "back.out(1.8)" },
           "-=0.3",
+        )
+        .from(
+          [q(".info-monthyear"), q(".info-time")],
+          { y: 10, opacity: 0, duration: 0.6, stagger: 0.1 },
+          "-=0.5",
         );
-      if (month)
-        timeline.from(
-          month,
-          { x: -20, opacity: 0, duration: 0.7, ease: "power2.out" },
-          "-=0.7",
-        );
-      if (year)
-        timeline.from(
-          year,
-          { x: 20, opacity: 0, duration: 0.7, ease: "power2.out" },
-          "<",
-        );
-      if (lunar) timeline.from(lunar, { opacity: 0, duration: 0.6 }, "-=0.2");
-    }
+    });
 
     const split = section.querySelector(".info-split");
     const sideG = split?.querySelector(".split-side--groom");
@@ -1398,7 +1455,126 @@ function setupCountdownNote() {
     });
   });
 }
+function setupGift() {
+  const modal = document.getElementById("giftModal");
+  const openBtn = document.getElementById("giftOpen");
+  const bills = document.querySelector(".gift-bills");
+  if (!modal || !openBtn) return;
 
+  const gift = WEDDING_CONFIG.gift || {};
+  const tabs = [...modal.querySelectorAll("[data-gift-tab]")];
+  const panels = [...modal.querySelectorAll("[data-gift-panel]")];
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  ["groom", "bride"].forEach((side) => {
+    const g = gift[side] || {};
+    const img = modal.querySelector(`[data-gift-qr="${side}"]`);
+    if (img && g.qr) {
+      img.src = g.qr;
+      img.alt = `Mã QR mừng cưới của ${side === "groom" ? "chú rể" : "cô dâu"}`;
+    }
+    setText(
+      `[data-gift-holder="${side}"]`,
+      g.holder || (side === "groom" ? WEDDING_CONFIG.groomName : WEDDING_CONFIG.brideName),
+    );
+    setText(`[data-gift-bank="${side}"]`, [g.bank, g.accountNumber].filter(Boolean).join(" · "));
+  });
+
+  function selectTab(side, focus) {
+    tabs.forEach((tab) => {
+      const on = tab.dataset.giftTab === side;
+      tab.setAttribute("aria-selected", String(on));
+      tab.tabIndex = on ? 0 : -1;
+      if (on && focus) tab.focus();
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.giftPanel !== side;
+    });
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => selectTab(tab.dataset.giftTab));
+    tab.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      selectTab(tab.dataset.giftTab === "groom" ? "bride" : "groom", true);
+    });
+  });
+
+  let lastFocus = null;
+  let prevOverflow = "";
+
+  function openModal() {
+    lastFocus = document.activeElement;
+    prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    selectTab("groom");
+    modal.hidden = false;
+    modal.querySelector("[data-gift-close]").focus();
+  }
+
+  function closeModal() {
+    modal.hidden = true;
+    document.body.style.overflow = prevOverflow;
+    lastFocus?.focus();
+  }
+
+  openBtn.addEventListener("click", openModal);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal || e.target.closest("[data-gift-close]")) closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal.hidden) closeModal();
+  });
+
+  // tiền vàng rơi quanh phong bì, chỉ chạy khi đang nhìn thấy
+  if (reduce || !bills) return;
+  let visible = false;
+  new IntersectionObserver((entries) => {
+    visible = entries[0].isIntersecting;
+  }).observe(openBtn);
+
+  function spawnBill() {
+    const el = document.createElement("span");
+    el.className = "gift-bill";
+    el.textContent = "囍";
+    bills.append(el);
+    const drift = (Math.random() - 0.5) * 140;
+    const spin = (Math.random() - 0.5) * 360;
+    el.animate(
+      [
+        { transform: "translate(-50%, 0) rotate(0deg)", opacity: 0 },
+        { opacity: 1, offset: 0.15 },
+        { transform: `translate(calc(-50% + ${drift}px), 190px) rotate(${spin}deg)`, opacity: 0 },
+      ],
+      { duration: 1800 + Math.random() * 1000, easing: "ease-in" },
+    ).onfinish = () => el.remove();
+  }
+
+  setInterval(() => {
+    if (visible && !document.hidden && modal.hidden) spawnBill();
+  }, 800);
+}
+
+function setupGiftAnimation() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const section = document.querySelector(".gift-section");
+    if (!section) return;
+    const once = (trigger) => ({ trigger, start: "top 88%", once: true });
+    const intro = section.querySelector(".gift-intro");
+    const scene = section.querySelector(".gift-scene");
+    const hint = section.querySelector(".gift-hint");
+
+    gsap.from(intro, { y: 18, opacity: 0, duration: 0.8, ease: "power2.out", scrollTrigger: once(intro) });
+    gsap.from(scene, {
+      y: 40, opacity: 0, scale: 0.85, duration: 0.9, ease: "back.out(1.6)",
+      clearProps: "transform,opacity", scrollTrigger: once(scene),
+    });
+    gsap.from(hint, { opacity: 0, duration: 0.8, delay: 0.3, scrollTrigger: once(hint) });
+  });
+}
 function safeRun(fn) {
   try {
     fn();
@@ -1413,6 +1589,7 @@ function safeRun(fn) {
   setupEnvelope,
   setupMapLinks,
   setupRsvp,
+  setupGift,
   prepareHeroIntro,
 ].forEach(safeRun);
 
@@ -1427,4 +1604,5 @@ function safeRun(fn) {
   setupCountdownAnimation,
   setupCountdownNote,
   setupRsvpAnimation,
+  setupGiftAnimation
 ].forEach(whenOpened);
