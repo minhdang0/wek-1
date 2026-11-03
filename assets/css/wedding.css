@@ -886,6 +886,7 @@ body:not(.is-closed) .music-toggle {
     0 0 0 6px var(--gold-500),
     0 0 0 7px var(--gold-500, #9a7b4f),
     0 24px 48px rgb(30 27 24 / 30%);
+    filter: brightness(1.15) saturate(1.05);
 }
 
 /* Đường kẻ mảnh nằm trong ảnh */
@@ -1414,6 +1415,7 @@ body:not(.is-closed) .music-toggle {
 }
 
 .count-wrap .main-image {
+  position: relative;
   overflow: visible;
   border-radius: 0.8rem;
 }
@@ -1422,9 +1424,18 @@ body:not(.is-closed) .music-toggle {
   display: block;
   width: 100%;
   object-fit: contain;
-  filter: brightness(0.85);
+  filter: none;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgb(0 0 0 / 60%) 12%, #000 30%);
   mask-image: linear-gradient(to bottom, transparent 0%, rgb(0 0 0 / 60%) 12%, #000 30%);
+  border-radius: 0.8rem;
+}
+
+.count-wrap .main-image::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: rgb(0 0 0 / 15%);
+  pointer-events: none;
   border-radius: 0.8rem;
 }
 
@@ -2202,4 +2213,321 @@ body:not(.is-closed) .music-toggle {
   contain: strict;
   will-change: transform;
   transform: translateZ(0);
+}
+
+/* ===== Hai ngày cưới ===== */
+.info-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 420px;
+  margin: 42px auto 0;
+}
+
+.info-dates .info-date {
+  margin: 0;
+  padding: 0 6px;
+  gap: 4px;
+}
+
+.info-dates .info-date + .info-date {
+  border-left: 1px solid rgb(154 123 79 / 40%);
+}
+
+.info-date-label {
+  color: var(--gold-500);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.info-dates .info-weekday {
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  padding-left: 0.3em;
+}
+
+.info-dates .info-day {
+  padding: 0;
+  border: 0;
+  font-size: clamp(3.6rem, 17vw, 4.8rem);
+}
+
+.info-monthyear {
+  font-family: "Antonio", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.info-time {
+  color: rgb(30 27 24 / 65%);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-style: italic;
+}
+
+
+.album-wrap .cards li {
+  filter: brightness(1.08) saturate(1.1);
+}
+
+/* ===== Lì xì mừng cưới ===== */
+.gift-section {
+  padding: 24px 22px 70px;
+  text-align: center;
+}
+
+.gift-intro {
+  max-width: 320px;
+  margin: 18px auto 0;
+  color: rgb(30 27 24 / 78%);
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.gift-scene {
+  position: relative;
+  width: 150px;
+  height: 225px;
+  margin: 30px auto 0;
+}
+
+.gift-envelope {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-origin: center bottom;
+  filter: drop-shadow(0 12px 22px rgb(30 27 24 / 28%));
+  animation: gift-shake 2.6s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gift-envelope:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 6px;
+}
+
+@media (hover: hover) {
+  .gift-envelope:hover {
+    animation-duration: 0.35s;
+    filter: drop-shadow(0 0 20px rgb(212 175 90 / 55%));
+  }
+}
+
+.gift-env-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes gift-shake {
+  0%, 100% { transform: rotate(-3deg); }
+  25% { transform: rotate(3deg); }
+  50% { transform: rotate(-2deg); }
+  75% { transform: rotate(2deg); }
+}
+
+.gift-bills {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.gift-bill {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 20px;
+  border: 1px solid var(--gold-600);
+  border-radius: 3px;
+  color: var(--gold-700);
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-300));
+  box-shadow: 0 2px 6px rgb(30 27 24 / 25%);
+  font-family: serif;
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.gift-hint {
+  margin-top: 14px;
+  color: var(--gold-500);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+/* --- modal --- */
+.gift-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 61;
+  display: flex;
+  padding: 48px 20px 24px;
+  overflow-y: auto;
+  background: rgb(20 17 15 / 62%);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  animation: gift-fade 0.3s ease both;
+}
+
+.gift-modal[hidden],
+.gift-panel[hidden] {
+  display: none;
+}
+
+.gift-modal-card {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  width: min(100%, 360px);
+  margin: auto;
+  padding: 34px 22px 24px;
+  border: 1px solid var(--gold-300);
+  color: var(--gold-50);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(212 175 90 / 24%) 0%, transparent 58%),
+    var(--ink);
+  box-shadow: 0 28px 60px rgb(58 38 38 / 34%);
+  animation: gift-rise 0.45s cubic-bezier(0.22, 0.8, 0.2, 1) both;
+}
+
+.gift-modal-card::before {
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgb(230 203 134 / 35%);
+  content: "";
+  pointer-events: none;
+}
+
+.gift-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  color: var(--gold-200);
+  background: none;
+  cursor: pointer;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.gift-modal-kicker {
+  color: var(--gold-200);
+  font-family: "Antonio", sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;
+  text-transform: uppercase;
+}
+
+.gift-modal-title {
+  color: var(--gold-200);
+  font-family: "Corinthia", cursive;
+  font-size: 3.2rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.gift-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  margin-top: 8px;
+  border: 1px solid rgb(230 203 134 / 40%);
+}
+
+.gift-tabs button {
+  padding: 11px 8px;
+  border: 0;
+  color: var(--gold-200);
+  background: transparent;
+  cursor: pointer;
+  font-family: "Antonio", sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  text-transform: uppercase;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.gift-tabs button[aria-selected="true"] {
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--gold-200) 0%, var(--gold-300) 55%, var(--gold-400) 100%);
+}
+
+.gift-tabs button:focus-visible {
+  outline: 2px solid var(--gold-200);
+  outline-offset: -4px;
+}
+
+.gift-panel {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 14px;
+  animation: gift-fade 0.35s ease both;
+}
+
+.gift-qr {
+  width: min(100%, 240px);
+  padding: 10px;
+  border: 1px solid var(--gold-300);
+  background: var(--ivory);
+  box-shadow: 0 10px 26px rgb(0 0 0 / 35%);
+}
+
+.gift-qr img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+.gift-holder {
+  margin-top: 8px;
+  color: var(--gold-100);
+  font-family: "Antonio", sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gift-bank {
+  color: rgb(251 243 220 / 70%);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.gift-bank:empty {
+  display: none;
+}
+
+@keyframes gift-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes gift-rise {
+  from { opacity: 0; transform: translateY(24px) scale(0.94); }
+  to { opacity: 1; transform: none; }
 }
