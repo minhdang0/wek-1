@@ -1562,17 +1562,31 @@ function setupGiftAnimation() {
   mm.add("(prefers-reduced-motion: no-preference)", () => {
     const section = document.querySelector(".gift-section");
     if (!section) return;
-    const once = (trigger) => ({ trigger, start: "top 88%", once: true });
-    const intro = section.querySelector(".gift-intro");
-    const scene = section.querySelector(".gift-scene");
-    const hint = section.querySelector(".gift-hint");
 
-    gsap.from(intro, { y: 18, opacity: 0, duration: 0.8, ease: "power2.out", scrollTrigger: once(intro) });
-    gsap.from(scene, {
-      y: 40, opacity: 0, scale: 0.85, duration: 0.9, ease: "back.out(1.6)",
-      clearProps: "transform,opacity", scrollTrigger: once(scene),
-    });
-    gsap.from(hint, { opacity: 0, duration: 0.8, delay: 0.3, scrollTrigger: once(hint) });
+    const items = [
+      section.querySelector(".gift-intro"),
+      section.querySelector(".gift-scene"),
+      section.querySelector(".gift-hint"),
+    ].filter(Boolean);
+
+    gsap.fromTo(
+      items,
+      { y: 30, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.15,
+        immediateRender: false,
+        clearProps: "transform,opacity",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 90%",
+          once: true,
+        },
+      },
+    );
   });
 }
 function safeRun(fn) {
