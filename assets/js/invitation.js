@@ -39,13 +39,13 @@ const WEDDING_CONFIG = {
     groom: {
       role: "Chú rể",
       text: "Anh từng nghĩ hạnh phúc còn xa lắm. Cho đến ngày gặp em.",
-      image: "./assets/img/story-optimized/groom.jpg",
+      image: "./assets/img/gallery-optimized/image8.jpg",
       imageAlt: "Chú rể Hoàng Vinh",
     },
     bride: {
       role: "Cô dâu",
       text: "Chỉ cần một người nắm tay em mỗi sáng thức dậy. Và người ấy, hóa ra, chính là anh.",
-      image: "./assets/img/story-optimized/bride.jpg",
+      image: "./assets/img/gallery-optimized/image10.jpg",
       imageAlt: "Cô dâu Nguyễn Nhung",
     },
   },
@@ -73,15 +73,6 @@ const WEDDING_CONFIG = {
       "./assets/img/gallery-optimized/image5.jpg",
       "./assets/img/gallery-optimized/image6.jpg",
       "./assets/img/gallery-optimized/image7.jpg",
-      "./assets/img/gallery-optimized/image8.jpg",
-      "./assets/img/gallery-optimized/image9.jpg",
-      "./assets/img/gallery-optimized/image10.jpg",
-      "./assets/img/gallery-optimized/image11.jpg",
-      "./assets/img/gallery-optimized/image12.jpg",
-      "./assets/img/gallery-optimized/image13.jpg",
-      "./assets/img/gallery-optimized/image14.jpg",
-      "./assets/img/gallery-optimized/image15.jpg",
-      "./assets/img/gallery-optimized/image16.jpg",
     ],
   },
   rsvpEndpoint:
@@ -89,15 +80,15 @@ const WEDDING_CONFIG = {
   gift: {
     groom: {
       holder: "PHUNG VAN VINH",
-      bank: "Vietcombank",
-      accountNumber: "0123456789",
-      qr: "./assets/img/qr/groom.jpg",
+      bank: "VIB",
+      accountNumber: "044871214",
+      qr: "./assets/img/groom-qr.jpg",
     },
     bride: {
-      holder: "NGUYEN PHUONG NHUNG",
-      bank: "Techcombank",
-      accountNumber: "9876543210",
-      qr: "./assets/img/qr/bride.jpg",
+      holder: "NGUYEN THI NHUNG",
+      bank: "BIDV",
+      accountNumber: "1280750882",
+      qr: "./assets/img/bride-qr.jpg",
     },
   },
 };
@@ -329,7 +320,7 @@ function setupHeroSlideshow() {
 
   slides.forEach((slide) => {
     const image = slide.querySelector("img");
-    if (image?.decode) image.decode().catch(() => { });
+    if (image?.decode) image.decode().catch(() => {});
   });
 
   function next() {
@@ -411,11 +402,14 @@ function setupEnvelope() {
 
   function resumeMusic() {
     if (!resumeOnTouch) return;
-    music.play().then(() => {
-      resumeOnTouch = false;
-      document.removeEventListener("touchstart", resumeMusic);
-      document.removeEventListener("click", resumeMusic);
-    }).catch(() => { });
+    music
+      .play()
+      .then(() => {
+        resumeOnTouch = false;
+        document.removeEventListener("touchstart", resumeMusic);
+        document.removeEventListener("click", resumeMusic);
+      })
+      .catch(() => {});
   }
 
   document.addEventListener("visibilitychange", () => {
@@ -1475,9 +1469,15 @@ function setupGift() {
     }
     setText(
       `[data-gift-holder="${side}"]`,
-      g.holder || (side === "groom" ? WEDDING_CONFIG.groomName : WEDDING_CONFIG.brideName),
+      g.holder ||
+        (side === "groom"
+          ? WEDDING_CONFIG.groomName
+          : WEDDING_CONFIG.brideName),
     );
-    setText(`[data-gift-bank="${side}"]`, [g.bank, g.accountNumber].filter(Boolean).join(" · "));
+    setText(
+      `[data-gift-bank="${side}"]`,
+      [g.bank, g.accountNumber].filter(Boolean).join(" · "),
+    );
   });
 
   function selectTab(side, focus) {
@@ -1521,7 +1521,8 @@ function setupGift() {
 
   openBtn.addEventListener("click", openModal);
   modal.addEventListener("click", (e) => {
-    if (e.target === modal || e.target.closest("[data-gift-close]")) closeModal();
+    if (e.target === modal || e.target.closest("[data-gift-close]"))
+      closeModal();
   });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !modal.hidden) closeModal();
@@ -1545,7 +1546,10 @@ function setupGift() {
       [
         { transform: "translate(-50%, 0) rotate(0deg)", opacity: 0 },
         { opacity: 1, offset: 0.15 },
-        { transform: `translate(calc(-50% + ${drift}px), 190px) rotate(${spin}deg)`, opacity: 0 },
+        {
+          transform: `translate(calc(-50% + ${drift}px), 190px) rotate(${spin}deg)`,
+          opacity: 0,
+        },
       ],
       { duration: 1800 + Math.random() * 1000, easing: "ease-in" },
     ).onfinish = () => el.remove();
@@ -1618,5 +1622,5 @@ function safeRun(fn) {
   setupCountdownAnimation,
   setupCountdownNote,
   setupRsvpAnimation,
-  setupGiftAnimation
+  setupGiftAnimation,
 ].forEach(whenOpened);
